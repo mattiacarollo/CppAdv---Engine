@@ -126,6 +126,7 @@ DocProject/Help/html
 # Click-Once directory
 publish/
 DirectXTK/
+DXUtils/
 
 # Publish Web Output
 *.[Pp]ublish.xml
