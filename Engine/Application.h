@@ -2,7 +2,7 @@
 
 #include "sampleProgram.h"
 
-class Application : public mcg::SampleProgram
+class Application 
 {
 public:
 	Application(HINSTANCE hInstance, int nCmdShow);

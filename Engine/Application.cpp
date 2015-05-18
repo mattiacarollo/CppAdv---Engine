@@ -1,14 +1,14 @@
 #include "Application.h"
 
 Application::Application(HINSTANCE hInstance, int nCmdShow)
-	: mcg::SampleProgram(hInstance, nCmdShow)
+	
 {
 
 }
 
 HRESULT Application::initializeResources()
 {
-
+	return S_OK;
 }
 
 void Application::render()
