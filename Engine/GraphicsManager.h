@@ -2,6 +2,11 @@
 
 #include <d3d11.h>
 #include "DXManager.h" 
+#include "DataType.h"
+#include "Camera.h"
+
+using namespace DirectX;
+using namespace utility;
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
@@ -16,12 +21,14 @@ public:
 	~GraphicsManager();
 
 	bool Initialize(int, int, HWND);
-	void Shutdown();
 	bool Frame();
+	void Shutdown();
 
 private:
 	bool Render(float);
 
 private:
 	DXManager* m_D3D;
+	Camera m_Camera;
+	Transformations transf;
 };

@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include "InputManager.h"
+#include "GraphicsManager.h"
 
 class SystemManager
 {
@@ -28,6 +29,7 @@ private:
 	HINSTANCE m_hinstance; 
 	HWND m_hwnd; 
 	InputManager* m_Input;
+	GraphicsManager* m_Graphic;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); 

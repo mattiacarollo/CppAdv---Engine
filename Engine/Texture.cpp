@@ -1,4 +1,4 @@
-#include "Texture.h"
+/*#include "Texture.h"
 
 int Texture::getHeight() const{
 	return height;
@@ -7,3 +7,4 @@ int Texture::getHeight() const{
 int Texture::getWidth() const{
 	return width;
 }
+*/

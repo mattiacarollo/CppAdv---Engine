@@ -1,6 +1,6 @@
 #include <DirectXMath.h>
 
-class Texture{
+/*class Texture{
 
 private:
 	ID3D11ShaderResourceView* mColorTexResourceView;
@@ -22,4 +22,4 @@ public:
 	int getHeight() const;
 
 
-};
+};*/
