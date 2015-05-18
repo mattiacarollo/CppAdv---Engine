@@ -5,13 +5,10 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{90ED14F5-0207-4E61-B68B-09F2E405EC28}"
 	ProjectSection(ProjectDependencies) = postProject
-		{8207C7E5-5288-40E3-AF87-130047780016} = {8207C7E5-5288-40E3-AF87-130047780016}
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {E0B52AE7-E160-4D32-BF3F-910B785E5A8E}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2013", "DirectXTK\DirectXTK_Desktop_2013.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXUtils", "DXUtils\DXUtils.vcxproj", "{8207C7E5-5288-40E3-AF87-130047780016}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +32,6 @@ Global
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|Win32.Build.0 = Release|Win32
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x64.ActiveCfg = Release|x64
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}.Release|x64.Build.0 = Release|x64
-		{8207C7E5-5288-40E3-AF87-130047780016}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8207C7E5-5288-40E3-AF87-130047780016}.Debug|Win32.Build.0 = Debug|Win32
-		{8207C7E5-5288-40E3-AF87-130047780016}.Debug|x64.ActiveCfg = Debug|Win32
-		{8207C7E5-5288-40E3-AF87-130047780016}.Release|Win32.ActiveCfg = Release|Win32
-		{8207C7E5-5288-40E3-AF87-130047780016}.Release|Win32.Build.0 = Release|Win32
-		{8207C7E5-5288-40E3-AF87-130047780016}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

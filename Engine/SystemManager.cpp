@@ -31,6 +31,10 @@ bool SystemManager::Initialize()
 	if (!m_Input){ return false; }
 	m_Input->Initialize();
 
+	m_Graphic = new GraphicsManager;
+	if (!m_Graphic){ return false; }
+	m_Graphic->Initialize(screenWidth, screenHeight, m_hwnd);
+
 	return true;
 }
 
