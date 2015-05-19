@@ -88,6 +88,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SystemManager.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +111,11 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Texture.h" />
+	<ClInclude Include="Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="colormap.dds" />    
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\pixelShader.hlsl">

@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{32f7297c-0715-4b2f-98c5-73cb19ae69a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{282c62b0-30ac-4c63-80ab-6618aad25b8f}</UniqueIdentifier>
+	</Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{1801ea09-f949-458e-ae3a-a97a4432f9a7}</UniqueIdentifier>
     </Filter>
@@ -39,6 +42,9 @@
     <ClCompile Include="DXManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+	 </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -68,6 +74,14 @@
     <ClInclude Include="DXManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="colormap.dds">
+      <Filter>Data</Filter>
+    </Image>
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
     </ClInclude>
