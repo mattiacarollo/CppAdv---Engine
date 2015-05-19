@@ -33,11 +33,11 @@ bool DXManager::Initialize(
 
 	hr = initializeDevice();
 	if (FAILED(hr))
-		return E_FAIL;
+		return false;
 
 	hr = initializeRenderTarget();
 	if (FAILED(hr))
-		return E_FAIL;
+		return false;
 
 	// Setta il viewport
 	D3D11_VIEWPORT vp;
@@ -179,9 +179,9 @@ void DXManager::EndScene()
 
 void DXManager::Shutdown()
 {
-	if (mPSwapChain)	{ mPSwapChain->Release(); mPSwapChain = 0; }	return;
-	if (mPd3dDevice)	{ mPd3dDevice->Release(); mPd3dDevice = 0; }	return;	
-	if (mPd3dDeviceContext)	{ mPd3dDeviceContext->Release(); mPd3dDeviceContext = 0; }	return;
-	if (mPRenderTargetView)	{ mPRenderTargetView->Release(); mPRenderTargetView = 0; }	return;
-	if (mPDepthStencilView)	{ mPDepthStencilView->Release(); mPDepthStencilView = 0; }	return;
+	if (mPSwapChain)	{ mPSwapChain->Release(); mPSwapChain = 0; }
+	if (mPd3dDevice)	{ mPd3dDevice->Release(); mPd3dDevice = 0; }
+	if (mPd3dDeviceContext)	{ mPd3dDeviceContext->Release(); mPd3dDeviceContext = 0; }
+	if (mPRenderTargetView)	{ mPRenderTargetView->Release(); mPRenderTargetView = 0; }
+	if (mPDepthStencilView)	{ mPDepthStencilView->Release(); mPDepthStencilView = 0; }
 }

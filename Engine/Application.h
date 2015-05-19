@@ -12,7 +12,7 @@ class Application
 public:
 	Application();
 
-	HRESULT initializeResources(DXManager*,float);
+	bool initializeResources(DXManager*,float);
 	void preRender();
 	void render();
 	void cleanResouces();
@@ -26,7 +26,9 @@ private:
 	ID3D11InputLayout* mPInputLayout;
 	ID3D11DepthStencilState* mPDepthStencilState;
 
-	Transformations transf;
-	Camera camera;
+	ID3D11RenderTargetView* mRTW;
 	DXManager* m_D3D;
+	Camera camera;
+
+	Transformations transf;	
 };

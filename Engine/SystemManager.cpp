@@ -45,7 +45,11 @@ void SystemManager::Shutdown()
 		delete m_Input;
 		m_Input = 0;
 	}
-
+	if (m_Graphic)
+	{
+		delete m_Graphic;
+		m_Graphic = 0;
+	}
 	ShutdownWindows();
 
 	return;

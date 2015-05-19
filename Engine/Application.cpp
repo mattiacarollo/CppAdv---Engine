@@ -21,31 +21,21 @@ Application::Application() :
 
 void Application::cleanResouces()
 {
-	if (mPVertexBuffer)
-		mPVertexBuffer->Release();
-
-	if (mPIndexBuffer)
-		mPIndexBuffer->Release();
-
-	if (mPTranfBuffer)
-		mPTranfBuffer->Release();
-
-	if (mPVertexShader)
-		mPVertexShader->Release();
-
-	if (mPPixelShader)
-		mPPixelShader->Release();
-
-	if (mPInputLayout)
-		mPInputLayout->Release();
-
-	if (mPDepthStencilState)
-		mPDepthStencilState->Release();
+	if (mPVertexBuffer)		{ mPVertexBuffer->Release(); delete mPVertexBuffer; mPVertexBuffer = 0; }
+	if (mPIndexBuffer)		{ mPIndexBuffer->Release(); delete mPIndexBuffer; mPIndexBuffer = 0; }
+	if (mPTranfBuffer)		{ mPTranfBuffer->Release(); delete mPTranfBuffer; mPTranfBuffer = 0; }
+	if (mPVertexShader)		{ mPVertexShader->Release(); delete mPVertexShader; mPVertexShader = 0; }
+	if (mPPixelShader)		{ mPPixelShader->Release(); delete mPPixelShader; mPPixelShader = 0; }
+	if (mPInputLayout)		{ mPInputLayout->Release(); delete mPInputLayout; mPInputLayout = 0; }
+	if (mPDepthStencilState)	{ mPDepthStencilState->Release(); delete mPDepthStencilState; mPDepthStencilState = 0; }
+	if (mRTW)				{ mRTW->Release(); delete mRTW; mRTW = 0; }
+	if (m_D3D) {m_D3D->Shutdown(); delete m_D3D; m_D3D = 0;}
 }
 
-HRESULT Application::initializeResources(DXManager* D3D, float screenratio)
+bool Application::initializeResources(DXManager* D3D, float screenratio)
 {
 	m_D3D = D3D;
+	mRTW = m_D3D->GetRenderTargetView();
 	// Creazione del cubo da renderizzare.
 	SimpleVertex vertices[] =
 	{
@@ -102,7 +92,7 @@ HRESULT Application::initializeResources(DXManager* D3D, float screenratio)
 	// Creiamo il vertex buffer nel device.
 	result = m_D3D->GetDevice()->CreateBuffer(&bufferDesc, &initData, &mPVertexBuffer);
 	if (FAILED(result))
-		return result;
+		return false;
 	
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = sizeof(unsigned int) * 36;
@@ -113,22 +103,22 @@ HRESULT Application::initializeResources(DXManager* D3D, float screenratio)
 	// Creiamo l'index buffer nel device.
 	result = m_D3D->GetDevice()->CreateBuffer(&bufferDesc, &initData, &mPIndexBuffer);
 	if (FAILED(result))
-		return result;
+		return false;
 
 	ID3DBlob* vsBlob = nullptr;
 	result = ShaderLoader::vertexPreBuiltLoad(L"./vertexShader.cso", m_D3D->GetDevice(), &mPVertexShader, &vsBlob);	
 	if (FAILED(result))
-		return result;
+		return false;
 
 	result = ShaderLoader::createInputLayout(vsBlob, m_D3D->GetDevice(), layout, 2, &mPInputLayout);
 	if (FAILED(result))
-		return result;
+		return false;
 
 	vsBlob->Release();
 
 	result = ShaderLoader::pixelPreBuiltLoad(L"./pixelShader.cso", m_D3D->GetDevice(), &mPPixelShader);
 	if (FAILED(result))
-		return result;
+		return false;
 	
 	transf.world = DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f);
 	transf.view = camera.getViewMatrix();
@@ -142,7 +132,7 @@ HRESULT Application::initializeResources(DXManager* D3D, float screenratio)
 	bufferDesc.CPUAccessFlags = 0;
 	result = m_D3D->GetDevice()->CreateBuffer(&bufferDesc, nullptr, &mPTranfBuffer);
 	if (FAILED(result))
-		return result;
+		return false;
 
 	D3D11_DEPTH_STENCIL_DESC dsDescON;
 	dsDescON.DepthEnable = true;
@@ -152,9 +142,9 @@ HRESULT Application::initializeResources(DXManager* D3D, float screenratio)
 
 	result = m_D3D->GetDevice()->CreateDepthStencilState(&dsDescON, &mPDepthStencilState);
 	if (FAILED(result))
-		return result;
+		return false;
 
-	return result;
+	return true;
 }
 
 void Application::render()
@@ -165,7 +155,7 @@ void Application::render()
 	XMFLOAT4 clearColor(0.39f, 0.58f, 0.93f, 1.0f);
 	
 	// Settiamo il render target corrente.
-	//m_D3D->GetDeviceContext()->OMSetRenderTargets(1, m_D3D->GetRenderTargetView() , m_D3D->GetDepthStencilView());
+	m_D3D->GetDeviceContext()->OMSetRenderTargets(1, &mRTW, m_D3D->GetDepthStencilView());
 	// Pulizia del render target.
 	m_D3D->GetDeviceContext()->ClearRenderTargetView(m_D3D->GetRenderTargetView(), &(clearColor.x));
 	// Pulizia del depth buffer

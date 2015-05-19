@@ -53,9 +53,11 @@ void GraphicsManager::Shutdown()
 	}
 	if (m_app)
 	{
+		m_app->cleanResouces();
 		delete m_app;
 		m_app = 0;
 	}
+	
 	return;
 }
 
