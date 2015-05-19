@@ -1,6 +1,5 @@
 #pragma once
 
-#include <d3d11.h>
 #include "Utility.h"
 
 using namespace utility;
@@ -11,10 +10,16 @@ public:
 	DXManager(const DXManager&);
 	~DXManager();
 
-	bool Initialize(int,int,bool,HWND,bool,float,float);
+	bool Initialize(int, int, bool, HWND, bool, float, float);
 	void BeginScene(float, float, float, float);
 	void EndScene();
 	void Shutdown();
+
+	ID3D11Device* GetDevice() { return mPd3dDevice; }
+	IDXGISwapChain* GetSwapChain() { return mPSwapChain; }
+	ID3D11DeviceContext* GetDeviceContext() { return mPd3dDeviceContext; }
+	ID3D11RenderTargetView* GetRenderTargetView(){ return mPRenderTargetView; }
+	ID3D11DepthStencilView* GetDepthStencilView(){ return mPDepthStencilView; }
 
 private:
 	HRESULT initializeDevice();

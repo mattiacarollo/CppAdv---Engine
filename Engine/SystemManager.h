@@ -25,7 +25,7 @@ private:
 	void ShutdownWindows();
 
 private:
-	LPCSTR m_applicationName; 
+	LPCWSTR m_applicationName; 
 	HINSTANCE m_hinstance; 
 	HWND m_hwnd; 
 	InputManager* m_Input;
@@ -34,3 +34,4 @@ private:
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); 
 static SystemManager* ApplicationHandle = 0; 
+//We can redirect windows message into our systemclass (and message handler)

@@ -1,8 +1,5 @@
 #include "Utility.h"
 
-#include <fstream>
-#include <streambuf>
-
 namespace utility
 {
 	int showErrorMessageBox(LPCTSTR lpText, LPCTSTR lpTitle, HWND hWnd)

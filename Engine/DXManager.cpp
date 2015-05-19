@@ -91,13 +91,13 @@ HRESULT DXManager::initializeDevice()
 		if (SUCCEEDED(hr))
 		{
 			if (mDriverType != D3D_DRIVER_TYPE_HARDWARE)
-				showWarningMessageBox("No hardware Direct3D here.", "Warning", mHWnd);
+				showWarningMessageBox(L"No hardware Direct3D here.", L"Warning", mHWnd);
 			break;
 		}
 	}
 	if (FAILED(hr))
 	{
-		showErrorMessageBox("Device and swap chain creation failed!", "Error", mHWnd);
+		showErrorMessageBox(L"Device and swap chain creation failed!", L"Error", mHWnd);
 		return hr;
 	}
 
@@ -111,14 +111,14 @@ HRESULT DXManager::initializeRenderTarget()
 	hr = mPSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	if (FAILED(hr))
 	{
-		showErrorMessageBox("No backbuffer texture!", "Error", mHWnd);
+		showErrorMessageBox(L"No backbuffer texture!", L"Error", mHWnd);
 		return hr;
 	}
 	hr = mPd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &mPRenderTargetView);
 	pBackBuffer->Release();
 	if (FAILED(hr))
 	{
-		showErrorMessageBox("Render target creation failed!", "Error", mHWnd);
+		showErrorMessageBox(L"Render target creation failed!", L"Error", mHWnd);
 		return hr;
 	}
 	ID3D11Texture2D* pDepthStencil = nullptr;
@@ -138,7 +138,7 @@ HRESULT DXManager::initializeRenderTarget()
 	hr = mPd3dDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil);
 	if (FAILED(hr))
 	{
-		showErrorMessageBox("Depth-Stencil buffer creation failed!", "Error", mHWnd);
+		showErrorMessageBox(L"Depth-Stencil buffer creation failed!", L"Error", mHWnd);
 		return hr;
 	}
 
@@ -150,7 +150,7 @@ HRESULT DXManager::initializeRenderTarget()
 	hr = mPd3dDevice->CreateDepthStencilView(pDepthStencil, &descDSV, &mPDepthStencilView);
 	if (FAILED(hr))
 	{
-		showErrorMessageBox("Depth-Stencil view creation failed!", "Error", mHWnd);
+		showErrorMessageBox(L"Depth-Stencil view creation failed!", L"Error", mHWnd);
 		return hr;
 	}
 	mPd3dDeviceContext->OMSetRenderTargets(1, &mPRenderTargetView, mPDepthStencilView);

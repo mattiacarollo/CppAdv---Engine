@@ -73,7 +73,7 @@ void SystemManager::Run()
 		}
 		else
 		{		
-			result = Frame(); 
+			result = Frame(); // infinte Loop, call Frame that call all system parts frame()
 			if (!result)
 			{
 				done = true;
@@ -89,6 +89,9 @@ bool SystemManager::Frame()
 {
 	bool result;
 	if (m_Input->IsKeyDown(VK_ESCAPE))	{	return false;	}
+
+	result = m_Graphic->Frame();
+	if (!result)	{	return false;	}
 
 	return true;
 }
@@ -137,13 +140,9 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	WNDCLASSEX wc;
 	DEVMODE dmScreenSettings;
 	int posX, posY;
-
 	ApplicationHandle = this;
-
 	m_hinstance = GetModuleHandle(NULL);
-
-	m_applicationName = "Engine";
-
+	m_applicationName = L"Engine";
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
@@ -156,12 +155,10 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = m_applicationName;
 	wc.cbSize = sizeof(WNDCLASSEX);
-
 	RegisterClassEx(&wc);
 
 	screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
 	screenWidth = 800;
 	screenHeight = 600;
 
