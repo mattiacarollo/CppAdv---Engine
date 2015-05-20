@@ -18,7 +18,7 @@
     </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{282c62b0-30ac-4c63-80ab-6618aad25b8f}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{1801ea09-f949-458e-ae3a-a97a4432f9a7}</UniqueIdentifier>
     </Filter>
@@ -44,7 +44,7 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
-	 </ClCompile>
+    </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -55,6 +55,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ShaderLoader.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

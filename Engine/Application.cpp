@@ -1,5 +1,4 @@
 #include "Application.h"
-#include <iostream>
 
 struct SimpleVertex
 {
@@ -32,9 +31,10 @@ void Application::cleanResouces()
 	if (m_D3D) {m_D3D->Shutdown(); delete m_D3D; m_D3D = 0;}
 }
 
-bool Application::initializeResources(DXManager* D3D, float screenratio)
+bool Application::initializeResources(DXManager* D3D, float screenratio, GraphicsManager* graphic)
 {
 	m_D3D = D3D;
+	m_Graphic = graphic;
 	mRTW = m_D3D->GetRenderTargetView();
 	// Creazione del cubo da renderizzare.
 	SimpleVertex vertices[] =
@@ -120,11 +120,6 @@ bool Application::initializeResources(DXManager* D3D, float screenratio)
 	if (FAILED(result))
 		return false;
 	
-	transf.world = DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f);
-	transf.view = camera.getViewMatrix();
-	transf.cameraPosition = camera.getCameraPositionFlaot4();
-	transf.projection = DirectX::XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), screenratio, 0.1f, 100.0f);
-
 	// Creiamo un constant buffer per passare le matrici agli shaders (al vertex shader).
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = sizeof(Transformations);
@@ -150,7 +145,7 @@ bool Application::initializeResources(DXManager* D3D, float screenratio)
 void Application::render()
 {
 	// Aggiorniamo il constant buffer delle trasformazioni
-	m_D3D->GetDeviceContext()->UpdateSubresource(mPTranfBuffer, 0, nullptr, &transf, 0, 0);
+	m_D3D->GetDeviceContext()->UpdateSubresource(mPTranfBuffer, 0, nullptr, m_Graphic->GetTransf(), 0, 0);
 
 	XMFLOAT4 clearColor(0.39f, 0.58f, 0.93f, 1.0f);
 	
@@ -186,7 +181,6 @@ void Application::render()
 
 void Application::preRender()
 {	
-	transf.view = camera.getViewMatrix();
-	transf.cameraPosition = camera.getCameraPositionFlaot4();
+
 }
 

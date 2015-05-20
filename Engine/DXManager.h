@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dxgi.h>
+
 #include "Utility.h"
 
 using namespace utility;
@@ -20,10 +22,24 @@ public:
 	ID3D11DeviceContext* GetDeviceContext() { return mPd3dDeviceContext; }
 	ID3D11RenderTargetView* GetRenderTargetView(){ return mPRenderTargetView; }
 	ID3D11DepthStencilView* GetDepthStencilView(){ return mPDepthStencilView; }
+	ID3D11Texture2D* GetDepthStencil(){ return pDepthStencil; }
+	ID3D11DepthStencilState* GetDepthStencilState(){ return m_depthStencilState; }
+	ID3D11BlendState* GetAlphaEnableBlendingState(){ return m_alphaEnableBlendingState; }
+	ID3D11BlendState* GetAlphaDisableBlendingState(){ return m_alphaDisableBlendingState; }
+	void GetVideoCardInfo(char*, int&);
+	void TurnZBufferOn();
+	void TurnZBufferOff();
+	void TurnOnAlphaBlending();
+	void TurnOffAlphaBlending();
+
 
 private:
-	HRESULT initializeDevice();
+	HRESULT initializeDevice(bool);
+	HRESULT getVideoCardInfo();
 	HRESULT initializeRenderTarget();
+	HRESULT initializeDepthBufferDesc();
+	HRESULT initializeDepthStencilDesc();
+	HRESULT initializeAlphaBlendStateDesc();
 
 private:
 	ID3D11Device* mPd3dDevice;
@@ -31,10 +47,16 @@ private:
 	ID3D11DeviceContext* mPd3dDeviceContext;
 	ID3D11RenderTargetView* mPRenderTargetView;
 	ID3D11DepthStencilView* mPDepthStencilView;
+	ID3D11Texture2D* pDepthStencil;
+	ID3D11DepthStencilState* m_depthStencilState;
+	ID3D11DepthStencilState* m_depthDisabledStencilState;
+	ID3D11BlendState* m_alphaEnableBlendingState;
+	ID3D11BlendState* m_alphaDisableBlendingState;
+
 	HWND mHWnd;
 	D3D_DRIVER_TYPE mDriverType;
-	bool mVSync;
-	int mScreenWidth;
-	int mScreenHeight;
-	int mMuntisampleCount;
+	bool m_vsync_enabled;
+	int mScreenWidth, mScreenHeight, mMuntisampleCount, mNumerator, mDenominator;
+	int m_videoCardMemory;
+	char m_videoCardDescription[128];
 };

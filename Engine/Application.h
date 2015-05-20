@@ -7,12 +7,14 @@
 using namespace utility;
 using namespace DirectX;
 
+class GraphicsManager;
+
 class Application
 {
 public:
 	Application();
 
-	bool initializeResources(DXManager*,float);
+	bool initializeResources(DXManager*,float, GraphicsManager*);
 	void preRender();
 	void render();
 	void cleanResouces();
@@ -25,10 +27,9 @@ private:
 	ID3D11PixelShader* mPPixelShader;
 	ID3D11InputLayout* mPInputLayout;
 	ID3D11DepthStencilState* mPDepthStencilState;
-
 	ID3D11RenderTargetView* mRTW;
-	DXManager* m_D3D;
-	Camera camera;
 
-	Transformations transf;	
+	DXManager* m_D3D;
+	GraphicsManager* m_Graphic;
+	
 };

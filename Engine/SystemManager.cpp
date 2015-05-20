@@ -33,7 +33,7 @@ bool SystemManager::Initialize()
 
 	m_Graphic = new GraphicsManager;
 	if (!m_Graphic){ return false; }
-	m_Graphic->Initialize(screenWidth, screenHeight, m_hwnd);
+	m_Graphic->Initialize(screenWidth, screenHeight, m_hwnd, m_Input);
 
 	return true;
 }
@@ -104,20 +104,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch (umessage)
 	{
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
-	case WM_CLOSE:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
-	default:
-	{
-		return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
-	}
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
+		case WM_CLOSE:
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
+		default:
+		{
+			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
+		}
 	}
 }
 
@@ -159,15 +159,33 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = m_applicationName;
 	wc.cbSize = sizeof(WNDCLASSEX);
+
 	RegisterClassEx(&wc);
 
 	screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-	screenWidth = 800;
-	screenHeight = 600;
 
-	posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-	posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+	if (FULL_SCREEN)
+	{
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+		dmScreenSettings.dmPelsWidth = (unsigned long)screenWidth;
+		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
+		dmScreenSettings.dmBitsPerPel = 32;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+
+		posX = posY = 0;
+	}
+	else
+	{
+		screenWidth = 800;
+		screenHeight = 600;
+
+		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+	}
 
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
@@ -183,6 +201,11 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 void SystemManager::ShutdownWindows()
 {
 	ShowCursor(true);
+
+	if (FULL_SCREEN)
+	{
+		ChangeDisplaySettings(NULL, 0);
+	}
 
 	DestroyWindow(m_hwnd); 
 	m_hwnd = NULL;

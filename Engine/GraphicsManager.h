@@ -4,6 +4,8 @@
 #include "DataType.h"
 #include "Camera.h"
 #include "Application.h"
+#include "InputManager.h"
+#include "timer.h"
 
 using namespace utility;
 
@@ -21,16 +23,19 @@ public:
 	GraphicsManager(const GraphicsManager&);
 	~GraphicsManager();
 
-	bool Initialize(int, int, HWND);
+	bool Initialize(int, int, HWND, InputManager*);
 	bool Frame();
 	void Shutdown();
 
+	Transformations* GetTransf() { return &transf; }
+
 private:
-	bool Render(float);
+	bool Render();
 
 private:
 	DXManager* m_D3D;
-	Camera m_Camera;
+	Camera* m_Camera;
 	Application* m_app;
+	InputManager* m_input;
 	Transformations transf;
 };
