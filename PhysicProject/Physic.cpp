@@ -1,6 +1,7 @@
 #include "Physic.h"
 
 //La funzione di integrazione. Viene invocata ogni deltaTime secondi
+
 void Physic::DoPhysic(float deltaTime, Vector3& m_vPos, Vector3& m_vVel, Vector3& m_vG, float M)
 {
 	Vector3 m_vF;

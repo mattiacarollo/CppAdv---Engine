@@ -5,6 +5,7 @@
 #include <math.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
+
 #include "Vector3.h"
 #include "Physic.h"
 #include "RigidBody.h"
@@ -12,14 +13,20 @@
 
 float DT = 0.005f;
 double TempoTotale = 0;
+
 float M = 10;
 Vector3 m_vPos = { -4.0f, 0.0f, 0.0f };
 Vector3 m_vVel = { 3.0f, 3.0f, 0.0f };
 Vector3 m_vG = { 0.0f, -9.8f, 0.0f };
 
+
+
+
 void DisegnaSfera(float X, float Y, float Z, float R);
 void DisegnaPianoXZ(float QuotaZ);
+
 static GLfloat rosso[] = { 2.0f, 0.1f, 0.1f, 1.0f };
+//static GLfloat verde[] = { 0.2f, 0.8f, 0.2f, 1.0f };
 static GLfloat verde2[] = { 0.4f, 1.0f, 0.4f, 1.0f };
 static GLfloat blu[] = { 0.4f, 0.4f, 1.0f, 1.0f };
 static GLfloat bianco[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -82,12 +89,18 @@ void DisegnaSfera(float X, float Y, float Z, float R)
 
 	glPopMatrix();
 }
+//La funzione di visualizzazione.Viene periodicamente invocata per visualizzare la simulazione
 static void VisualizzaSistema()
 {
 	DisegnaPianoXZ(-5);
 	DisegnaSfera(m_vPos[0], m_vPos[1], m_vPos[2], 1);
 }
-static void TastoPremuto(unsigned char Tasto){}
+//La funzione di interazione.Viene invocata se l'utente preme un tasto
+static void TastoPremuto(unsigned char Tasto)
+{
+}
+
+
 HDC			hDC = NULL;
 HGLRC		hRC = NULL;
 HWND		hWnd = NULL;
@@ -343,6 +356,9 @@ LRESULT CALLBACK WndProc(HWND	hWnd,
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
+
+
 
 
 //MATTIA

@@ -1,11 +1,8 @@
 #pragma once
 
-#include <iostream>
-//#include "Matrix.h"
+#include "Matrix.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "Collider.h"
-#include "Physic.h"
 
 /*
 template<int row, int col>
@@ -17,11 +14,12 @@ class RigidBody
 
 public:
 
-	RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia);
+	RigidBody(const Vector3& pos, int id, float mass, const Vector3& inertia);
 	RigidBody(const RigidBody& other);
 	~RigidBody();
 
-	void DoPhysic(float);
+	//void DoPhysic(float);
+	void DoPhysic(float DeltaTime, Vector3& m_vPos, Vector3& m_vVel, Vector3& m_vG, float M);
 	void ApplyForce(const Vector3& force, const Vector3& pointOfApplication);
 	void SumForceToTotalForce(const Vector3&);
 	void SumMomentumToTotalMomentum(const Vector3&);

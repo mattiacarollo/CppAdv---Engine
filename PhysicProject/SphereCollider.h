@@ -3,7 +3,7 @@
 #include "Collider.h"
 //#include "ColliderUtil.h"
 
-//class RigidBody;
+class RigidBody;
 class SphereCollider : Collider
 {
 
