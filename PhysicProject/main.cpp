@@ -10,12 +10,18 @@
 #include "RigidBody.h"
 #include "SphereCollider.h"
 
+//MATTIA
+Vector3 SphereInertia(float mass, float radius)
+{
+	float tmp = 2 * mass*radius*radius / 5;
+	return Vector3(tmp, tmp, tmp);
+}
+
+Physic p;
+RigidBody* rB = new RigidBody(Vector3(1.0f, 4.0f, 1.0f), 0, 5.0f, SphereInertia(5.0f, 5.0f));
+
 float DT = 0.005f;
 double TempoTotale = 0;
-float M = 10;
-Vector3 m_vPos = { -4.0f, 0.0f, 0.0f };
-Vector3 m_vVel = { 3.0f, 3.0f, 0.0f };
-Vector3 m_vG = { 0.0f, -9.8f, 0.0f };
 
 void DisegnaSfera(float X, float Y, float Z, float R);
 void DisegnaPianoXZ(float QuotaZ);
@@ -46,14 +52,14 @@ void DisegnaPianoXZ(float Y)
 	glEnd();
 
 }
-void DisegnaSfera(float X, float Y, float Z, float R)
+void DisegnaSfera(Vector3 pos, float R)
 {
 	int i;
 	float j, X1, Y1, X2, Y2, s, c;
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glTranslatef(X, Y, Z);
+	glTranslatef(pos.getX(), pos.getY(), pos.getZ());
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, verde2);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, rosso);
@@ -85,7 +91,7 @@ void DisegnaSfera(float X, float Y, float Z, float R)
 static void VisualizzaSistema()
 {
 	DisegnaPianoXZ(-5);
-	DisegnaSfera(m_vPos[0], m_vPos[1], m_vPos[2], 1);
+	DisegnaSfera(rB->GetPosition(), 1); 
 }
 static void TastoPremuto(unsigned char Tasto){}
 HDC			hDC = NULL;
@@ -142,7 +148,7 @@ static int DrawGLScene()
 	}
 
 	while (TempoTotale < t) {
-		Physic::DoPhysic(DT, m_vPos, m_vVel, m_vG, M);
+		p.ComputePhysic();
 		TempoTotale += DT;
 	}
 
@@ -345,17 +351,6 @@ LRESULT CALLBACK WndProc(HWND	hWnd,
 }
 
 
-//MATTIA
-//Vector3 SphereInertia(float mass, float radius)
-//{
-//	float tmp = 2 * mass*radius*radius / 5;
-//
-//	return Vector3(tmp, tmp, tmp);
-//}
-
-
-
-
 int WINAPI WinMain(HINSTANCE	hInstance,
 	HINSTANCE	hPrevInstance,
 	LPSTR		lpCmdLine,
@@ -363,20 +358,13 @@ int WINAPI WinMain(HINSTANCE	hInstance,
 {
 
 	//MATTIA
-	//Physic p;
-	//Vector3 zeros(0.0f, 0.0f, 0.0f);
-	//RigidBody* rB = new RigidBody(Vector3(1.0f, 4.0f, 1.0f), 0, 5.0f, SphereInertia(5.0f, 5.0f));
-	//SphereCollider* sC = new SphereCollider(rB->GetPosition(), /*zeros,*/ 5.0);
-	//rB->AttachCollider(sC);
-	//p.AddRigidBody(*rB, rB->GetID());
-	/*rB->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
-	for (int i = 0; i < 5; ++i)
-	{
-		std::cout << "Iteration: " << i << std::endl;
-		p.ComputePhysic();
-		//system("PAUSE");
-	}*/
 
+	//Vector3 zeros(0.0f, 0.0f, 0.0f);
+	//SphereCollider* sC = new SphereCollider(rB->GetPosition(), zeros, 5.0);
+	SphereCollider* sC = new SphereCollider(rB->GetPosition(), 5.0);
+	rB->AttachCollider(sC);
+	p.AddRigidBody(*rB, rB->GetID());
+	rB->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 
 
 	MSG		msg;

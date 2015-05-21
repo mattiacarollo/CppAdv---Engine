@@ -1,6 +1,7 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia) : m_vPosition(pos), m_iID(id), m_fMass(mass)
+RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia) 
+	: m_vPosition(pos), m_iID(id), m_fMass(mass)
 {
 	m_vVelocity=VectorOp::Zero;
 	m_vInertia = inertia;
@@ -20,7 +21,7 @@ RigidBody::RigidBody(const RigidBody& other)
 RigidBody::~RigidBody()
 {
 }
-/*
+
 void RigidBody::DoPhysic(float DeltaTime)
 {
 	Vector3 tmp(m_vForceSum * DeltaTime);
@@ -50,45 +51,46 @@ void RigidBody::DoPhysic(float DeltaTime)
 	//m_mRotationMatrix = m_qRotation.ToMatrix();
 
 	//m_vForceSum += Physic::mk_vGravity*m_fMass;
-}*/
-
-void RigidBody::DoPhysic(float DeltaTime, Vector3& m_vPos, Vector3& m_vVel, Vector3& m_vG, float M)
-{
-	Vector3 m_vF;
-	Vector3 m_vA;
-
-	Matrix::MoltiplicaVettoreScalare(m_vG, M, m_vF);
-
-	//movimento laterale sul terreno
-	if (m_vPos[1] + 5 < 1) {
-		float d = 1 - (m_vPos[1] + 5);
-		d *= 4000;
-		d -= m_vVel[1] * 100;
-		if (d > 0) m_vF[1] += d;
-	}
-
-	if (5 - m_vPos[0] < 1) {
-		float d = 1 - (5 - m_vPos[0]);
-		d *= 4000;
-		d -= m_vVel[1] * 50;
-		if (d > 0) m_vF[0] -= d;
-	}
-
-	if (m_vPos[0] + 5 < 1)
-	{
-		float d = 1 - (m_vPos[0] + 5);
-		d *= 4000;
-		d += m_vVel[1] * 50;
-		if (d > 0) m_vF[0] += d;
-	}
-
-	//movimento di caduta
-	Matrix::DividiVettoreScalare(m_vF, M, m_vA);
-	Matrix::MoltiplicaVettoreScalare(m_vA, DeltaTime, m_vA);
-	Matrix::SommaVettori(m_vVel, m_vA, m_vVel);
-	Matrix::MoltiplicaVettoreScalare(m_vVel, DeltaTime, m_vA);
-	Matrix::SommaVettori(m_vPos, m_vA, m_vPos);
+	m_vForceSum += Physic::mk_vGravity/m_fMass;
 }
+
+//void RigidBody::DoPhysic(float DeltaTime)
+//{
+//	Vector3 m_vF;
+//	Vector3 m_vA;
+//
+//	Matrix::MoltiplicaVettoreScalare(Physic::mk_vGravity, m_fMass, m_vF);
+//
+//	//movimento laterale sul terreno
+//	if (m_vPosition[1] + 5 < 1) {
+//		float d = 1 - (m_vPosition[1] + 5);
+//		d *= 4000;
+//		d -= m_vVelocity[1] * 100;
+//		if (d > 0) m_vF[1] += d;
+//	}
+//
+//	if (5 - m_vPosition[0] < 1) {
+//		float d = 1 - (5 - m_vPosition[0]);
+//		d *= 4000;
+//		d -= m_vVelocity[1] * 50;
+//		if (d > 0) m_vF[0] -= d;
+//	}
+//
+//	if (m_vPosition[0] + 5 < 1)
+//	{
+//		float d = 1 - (m_vPosition[0] + 5);
+//		d *= 4000;
+//		d += m_vVelocity[1] * 50;
+//		if (d > 0) m_vF[0] += d;
+//	}
+//
+//	//movimento di caduta
+//	Matrix::DividiVettoreScalare(m_vF, m_fMass, m_vA);
+//	Matrix::MoltiplicaVettoreScalare(m_vA, DeltaTime, m_vA);
+//	Matrix::SommaVettori(m_vVelocity, m_vA, m_vVelocity);
+//	Matrix::MoltiplicaVettoreScalare(m_vVelocity, DeltaTime, m_vA);
+//	Matrix::SommaVettori(m_vPosition, m_vA, m_vPosition);
+//}
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {

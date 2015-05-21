@@ -1,37 +1,26 @@
 #pragma once
 
-
-#include "Vector3.h"
-#include "Matrix.h"
-
-class Physic
-{
-public:
-static void DoPhysic(float deltaTime, Vector3& m_vPos, Vector3& m_vVel, Vector3& m_vG, float M);
-
-private:
-
-};
-/*
 #include <vector>
 //#include "CollisionHandler.h"
 //#include "Dispatcher.h"
-//#include "ColliderUtil.h"
+//#include "CollisionAlgorithms.h"
+#include "RigidBody.h"
+#include "Collider.h"
 
+class RigidBody;
 
-//typedef ColliderType::ColliderTypeList CollidersType;
 //typedef CollisionHandler<20> PhysicCollisionHandler;
 typedef std::vector<RigidBody*> RigidBodyList;
 typedef std::vector<Collider*> ColliderList;
 //typedef Dispatcher<Collider, CollidersType, Collision*> ColliderDispatcher;
 typedef std::vector<int> RigidBodyID;
-class RigidBody;
-class Physics
+
+class Physic
 {
 
 public:
-	Physics();
-	~Physics();
+	Physic();
+	~Physic();
 
 	void ComputePhysic();
 	void AddRigidBody(RigidBody& rigidbody, int id);
@@ -43,12 +32,12 @@ public:
 	static const Vector3 mk_vGravity;
 
 private:
-	Physics(const Physics& other);
-	Physics& operator=(const Physics& other);
+	Physic(const Physic& other);
+	Physic& operator=(const Physic& other);
 
 	//PhysicCollisionHandler m_CollisionHandler;
 	RigidBodyID m_RigidBodyID;
 	RigidBodyList m_RigidBodyList;
 	ColliderList m_ColliderList;
 	//ColliderDispatcher m_ColliderDispatcher;
-};*/
+};
