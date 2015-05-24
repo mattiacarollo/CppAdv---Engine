@@ -67,7 +67,10 @@
   <ItemGroup>
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Collider.h" />
-    <ClInclude Include="ColliderUtil.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionAlgorithms.h" />
+    <ClInclude Include="CollisionDetector.h" />
+    <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Physic.h" />
     <ClInclude Include="Quaternion.h" />
@@ -78,7 +81,8 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="ColliderUtil.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Physic.cpp" />

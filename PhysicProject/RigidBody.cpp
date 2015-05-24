@@ -1,23 +1,7 @@
 #include "RigidBody.h"
-/*
-void Print(const Vector3& v)
-{
-	std::cout << "(" << v.getX() << ", " << v.getY() << ", " << v.getZ() << ")" << std::endl;
-}
 
-void Print(const Quaternion& v)
-{
-	std::cout << "(" << v.GetValue(0) << ", " << v.GetValue(1) << ", " << v.GetValue(2) << ", " << v.GetValue(3) << ")" << std::endl;
-}
-
-void Print(const Matrix<3, 3>& m)
-{
-	std::cout << m.GetElementAt(0) << ", " << m.GetElementAt(1) << ", " << m.GetElementAt(2) << std::endl;
-	std::cout << m.GetElementAt(3) << ", " << m.GetElementAt(4) << ", " << m.GetElementAt(5) << std::endl;
-	std::cout << m.GetElementAt(6) << ", " << m.GetElementAt(7) << ", " << m.GetElementAt(8) << std::endl;
-}*/
-
-RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia) : m_vPosition(pos), m_iID(id), m_fMass(mass)
+RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia) 
+	: m_vPosition(pos), m_iID(id), m_fMass(mass)
 {
 	m_vVelocity=VectorOp::Zero;
 	m_vInertia = inertia;
@@ -40,7 +24,6 @@ RigidBody::~RigidBody()
 
 void RigidBody::DoPhysic(float DeltaTime)
 {
-	
 	Vector3 tmp(m_vForceSum * DeltaTime);
 	
 	m_vQuantityOfMotion += tmp;
@@ -68,7 +51,46 @@ void RigidBody::DoPhysic(float DeltaTime)
 	//m_mRotationMatrix = m_qRotation.ToMatrix();
 
 	//m_vForceSum += Physic::mk_vGravity*m_fMass;
+	m_vForceSum += Physic::mk_vGravity/m_fMass;
 }
+
+//void RigidBody::DoPhysic(float DeltaTime)
+//{
+//	Vector3 m_vF;
+//	Vector3 m_vA;
+//
+//	Matrix::MoltiplicaVettoreScalare(Physic::mk_vGravity, m_fMass, m_vF);
+//
+//	//movimento laterale sul terreno
+//	if (m_vPosition[1] + 5 < 1) {
+//		float d = 1 - (m_vPosition[1] + 5);
+//		d *= 4000;
+//		d -= m_vVelocity[1] * 100;
+//		if (d > 0) m_vF[1] += d;
+//	}
+//
+//	if (5 - m_vPosition[0] < 1) {
+//		float d = 1 - (5 - m_vPosition[0]);
+//		d *= 4000;
+//		d -= m_vVelocity[1] * 50;
+//		if (d > 0) m_vF[0] -= d;
+//	}
+//
+//	if (m_vPosition[0] + 5 < 1)
+//	{
+//		float d = 1 - (m_vPosition[0] + 5);
+//		d *= 4000;
+//		d += m_vVelocity[1] * 50;
+//		if (d > 0) m_vF[0] += d;
+//	}
+//
+//	//movimento di caduta
+//	Matrix::DividiVettoreScalare(m_vF, m_fMass, m_vA);
+//	Matrix::MoltiplicaVettoreScalare(m_vA, DeltaTime, m_vA);
+//	Matrix::SommaVettori(m_vVelocity, m_vA, m_vVelocity);
+//	Matrix::MoltiplicaVettoreScalare(m_vVelocity, DeltaTime, m_vA);
+//	Matrix::SommaVettori(m_vPosition, m_vA, m_vPosition);
+//}
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {
@@ -97,34 +119,6 @@ void RigidBody::DetachCollider()
 {
 	delete m_cCollider;
 }
-/*
-void RigidBody::PrintStatus()
-{
-	std::cout << "----------------------------- \n" << std::endl;
-	std::cout << "RigidBody: " << m_iID << std::endl;
-	std::cout << "Mass: " << m_fMass << std::endl;
-	std::cout << "Position: ";
-	Print(m_vPosition);
-	std::cout << "Velocity: ";
-	Print(m_vVelocity);
-	std::cout << "Inertia: ";
-	Print(m_vInertia);
-	std::cout << "AngularVelocity: ";
-	Print(m_vAngularVelocity);
-	std::cout << "QuantityOfMotion: ";
-	Print(m_vQuantityOfMotion);
-	std::cout << "AngularMomentum: ";
-	Print(m_vAngularMomentum);
-	std::cout << "ForceSum: ";
-	Print(m_vForceSum);
-	std::cout << "MomentumSum: ";
-	Print(m_vMomentumSum);
-	std::cout << "Rotation: ";
-	Print(m_qRotation);
-	std::cout << "RotationMatrix: \n";
-	Print(m_mRotationMatrix);
-	std::cout << "----------------------------- \n" << std::endl;
-}*/
 
 int RigidBody::GetID() const
 {

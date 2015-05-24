@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Rigidbody">
       <UniqueIdentifier>{b4fd508f-e053-44ad-a30b-e573fff9e688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{d9553475-ef90-41a6-950d-aa1bf503ec37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{36d8f8a4-b607-491c-afa2-dc8849d0ffe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physic.h">
@@ -51,9 +57,6 @@
     <ClInclude Include="Collider.h">
       <Filter>Header Files\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderUtil.h">
-      <Filter>Header Files\Collider</Filter>
-    </ClInclude>
     <ClInclude Include="SphereCollider.h">
       <Filter>Header Files\Collider</Filter>
     </ClInclude>
@@ -65,6 +68,18 @@
     </ClInclude>
     <ClInclude Include="RigidBody.h">
       <Filter>Header Files\Rigidbody</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionAlgorithms.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetector.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,9 +98,6 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Source Files\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="ColliderUtil.cpp">
-      <Filter>Source Files\Collider</Filter>
-    </ClCompile>
     <ClCompile Include="SphereCollider.cpp">
       <Filter>Source Files\Collider</Filter>
     </ClCompile>
@@ -97,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Source Files\Rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDetector.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

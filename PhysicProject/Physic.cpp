@@ -1,40 +1,93 @@
 #include "Physic.h"
 
-//La funzione di integrazione. Viene invocata ogni deltaTime secondi
-void Physic::DoPhysic(float deltaTime, Vector3& m_vPos, Vector3& m_vVel, Vector3& m_vG, float M)
+const float Physic::mk_fDeltaTime = 0.025f;
+const Vector3 Physic::mk_vGravity = Vector3( 0.0f, -9.8f, 0.0f );
+
+Physic::Physic()
+{/*
+	m_ColliderDispatcher.Add<BoxCollider, BoxCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, BoxCollider>::Fire);
+	m_ColliderDispatcher.Add<BoxCollider, SphereCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, SphereCollider>::Fire<BoxCollider, SphereCollider>);
+	m_ColliderDispatcher.Add<SphereCollider, BoxCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, SphereCollider>::Fire<SphereCollider, BoxCollider>);
+	m_ColliderDispatcher.Add<SphereCollider, SphereCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<SphereCollider, SphereCollider>::Fire);*/
+}
+
+Physic::~Physic()
 {
-	Vector3 m_vF;
-	Vector3 m_vA;
+	unsigned int i;
 
-	Matrix::MoltiplicaVettoreScalare(m_vG, M, m_vF);
-
-	//movimento laterale sul terreno
-	if (m_vPos[1] + 5 < 1) {
-		float d = 1 - (m_vPos[1] + 5);
-		d *= 4000;
-		d -= m_vVel[1] * 100;
-		if (d > 0) m_vF[1] += d;
-	}
-
-	if (5 - m_vPos[0] < 1) {
-		float d = 1 - (5 - m_vPos[0]);
-		d *= 4000;
-		d -= m_vVel[1] * 50;
-		if (d > 0) m_vF[0] -= d;
-	}
-
-	if (m_vPos[0] + 5 < 1)
+	for (i = 0; i < m_ColliderList.size(); ++i)
 	{
-		float d = 1 - (m_vPos[0] + 5);
-		d *= 4000;
-		d += m_vVel[1] * 50;
-		if (d > 0) m_vF[0] += d;
+		delete m_ColliderList[i];
+	}
+	m_ColliderList.clear();
+
+	for (i = 0; i < m_RigidBodyList.size(); ++i)
+	{
+		delete m_RigidBodyList[i];
+	}
+	m_RigidBodyList.clear();
+	m_RigidBodyID.clear();
+}
+
+void Physic::ComputePhysic()
+{
+	unsigned int i, i2;
+	bool MaxCollisionReached = false;
+
+	for (i = 0; i < m_RigidBodyList.size(); ++i)
+	{
+		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
+	}
+	/*
+	for (i = 0; i < m_RigidBodyList.size() && !MaxCollisionReached; ++i)
+	{
+		for (i2 = i + 1; i2 < m_RigidBodyList.size() && !MaxCollisionReached; ++i2)
+		{
+			MaxCollisionReached = m_CollisionHandler.AddCollision(m_ColliderDispatcher.Dispatch(*(m_RigidBodyList[i]->GetCollider()), *(m_RigidBodyList[i2]->GetCollider())), m_RigidBodyList[i], m_RigidBodyList[i2]);
+		}
+	}
+	m_CollisionHandler.HandleCollision();*/
+}
+
+void Physic::AddRigidBody(RigidBody& rigidbody, int id)
+{
+	m_RigidBodyID.push_back(id);
+	m_RigidBodyList.push_back(&rigidbody);
+}
+
+void Physic::ApplyForce(int id, const Vector3& force, const Vector3& pointOfApplication)
+{
+	bool found = false;
+	unsigned int i = 0;
+
+	for (; i < m_RigidBodyID.size() && !found; ++i)
+	{
+		found = m_RigidBodyID[i] == id;
+	}
+	if (found)
+	{
+		m_RigidBodyList[i]->ApplyForce(force, pointOfApplication);
+	}
+}
+
+//MAYBE NON SENSE
+void Physic::DeleteRigidBody(int id)
+{
+	bool found = false;
+	unsigned int i = 0;
+
+	for (; i < m_RigidBodyID.size() && !found; ++i)
+	{
+		found = m_RigidBodyID[i] == id;
 	}
 
-	//movimento di caduta
-	Matrix::DividiVettoreScalare(m_vF, M, m_vA);
-	Matrix::MoltiplicaVettoreScalare(m_vA, deltaTime, m_vA);
-	Matrix::SommaVettori(m_vVel, m_vA, m_vVel);
-	Matrix::MoltiplicaVettoreScalare(m_vVel, deltaTime, m_vA);
-	Matrix::SommaVettori(m_vPos, m_vA, m_vPos);
+	if (found)
+	{
+		//TO DO
+	}
+}
+
+void Physic::AddCollider(Collider* col)
+{
+	m_ColliderList.push_back(col);
 }

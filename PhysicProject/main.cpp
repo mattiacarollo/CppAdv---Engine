@@ -5,26 +5,27 @@
 #include <math.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
-
 #include "Vector3.h"
 #include "Physic.h"
+#include "RigidBody.h"
+#include "SphereCollider.h"
+
+//MATTIA
+Vector3 SphereInertia(float mass, float radius)
+{
+	float tmp = 2 * mass*radius*radius / 5;
+	return Vector3(tmp, tmp, tmp);
+}
+
+Physic p;
+RigidBody* rB = new RigidBody(Vector3(1.0f, 4.0f, 1.0f), 0, 5.0f, SphereInertia(5.0f, 5.0f));
 
 float DT = 0.005f;
 double TempoTotale = 0;
 
-float M = 10;
-Vector3 m_vPos = { -4.0f, 0.0f, 0.0f };
-Vector3 m_vVel = { 3.0f, 3.0f, 0.0f };
-Vector3 m_vG = { 0.0f, -9.8f, 0.0f };
-
-
-
-
 void DisegnaSfera(float X, float Y, float Z, float R);
 void DisegnaPianoXZ(float QuotaZ);
-
 static GLfloat rosso[] = { 2.0f, 0.1f, 0.1f, 1.0f };
-//static GLfloat verde[] = { 0.2f, 0.8f, 0.2f, 1.0f };
 static GLfloat verde2[] = { 0.4f, 1.0f, 0.4f, 1.0f };
 static GLfloat blu[] = { 0.4f, 0.4f, 1.0f, 1.0f };
 static GLfloat bianco[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -51,14 +52,14 @@ void DisegnaPianoXZ(float Y)
 	glEnd();
 
 }
-void DisegnaSfera(float X, float Y, float Z, float R)
+void DisegnaSfera(Vector3 pos, float R)
 {
 	int i;
 	float j, X1, Y1, X2, Y2, s, c;
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glTranslatef(X, Y, Z);
+	glTranslatef(pos.getX(), pos.getY(), pos.getZ());
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, verde2);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, rosso);
@@ -87,18 +88,12 @@ void DisegnaSfera(float X, float Y, float Z, float R)
 
 	glPopMatrix();
 }
-//La funzione di visualizzazione.Viene periodicamente invocata per visualizzare la simulazione
 static void VisualizzaSistema()
 {
 	DisegnaPianoXZ(-5);
-	DisegnaSfera(m_vPos[0], m_vPos[1], m_vPos[2], 1);
+	DisegnaSfera(rB->GetPosition(), 1); 
 }
-//La funzione di interazione.Viene invocata se l'utente preme un tasto
-static void TastoPremuto(unsigned char Tasto)
-{
-}
-
-
+static void TastoPremuto(unsigned char Tasto){}
 HDC			hDC = NULL;
 HGLRC		hRC = NULL;
 HWND		hWnd = NULL;
@@ -153,7 +148,7 @@ static int DrawGLScene()
 	}
 
 	while (TempoTotale < t) {
-		Physic::DoPhysic(DT, m_vPos, m_vVel, m_vG, M);
+		p.ComputePhysic();
 		TempoTotale += DT;
 	}
 
@@ -192,7 +187,7 @@ static GLvoid KillGLWindow()
 		hWnd = NULL;						
 	}
 
-	if (!UnregisterClass(_T("Cattani di Merda"), hInstance)) {
+	if (!UnregisterClass(_T("Physic Lib"), hInstance)) {
 		MessageBox(NULL, _T("Could Not Unregister Class."), _T("SHUTDOWN ERROR"), MB_OK | MB_ICONINFORMATION);
 		hInstance = NULL;						
 	}
@@ -219,7 +214,7 @@ static BOOL CreateGLWindow(const char* title, int width, int height)
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
 	wc.hbrBackground = NULL;									// No Background Required For GL
 	wc.lpszMenuName = NULL;									// We Don't Want A Menu
-	wc.lpszClassName = _T("Cattani di Merda");								// Set The Class Name
+	wc.lpszClassName = _T("Physic Lib");								// Set The Class Name
 
 	if (!RegisterClass(&wc)) {
 		MessageBox(NULL, _T("Failed To Register The Window Class."), _T("ERROR"), MB_OK | MB_ICONEXCLAMATION);
@@ -233,8 +228,8 @@ static BOOL CreateGLWindow(const char* title, int width, int height)
 
 	// Create The Window
 	if (!(hWnd = CreateWindowEx(dwExStyle,							// Extended Style For The Window
-		_T("Cattani di Merda"),							// Class Name
-		_T("Cattani di Merda"),								// Window Title
+		_T("Physic Lib"),							// Class Name
+		_T("Physic Lib"),								// Window Title
 		dwStyle |							// Defined Window Style
 		WS_CLIPSIBLINGS |					// Required Window Style
 		WS_CLIPCHILDREN,					// Required Window Style
@@ -361,9 +356,20 @@ int WINAPI WinMain(HINSTANCE	hInstance,
 	LPSTR		lpCmdLine,
 	int			nCmdShow)
 {
+
+	//MATTIA
+
+	//Vector3 zeros(0.0f, 0.0f, 0.0f);
+	//SphereCollider* sC = new SphereCollider(rB->GetPosition(), zeros, 5.0);
+	SphereCollider* sC = new SphereCollider(rB->GetPosition(), 5.0);
+	rB->AttachCollider(sC);
+	p.AddRigidBody(*rB, rB->GetID());
+	rB->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+
+
 	MSG		msg;
 	BOOL	done = FALSE;
-	if (!CreateGLWindow("Cattani di Merda", 600, 600)) {
+	if (!CreateGLWindow("Physic Lib", 600, 600)) {
 		return 0;
 	}
 	timeBeginPeriod(1);
