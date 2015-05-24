@@ -2,8 +2,8 @@
 
 struct SimpleVertex
 {
-	XMFLOAT3 position;
-	XMFLOAT4 color;
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT4 color;
 };
 
 Application::Application() :
@@ -26,27 +26,27 @@ void Application::cleanResouces()
 	if (mPVertexShader)		{ mPVertexShader->Release(); delete mPVertexShader; mPVertexShader = 0; }
 	if (mPPixelShader)		{ mPPixelShader->Release(); delete mPPixelShader; mPPixelShader = 0; }
 	if (mPInputLayout)		{ mPInputLayout->Release(); delete mPInputLayout; mPInputLayout = 0; }
-	if (mPDepthStencilState)	{ mPDepthStencilState->Release(); delete mPDepthStencilState; mPDepthStencilState = 0; }
+	if (mPDepthStencilState){ mPDepthStencilState->Release(); delete mPDepthStencilState; mPDepthStencilState = 0; }
 	if (mRTW)				{ mRTW->Release(); delete mRTW; mRTW = 0; }
-	if (m_D3D) {m_D3D->Shutdown(); delete m_D3D; m_D3D = 0;}
+	if (m_D3D)				{ m_D3D->Shutdown(); delete m_D3D; m_D3D = 0; }
 }
 
-bool Application::initializeResources(DXManager* D3D, float screenratio, GraphicsManager* graphic)
+bool Application::initializeResources(DXManager* D3D, float screenratio, TerrainClass* terrain, ColorShaderClass* colorshader)
 {
 	m_D3D = D3D;
-	m_Graphic = graphic;
 	mRTW = m_D3D->GetRenderTargetView();
+
 	// Creazione del cubo da renderizzare.
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
 	};
 
 	unsigned int indices[] =
@@ -129,7 +129,7 @@ bool Application::initializeResources(DXManager* D3D, float screenratio, Graphic
 	if (FAILED(result))
 		return false;
 
-	D3D11_DEPTH_STENCIL_DESC dsDescON;
+	/*D3D11_DEPTH_STENCIL_DESC dsDescON;
 	dsDescON.DepthEnable = true;
 	dsDescON.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsDescON.DepthFunc = D3D11_COMPARISON_LESS;
@@ -137,24 +137,27 @@ bool Application::initializeResources(DXManager* D3D, float screenratio, Graphic
 
 	result = m_D3D->GetDevice()->CreateDepthStencilState(&dsDescON, &mPDepthStencilState);
 	if (FAILED(result))
-		return false;
+		return false;*/
 
 	return true;
 }
 
-void Application::render()
+void Application::render(DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix)
 {
+	Transformations trans;
+	trans.view = viewMatrix;
+	trans.world = worldMatrix;
+	trans.projection = projectionMatrix;
 	// Aggiorniamo il constant buffer delle trasformazioni
-	m_D3D->GetDeviceContext()->UpdateSubresource(mPTranfBuffer, 0, nullptr, m_Graphic->GetTransf(), 0, 0);
+	m_D3D->GetDeviceContext()->UpdateSubresource(mPTranfBuffer, 0, nullptr, &trans, 0, 0);
 
-	XMFLOAT4 clearColor(0.39f, 0.58f, 0.93f, 1.0f);
-	
+	//DirectX::XMFLOAT4 clearColor(0.39f, 0.58f, 0.93f, 1.0f);	
 	// Settiamo il render target corrente.
-	m_D3D->GetDeviceContext()->OMSetRenderTargets(1, &mRTW, m_D3D->GetDepthStencilView());
+	//m_D3D->GetDeviceContext()->OMSetRenderTargets(1, &mRTW, m_D3D->GetDepthStencilView());
 	// Pulizia del render target.
-	m_D3D->GetDeviceContext()->ClearRenderTargetView(m_D3D->GetRenderTargetView(), &(clearColor.x));
+	//m_D3D->GetDeviceContext()->ClearRenderTargetView(m_D3D->GetRenderTargetView(), &(clearColor.x));
 	// Pulizia del depth buffer
-	m_D3D->GetDeviceContext()->ClearDepthStencilView(m_D3D->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	//m_D3D->GetDeviceContext()->ClearDepthStencilView(m_D3D->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	// Settiamo l'input layout.
 	m_D3D->GetDeviceContext()->IASetInputLayout(mPInputLayout);
@@ -171,7 +174,7 @@ void Application::render()
 	//Settiamo i constant buffer da utilizzare.
 	m_D3D->GetDeviceContext()->VSSetConstantBuffers(0, 1, &mPTranfBuffer);
 
-	m_D3D->GetDeviceContext()->OMSetDepthStencilState(mPDepthStencilState, 0);
+	//m_D3D->GetDeviceContext()->OMSetDepthStencilState(mPDepthStencilState, 0);
 
 	m_D3D->GetDeviceContext()->IASetIndexBuffer(mPIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_D3D->GetDeviceContext()->DrawIndexed(36, 0, 0);

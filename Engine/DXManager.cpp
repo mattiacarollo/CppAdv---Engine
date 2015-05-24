@@ -12,6 +12,7 @@ DXManager::DXManager()
 	m_alphaEnableBlendingState = 0;
 	m_alphaDisableBlendingState = 0;
 	m_depthDisabledStencilState = 0;
+	m_rasterState = 0;
 	mMuntisampleCount = 1;
 }
 
@@ -33,10 +34,17 @@ bool DXManager::Initialize(
 	HRESULT hr = S_OK;
 	m_vsync_enabled = vsync;
 	mHWnd = HWnd;
-	mScreenWidth = screenWidth;
-	mScreenHeight = screenHeight;
+	m_ScreenWidth = screenWidth;
+	m_ScreenHeight = screenHeight;
+	m_ScreenNear = screenNear;
+	m_ScreenDepth = screenDepth;
+
 
 	hr = initializeDevice(fullscreen);
+	if (FAILED(hr))
+		return false;
+
+	hr = setupMatrix();
 	if (FAILED(hr))
 		return false;
 
@@ -60,10 +68,14 @@ bool DXManager::Initialize(
 	if (FAILED(hr))
 		return false;
 
+	hr = initializeRasterState();
+	if (FAILED(hr))
+		return false;
+
 	// Setta il viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = static_cast<float>(mScreenWidth);
-	vp.Height = static_cast<float>(mScreenHeight);
+	vp.Width = static_cast<float>(m_ScreenWidth);
+	vp.Height = static_cast<float>(m_ScreenHeight);
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
@@ -86,8 +98,8 @@ HRESULT DXManager::initializeDevice(bool fullscreen)
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1; 
-	sd.BufferDesc.Width = mScreenWidth;
-	sd.BufferDesc.Height = mScreenHeight;
+	sd.BufferDesc.Width = m_ScreenWidth;
+	sd.BufferDesc.Height = m_ScreenHeight;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; 
 	if (m_vsync_enabled)
 	{
@@ -145,6 +157,25 @@ HRESULT DXManager::initializeDevice(bool fullscreen)
 	return S_OK;
 }
 
+HRESULT DXManager::setupMatrix()
+{
+	float fieldOfView, screenAspect;
+	// Setup the projection matrix.
+	fieldOfView = (float)DirectX::XM_PI / 4.0f;
+	screenAspect = (float)m_ScreenWidth / (float)m_ScreenHeight;
+
+	// Create the projection matrix for 3D rendering.
+	transf.projection = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, m_ScreenNear, m_ScreenDepth);
+
+	// Initialize the world matrix to the identity matrix.
+	transf.world = DirectX::XMMatrixIdentity();
+
+	// Create an orthographic projection matrix for 2D rendering.
+	m_orthoMatrix = DirectX::XMMatrixOrthographicLH((float)m_ScreenWidth, (float)m_ScreenHeight, m_ScreenNear, m_ScreenDepth);
+
+	return S_OK;
+}
+
 HRESULT DXManager::getVideoCardInfo()
 {
 	HRESULT result;
@@ -176,9 +207,9 @@ HRESULT DXManager::getVideoCardInfo()
 
 	for (i = 0; i<numModes; i++)
 	{
-		if (displayModeList[i].Width == (unsigned int)mScreenWidth)
+		if (displayModeList[i].Width == (unsigned int)m_ScreenWidth)
 		{
-			if (displayModeList[i].Height == (unsigned int)mScreenHeight)
+			if (displayModeList[i].Height == (unsigned int)m_ScreenHeight)
 			{
 				mNumerator = displayModeList[i].RefreshRate.Numerator;
 				mDenominator = displayModeList[i].RefreshRate.Denominator;
@@ -244,13 +275,41 @@ HRESULT DXManager::initializeRenderTarget()
 	return S_OK;
 }
 
+HRESULT DXManager::initializeRasterState()
+{
+	HRESULT hr = S_OK;
+	// Setup the raster description which will determine how and what polygons will be drawn.
+	D3D11_RASTERIZER_DESC rasterDesc;
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = false;
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	// Create the rasterizer state from the description we just filled out.
+	hr = mPd3dDevice->CreateRasterizerState(&rasterDesc, &m_rasterState);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	// Now set the rasterizer state.
+	mPd3dDeviceContext->RSSetState(m_rasterState);
+	return S_OK;
+}
+
 HRESULT DXManager::initializeDepthBufferDesc()
 {
 	HRESULT hr = S_OK;
 	D3D11_TEXTURE2D_DESC descDepth;
 	ZeroMemory(&descDepth, sizeof(descDepth));
-	descDepth.Width = mScreenWidth;
-	descDepth.Height = mScreenHeight;
+	descDepth.Width = m_ScreenWidth;
+	descDepth.Height = m_ScreenHeight;
 	descDepth.MipLevels = 1;
 	descDepth.ArraySize = 1;
 	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;;
@@ -385,4 +444,6 @@ void DXManager::Shutdown()
 	if (m_alphaEnableBlendingState)	{ m_alphaEnableBlendingState->Release(); delete m_alphaEnableBlendingState; m_alphaEnableBlendingState = 0; }
 	if (m_alphaDisableBlendingState)	{ m_alphaDisableBlendingState->Release(); delete m_alphaDisableBlendingState; m_alphaDisableBlendingState = 0; }
 	if (m_depthDisabledStencilState)	{ m_depthDisabledStencilState->Release(); delete m_depthDisabledStencilState; m_depthDisabledStencilState = 0; }
+	if (m_rasterState)	{ m_rasterState->Release(); delete m_rasterState; m_rasterState = 0; }
+
 }

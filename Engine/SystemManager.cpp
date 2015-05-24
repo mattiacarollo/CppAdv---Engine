@@ -3,19 +3,12 @@
 
 SystemManager::SystemManager() 
 {
-	m_Input = 0;
+	m_AppManag = 0;
 }
 
+SystemManager::SystemManager(const SystemManager& other){}
 
-SystemManager::SystemManager(const SystemManager& other)
-{
-}
-
-
-SystemManager::~SystemManager()
-{
-}
-
+SystemManager::~SystemManager(){}
 
 bool SystemManager::Initialize()
 {
@@ -27,34 +20,25 @@ bool SystemManager::Initialize()
 
 	InitializeWindows(screenWidth, screenHeight);
 
-	m_Input = new InputManager;
-	if (!m_Input){ return false; }
-	m_Input->Initialize();
-
-	m_Graphic = new GraphicsManager;
-	if (!m_Graphic){ return false; }
-	m_Graphic->Initialize(screenWidth, screenHeight, m_hwnd, m_Input);
+	m_AppManag = new ApplicationManager;
+	if (!m_AppManag){ return false; }
+	m_AppManag->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
 
 	return true;
 }
 
 void SystemManager::Shutdown()
 {
-	if (m_Input)
+	if (m_AppManag)
 	{
-		delete m_Input;
-		m_Input = 0;
-	}
-	if (m_Graphic)
-	{
-		delete m_Graphic;
-		m_Graphic = 0;
+		m_AppManag->Shutdown();
+		delete m_AppManag;
+		m_AppManag = 0;
 	}
 	ShutdownWindows();
 
 	return;
 }
-
 
 void SystemManager::Run()
 {
@@ -92,51 +76,14 @@ void SystemManager::Run()
 bool SystemManager::Frame()
 {
 	bool result;
-	if (m_Input->IsKeyDown(VK_ESCAPE))	{	return false;	}
-
-	result = m_Graphic->Frame();
+	result = m_AppManag->Frame();
 	if (!result)	{	return false;	}
-
 	return true;
-}
-
-LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
-{
-	switch (umessage)
-	{
-		case WM_DESTROY:
-		{
-			PostQuitMessage(0);
-			return 0;
-		}
-		case WM_CLOSE:
-		{
-			PostQuitMessage(0);
-			return 0;
-		}
-		default:
-		{
-			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
-		}
-	}
 }
 
 LRESULT CALLBACK SystemManager::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
-	switch (umsg)
-	{
-	case WM_KEYDOWN:
-	{
-		m_Input->KeyDown((unsigned int)wparam);
-		return 0;
-	}
-	case WM_KEYUP:
-	{
-		m_Input->KeyUp((unsigned int)wparam);
-		return 0;
-	}
-	default:{ return DefWindowProc(hwnd, umsg, wparam, lparam); }
-	}
+	return DefWindowProc(hwnd, umsg, wparam, lparam); 
 }
 
 void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
@@ -180,15 +127,13 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		screenWidth = 800;
-		screenHeight = 600;
-
+		screenWidth = 1024;
+		screenHeight = 768;
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
 		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 	}
-
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP | WS_OVERLAPPEDWINDOW,
 		posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
 
 	ShowWindow(m_hwnd, SW_SHOW);
@@ -218,4 +163,24 @@ void SystemManager::ShutdownWindows()
 	return;
 }
 
+LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+{
+	switch (umessage)
+	{
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+	case WM_CLOSE:
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+	default:
+	{
+		return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
+	}
+	}
+}
 

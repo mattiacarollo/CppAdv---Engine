@@ -1,33 +1,29 @@
-#pragma once
+#ifndef _CAMERACLASS_H_
+#define _CAMERACLASS_H_
 
 #include <DirectXMath.h>
-#include <algorithm>
 
-namespace utility
+class Camera
 {
-	class Camera
-	{
-	public:
-		Camera();
+public:
+	Camera();
+	Camera(const Camera&);
+	~Camera();
 
-		DirectX::XMMATRIX getViewMatrix() const;
-		DirectX::XMVECTOR getCameraPosition() const;
-		DirectX::XMFLOAT4 getCameraPositionFlaot4() const;
+	void SetPosition(float, float, float);
+	void SetRotation(float, float, float);
 
-		void setFocusPoint(const DirectX::XMVECTOR focusPoint);
+	DirectX::XMFLOAT3 GetPosition();
+	DirectX::XMFLOAT3 GetRotation();
 
-		void xRotation(const float dTheta);
-		void yRotation(const float dPhi);
-		void translate(const float dRho);
+	void Render();
+	void GetViewMatrix(DirectX::XMMATRIX&);
 
-	private:
-		void adjustTheta();
-		void adjustPhi();
-		void adjustRho();
 
-		DirectX::XMVECTOR mFocusPoint;
-		float mPhi;
-		float mTheta;
-		float mRho;
-	};
-}
+private:
+	float m_positionX, m_positionY, m_positionZ;
+	float m_rotationX, m_rotationY, m_rotationZ;
+	DirectX::XMMATRIX m_viewMatrix;
+};
+
+#endif

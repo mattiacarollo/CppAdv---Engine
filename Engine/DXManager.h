@@ -1,7 +1,7 @@
 #pragma once
 
 #include <dxgi.h>
-
+#include "DataType.h"
 #include "Utility.h"
 
 using namespace utility;
@@ -27,6 +27,8 @@ public:
 	ID3D11BlendState* GetAlphaEnableBlendingState(){ return m_alphaEnableBlendingState; }
 	ID3D11BlendState* GetAlphaDisableBlendingState(){ return m_alphaDisableBlendingState; }
 	void GetVideoCardInfo(char*, int&);
+	Transformations* GetTransf() { return &transf; }
+	DirectX::XMMATRIX GetOrthoMatrix(){return m_orthoMatrix;}
 	void TurnZBufferOn();
 	void TurnZBufferOff();
 	void TurnOnAlphaBlending();
@@ -35,11 +37,13 @@ public:
 
 private:
 	HRESULT initializeDevice(bool);
+	HRESULT setupMatrix();
 	HRESULT getVideoCardInfo();
 	HRESULT initializeRenderTarget();
 	HRESULT initializeDepthBufferDesc();
 	HRESULT initializeDepthStencilDesc();
 	HRESULT initializeAlphaBlendStateDesc();
+	HRESULT initializeRasterState();
 
 private:
 	ID3D11Device* mPd3dDevice;
@@ -52,11 +56,14 @@ private:
 	ID3D11DepthStencilState* m_depthDisabledStencilState;
 	ID3D11BlendState* m_alphaEnableBlendingState;
 	ID3D11BlendState* m_alphaDisableBlendingState;
+	ID3D11RasterizerState* m_rasterState;
 
 	HWND mHWnd;
 	D3D_DRIVER_TYPE mDriverType;
 	bool m_vsync_enabled;
-	int mScreenWidth, mScreenHeight, mMuntisampleCount, mNumerator, mDenominator;
-	int m_videoCardMemory;
+	int m_ScreenWidth, m_ScreenHeight, mMuntisampleCount, mNumerator, mDenominator, m_videoCardMemory;
+	float m_ScreenNear, m_ScreenDepth;
+	Transformations transf;
+	DirectX::XMMATRIX m_orthoMatrix;
 	char m_videoCardDescription[128];
 };

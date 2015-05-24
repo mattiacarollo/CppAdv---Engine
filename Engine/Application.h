@@ -1,22 +1,19 @@
 #pragma once
 
-#include "GraphicsManager.h"
+#include "ApplicationManager.h"
 #include "Utility.h"
 #include "ShaderLoader.h"
 
 using namespace utility;
-using namespace DirectX;
-
-class GraphicsManager;
 
 class Application
 {
 public:
 	Application();
 
-	bool initializeResources(DXManager*,float, GraphicsManager*);
+	bool initializeResources(DXManager*,float, class TerrainClass*, class ColorShaderClass*);
 	void preRender();
-	void render();
+	void render(DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&);
 	void cleanResouces();
 
 private:
@@ -29,7 +26,7 @@ private:
 	ID3D11DepthStencilState* mPDepthStencilState;
 	ID3D11RenderTargetView* mRTW;
 
-	DXManager* m_D3D;
-	GraphicsManager* m_Graphic;
-	
+	bool result;
+
+	DXManager* m_D3D;	
 };

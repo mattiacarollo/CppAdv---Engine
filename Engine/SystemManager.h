@@ -2,8 +2,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
-#include "InputManager.h"
-#include "GraphicsManager.h"
+#include "ApplicationManager.h"
 
 class SystemManager
 {
@@ -28,10 +27,8 @@ private:
 	LPCWSTR m_applicationName; 
 	HINSTANCE m_hinstance; 
 	HWND m_hwnd; 
-	InputManager* m_Input;
-	GraphicsManager* m_Graphic;
+	ApplicationManager* m_AppManag;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); 
 static SystemManager* ApplicationHandle = 0; 
-//We can redirect windows message into our systemclass (and message handler)
