@@ -57,9 +57,6 @@
     <ClCompile Include="ShaderLoader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="timer.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="ApplicationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,9 +91,6 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="ApplicationManager.h">
       <Filter>Header Files</Filter>

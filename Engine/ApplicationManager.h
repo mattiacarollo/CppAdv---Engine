@@ -11,14 +11,12 @@ const float SCREEN_NEAR = 0.1f;
 #include "InputManager.h"
 #include "DXManager.h"
 #include "Camera.h"
-#include "Application.h"
+#include "GraphicsManager.h"
 #include "PositionManager.h"
-#include "timer.h"
-#include "TerrainManager.h"
-#include "ColorShader.h"
-#include "timerManager.h"
+#include "timerManager.h" 
 
 class Application;
+class GraphicsManager;
 
 class ApplicationManager
 {
@@ -40,9 +38,7 @@ private:
 	PositionManager* m_Position;
 	DXManager* m_D3D;
 	Camera* m_Camera;
-	Application* m_App;
-	TerrainClass* m_Terrain;
-	ColorShaderClass* m_ColorShader;
+	GraphicsManager* m_Graphic;
 	TimerClass* m_Timer;
 };
 

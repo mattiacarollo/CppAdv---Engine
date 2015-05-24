@@ -100,7 +100,6 @@
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="TerrainManager.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -129,7 +128,6 @@
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="TerrainManager.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="timer.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>

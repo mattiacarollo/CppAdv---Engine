@@ -11,7 +11,7 @@ class Application
 public:
 	Application();
 
-	bool initializeResources(DXManager*,float, class TerrainClass*, class ColorShaderClass*);
+	bool initializeResources(DXManager*);
 	void preRender();
 	void render(DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&);
 	void cleanResouces();

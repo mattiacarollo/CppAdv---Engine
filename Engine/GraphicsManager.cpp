@@ -1,146 +1,114 @@
-//#include "GraphicsManager.h"
-//
-//GraphicsManager::GraphicsManager()
-//{
-//	m_D3D = 0;
-//	m_app = 0;
-//	m_Camera = 0;
-//	m_input = 0;
-//}
-//
-//
-//GraphicsManager::GraphicsManager(const GraphicsManager& other)
-//{
-//}
-//
-//
-//GraphicsManager::~GraphicsManager()
-//{
-//}
-//
-//
-//bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, InputManager* Input)
-//{
-//	bool result;
-//	float screenratio = static_cast<float>(screenWidth) / (screenHeight);
-//	m_input = Input;
-//
-//	m_D3D = new DXManager;
-//	if (!m_D3D) {	return false;	}
-//	result = m_D3D->Initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
-//	if (!result)
-//	{
-//		MessageBox(hwnd, L"Could not initialize Direct3D", L"Error", MB_OK);
-//		return false;
-//	}
-//
-//	m_app = new Application;
-//	if (!m_app) { return false; }
-//	result = m_app->initializeResources(m_D3D, screenratio, this);
-//	if (!result)
-//	{
-//		MessageBox(hwnd, L"Could not initialize Application", L"Error", MB_OK);
-//		return false;
-//	}
-//	
-//	m_Camera = new Camera;
-//	if (!m_Camera) 
-//	{
-//		MessageBox(hwnd, L"Could not initialize Camera", L"Error", MB_OK);
-//		return false;
-//	}
-//
-//	transf.world = DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f);
-//	transf.view = m_Camera->getViewMatrix();
-//	transf.cameraPosition = m_Camera->getCameraPositionFlaot4();
-//	transf.projection = DirectX::XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), screenratio, 0.1f, 100.0f);
-//
-//	return true;
-//}
-//
-//bool GraphicsManager::Frame()
-//{
-//	static utility::Timer timer;
-//	const float degForSec = 1.0f;
-//
-//	float fSec = timer.elapsedSecF();
-//	XMFLOAT4 viewAxeRotation(0.0f, 0.0f, 0.0f, 0.0f);
-//	float viewTraslation = 0.0f;
-//
-//	if (m_input->IsKeyDown(0x57))		m_Camera->xRotation(-fSec);
-//	if (m_input->IsKeyDown(0x41))		m_Camera->yRotation(fSec);
-//	if (m_input->IsKeyDown(0x53))		m_Camera->xRotation(fSec);
-//	if (m_input->IsKeyDown(0x44))		m_Camera->yRotation(-fSec);
-//	if (m_input->IsKeyDown(0x51))		viewTraslation += (2.0f * fSec);
-//	if (m_input->IsKeyDown(0x45))		viewTraslation -= (2.0f * fSec);
-//
-//	if (viewTraslation != 0.0f)		m_Camera->translate(viewTraslation);
-//
-//	XMFLOAT4 axeRotation(0.0f, 0.0f, 0.0f, 0.0f);
-//
-//	if (m_input->IsKeyDown(VK_LEFT))	axeRotation.y -= 1.0f;
-//	if (m_input->IsKeyDown(VK_RIGHT))	axeRotation.y += 1.0f;
-//	if (m_input->IsKeyDown(VK_UP))		axeRotation.x -= 1.0f;
-//	if (m_input->IsKeyDown(VK_DOWN))	axeRotation.x += 1.0f;
-//
-//	if (axeRotation.x != 0.0f || axeRotation.y != 0.0f)
-//	{
-//		float angle = degForSec * fSec;
-//		XMMATRIX rotationMatrix = XMMatrixRotationAxis(XMLoadFloat4(&axeRotation), angle);
-//		XMMATRIX newWorldMatrix = XMMatrixMultiply(rotationMatrix, transf.world);
-//		transf.world = newWorldMatrix;
-//	}
-//
-//	transf.view = m_Camera->getViewMatrix();
-//	transf.cameraPosition = m_Camera->getCameraPositionFlaot4();
-//
-//	timer.start();
-//	bool result;
-//	result = Render();
-//	if (!result)
-//	{
-//		return false;
-//	}
-//	return true;
-//}
-//
-//
-//bool GraphicsManager::Render()
-//{
-//	m_D3D->BeginScene(0.12f, 0.29f, 0.60f, 0.5f);
-//
-//	m_app->preRender();
-//	m_app->render();
-//	
-//	m_D3D->EndScene();
-//
-//	return true;
-//}
-//
-//
-//void GraphicsManager::Shutdown()
-//{
-//	if (m_D3D)
-//	{
-//		m_D3D->Shutdown();
-//		delete m_D3D;
-//		m_D3D = 0;
-//	}
-//	if (m_app)
-//	{
-//		m_app->cleanResouces();
-//		delete m_app;
-//		m_app = 0;
-//	}
-//	if (m_input)
-//	{
-//		delete m_input;
-//		m_input = 0;
-//	}
-//	if (m_Camera)
-//	{
-//		delete m_Camera;
-//		m_Camera = 0;
-//	}
-//	return;
-//}
+#include "GraphicsManager.h"
+
+GraphicsManager::GraphicsManager()
+{
+	m_Terrain = 0;
+	m_ColorShader = 0;
+	m_App = 0;
+	m_Camera = 0;
+}
+
+
+GraphicsManager::GraphicsManager(const GraphicsManager& other)
+{
+}
+
+
+GraphicsManager::~GraphicsManager()
+{
+}
+
+
+bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
+{
+	m_D3D = D3D;
+	m_Camera = camera;
+	bool result;
+	// Create and Initialize the terrain object.
+	m_Terrain = new TerrainClass;
+	if (!m_Terrain)	{ return false; }
+	result = m_Terrain->Initialize(m_D3D->GetDevice());
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create and initialize the color shader object.
+	m_ColorShader = new ColorShaderClass;
+	if (!m_ColorShader)	{ return false; }
+	result = m_ColorShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create and initialize the Application object.
+	m_App = new Application;
+	if (!m_App)	{ return false; }
+	result = m_App->initializeResources(D3D);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the Application object.", L"Error", MB_OK);
+		return false;
+	}
+
+	return true;
+}
+
+bool GraphicsManager::Frame()
+{
+	bool result;
+	result = Render();
+	if (!result) { return false; }
+	return true;
+}
+
+
+bool GraphicsManager::Render()
+{
+	bool result;
+	utility::Transformations trans;
+	m_Camera->Render();
+	m_Camera->GetViewMatrix(trans.view);
+	trans.world = m_D3D->GetTransf()->world;
+	trans.projection = m_D3D->GetTransf()->projection;
+
+	m_App->render(trans.world, trans.view, trans.projection);
+
+	m_Terrain->Render(m_D3D->GetDeviceContext());
+	result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), trans.world, trans.view, trans.projection);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+void GraphicsManager::Shutdown()
+{
+	if (m_Terrain)
+	{
+		delete m_Terrain;
+		m_Terrain = 0;
+	}
+	if (m_ColorShader)
+	{
+		delete m_ColorShader;
+		m_ColorShader = 0;
+	}
+	if (m_App)
+	{
+		delete m_App;
+		m_App = 0;
+	}
+	if (m_Camera)
+	{
+		delete m_App;
+		m_App = 0;
+	}
+	return;
+}

@@ -6,10 +6,8 @@ ApplicationManager::ApplicationManager()
 	m_Input = 0;
 	m_D3D = 0;
 	m_Camera = 0;
-	m_App = 0;
+	m_Graphic = 0;
 	m_Position = 0;
-	m_Terrain = 0;
-	m_ColorShader = 0;
 	m_Timer = 0;
 }
 
@@ -61,26 +59,6 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	cameraZ = -7.0f;
 	m_Camera->SetPosition(cameraX, cameraY, cameraZ);
 
-	// Create and Initialize the terrain object.
-	m_Terrain = new TerrainClass;
-	if (!m_Terrain)	{ return false; }
-	result = m_Terrain->Initialize(m_D3D->GetDevice());
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
-		return false;
-	}
-
-	// Create and initialize the color shader object.
-	m_ColorShader = new ColorShaderClass;
-	if (!m_ColorShader)	{	return false;	}
-	result = m_ColorShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	// Create and Initialize the timer object.
 	m_Timer = new TimerClass;
 	if (!m_Timer)	{	return false;	}
@@ -96,13 +74,13 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	if (!m_Position)	{	return false;	}
 	m_Position->SetPosition(cameraX, cameraY, cameraZ);
 
-	//Create and Initialize the Application Object.
-	m_App = new Application;
-	if (!m_App) { return false; }
-	result = m_App->initializeResources(m_D3D, screenratio, m_Terrain, m_ColorShader);
+	//Create and Initialize the Graphic Manager Object.
+	m_Graphic = new GraphicsManager;
+	if (!m_Graphic) { return false; }
+	result = m_Graphic->Initialize(m_D3D, hwnd, m_Camera);
 	if (!result)
 	{
-		MessageBox(hwnd, L"Could not initialize Application", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize Graphic Manager Object", L"Error", MB_OK);
 		return false;
 	}
 
@@ -129,26 +107,16 @@ void ApplicationManager::Shutdown()
 		delete m_Input;
 		m_Input = 0;
 	}
-	if (m_App)
+	if (m_Graphic)
 	{
-		m_App->cleanResouces();
-		delete m_App;
-		m_App = 0;
+		m_Graphic->Shutdown();
+		delete m_Graphic;
+		m_Graphic = 0;
 	}
 	if (m_Position)
 	{
 		delete m_Position;
 		m_Position = 0;
-	}
-	if (m_Terrain)
-	{
-		delete m_Terrain;
-		m_Terrain = 0;
-	}	
-	if (m_ColorShader)
-	{
-		delete m_ColorShader;
-		m_ColorShader = 0;
 	}
 	if (m_Timer)
 	{
@@ -171,9 +139,6 @@ bool ApplicationManager::Frame()
 	if (m_Input->IsEscapePressed() == true)	{	return false;	}
 
 	m_Timer->Frame();
-	static utility::Timer timer;
-	const float degForSec = 1.0f;
-	float fSec = timer.elapsedSecF();
 
 	// Do the frame input processing.
 	result = HandleInput(m_Timer->GetTime());
@@ -234,25 +199,13 @@ bool ApplicationManager::HandleInput(float frameTime)
 
 bool ApplicationManager::RenderGraphics()
 {
-	utility::Transformations temp;
 	bool result;
+	DirectX::XMMATRIX view;
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Generate the view matrix based on the camera's position.
-	m_Camera->Render();
 
-	m_Camera->GetViewMatrix(temp.view);
-	temp.world = m_D3D->GetTransf()->world;
-	temp.projection = m_D3D->GetTransf()->projection;
-
-	m_App->render(temp.world, temp.view, temp.projection);
-
-	m_Terrain->Render(m_D3D->GetDeviceContext());
-	result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), temp.world, temp.view, temp.projection);
-	if (!result)
-	{
-		return false;
-	}
+	m_Graphic->Frame();
 
 	m_D3D->EndScene();
 

@@ -31,7 +31,7 @@ void Application::cleanResouces()
 	if (m_D3D)				{ m_D3D->Shutdown(); delete m_D3D; m_D3D = 0; }
 }
 
-bool Application::initializeResources(DXManager* D3D, float screenratio, TerrainClass* terrain, ColorShaderClass* colorshader)
+bool Application::initializeResources(DXManager* D3D)
 {
 	m_D3D = D3D;
 	mRTW = m_D3D->GetRenderTargetView();
