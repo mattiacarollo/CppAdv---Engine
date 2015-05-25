@@ -37,7 +37,7 @@ public:
 	Collider* GetCollider() const;
 
 	void SetPosition(const Vector3&);
-	void SetVelocity(const Vector3&);	
+	void SetVelocity(const Vector3&);
 
 private:
 
