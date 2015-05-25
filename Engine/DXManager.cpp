@@ -434,16 +434,16 @@ void DXManager::EndScene()
 
 void DXManager::Shutdown()
 {
-	if (mPSwapChain)	{ mPSwapChain->Release(); delete mPSwapChain; mPSwapChain = 0; }
-	if (mPd3dDevice)	{ mPd3dDevice->Release(); delete mPd3dDevice; mPd3dDevice = 0; }
-	if (mPd3dDeviceContext)	{ mPd3dDeviceContext->Release(); delete mPd3dDeviceContext; mPd3dDeviceContext = 0; }
-	if (mPRenderTargetView)	{ mPRenderTargetView->Release(); delete mPRenderTargetView; mPRenderTargetView = 0; }
-	if (pDepthStencil)	{ pDepthStencil->Release(); delete pDepthStencil; pDepthStencil = 0; }
-	if (mPDepthStencilView)	{ mPDepthStencilView->Release(); delete mPDepthStencilView; mPDepthStencilView = 0; }
-	if (m_depthStencilState)	{ m_depthStencilState->Release(); delete m_depthStencilState; m_depthStencilState = 0; }
-	if (m_alphaEnableBlendingState)	{ m_alphaEnableBlendingState->Release(); delete m_alphaEnableBlendingState; m_alphaEnableBlendingState = 0; }
-	if (m_alphaDisableBlendingState)	{ m_alphaDisableBlendingState->Release(); delete m_alphaDisableBlendingState; m_alphaDisableBlendingState = 0; }
-	if (m_depthDisabledStencilState)	{ m_depthDisabledStencilState->Release(); delete m_depthDisabledStencilState; m_depthDisabledStencilState = 0; }
-	if (m_rasterState)	{ m_rasterState->Release(); delete m_rasterState; m_rasterState = 0; }
+	if (mPSwapChain)	{ mPSwapChain->Release(); mPSwapChain = 0; }
+	if (mPd3dDevice)	{ mPd3dDevice->Release(); mPd3dDevice = 0; }
+	if (mPd3dDeviceContext)	{ mPd3dDeviceContext->Release(); mPd3dDeviceContext = 0; }
+	if (mPRenderTargetView)	{ mPRenderTargetView->Release(); mPRenderTargetView = 0; }
+	if (pDepthStencil)	{ pDepthStencil->Release(); pDepthStencil = 0; }
+	if (mPDepthStencilView)	{ mPDepthStencilView->Release(); mPDepthStencilView = 0; }
+	if (m_depthStencilState)	{ m_depthStencilState->Release(); m_depthStencilState = 0; }
+	if (m_alphaEnableBlendingState)	{ m_alphaEnableBlendingState->Release(); m_alphaEnableBlendingState = 0; }
+	if (m_alphaDisableBlendingState)	{ m_alphaDisableBlendingState->Release(); m_alphaDisableBlendingState = 0; }
+	if (m_depthDisabledStencilState)	{ m_depthDisabledStencilState->Release(); m_depthDisabledStencilState = 0; }
+	if (m_rasterState)	{ m_rasterState->Release(); m_rasterState = 0; }
 
 }

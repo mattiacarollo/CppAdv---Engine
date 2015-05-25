@@ -26,6 +26,7 @@ public:
 	ID3D11DepthStencilState* GetDepthStencilState(){ return m_depthStencilState; }
 	ID3D11BlendState* GetAlphaEnableBlendingState(){ return m_alphaEnableBlendingState; }
 	ID3D11BlendState* GetAlphaDisableBlendingState(){ return m_alphaDisableBlendingState; }
+
 	void GetVideoCardInfo(char*, int&);
 	Transformations* GetTransf() { return &transf; }
 	DirectX::XMMATRIX GetOrthoMatrix(){return m_orthoMatrix;}

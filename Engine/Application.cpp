@@ -20,14 +20,15 @@ Application::Application() :
 
 void Application::cleanResouces()
 {
-	if (mPVertexBuffer)		{ mPVertexBuffer->Release(); delete mPVertexBuffer; mPVertexBuffer = 0; }
-	if (mPIndexBuffer)		{ mPIndexBuffer->Release(); delete mPIndexBuffer; mPIndexBuffer = 0; }
-	if (mPTranfBuffer)		{ mPTranfBuffer->Release(); delete mPTranfBuffer; mPTranfBuffer = 0; }
-	if (mPVertexShader)		{ mPVertexShader->Release(); delete mPVertexShader; mPVertexShader = 0; }
-	if (mPPixelShader)		{ mPPixelShader->Release(); delete mPPixelShader; mPPixelShader = 0; }
-	if (mPInputLayout)		{ mPInputLayout->Release(); delete mPInputLayout; mPInputLayout = 0; }
-	if (mPDepthStencilState){ mPDepthStencilState->Release(); delete mPDepthStencilState; mPDepthStencilState = 0; }
-	if (mRTW)				{ mRTW->Release(); delete mRTW; mRTW = 0; }
+	if (mPVertexBuffer)		{ mPVertexBuffer->Release(); mPVertexBuffer = 0; }
+	if (mPIndexBuffer)		{ mPIndexBuffer->Release(); mPIndexBuffer = 0; }
+	if (mPTranfBuffer)		{ mPTranfBuffer->Release(); mPTranfBuffer = 0; }
+	if (mPVertexShader)		{ mPVertexShader->Release(); mPVertexShader = 0; }
+	if (mPPixelShader)		{ mPPixelShader->Release(); mPPixelShader = 0; }
+	if (mPInputLayout)		{ mPInputLayout->Release(); mPInputLayout = 0; }
+	if (mPDepthStencilState){ mPDepthStencilState->Release(); mPDepthStencilState = 0; }
+	if (mRTW)				{ mRTW->Release(); mRTW = 0; }
+
 	if (m_D3D)				{ m_D3D->Shutdown(); delete m_D3D; m_D3D = 0; }
 }
 
