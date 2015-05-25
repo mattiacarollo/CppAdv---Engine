@@ -1,13 +1,13 @@
 #pragma once
 
 #include <math.h>
-//#include "Matrix.h"
+#include "Matrix.h"
 
 class Quaternion
 {
 
 public:
-	//Matrix<3, 3> ToMatrix() const;
+	Matrix<3, 3> ToMatrix() const;
 	Quaternion();
 	Quaternion(float, float, float, float);
 	Quaternion(const Quaternion&);

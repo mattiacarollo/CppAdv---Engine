@@ -34,11 +34,15 @@ void Physic::ComputePhysic()
 	unsigned int i, i2;
 	bool MaxCollisionReached = false;
 
-	for (i = 0; i < m_RigidBodyList.size(); ++i)
+	/*for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
 		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
-	}
-	/*
+	}*/
+	
+	m_RigidBodyList[0]->DoPhysicMove(Physic::mk_fDeltaTime);
+	m_RigidBodyList[1]->DoPhysicJump(Physic::mk_fDeltaTime);
+	
+	
 	for (i = 0; i < m_RigidBodyList.size() && !MaxCollisionReached; ++i)
 	{
 		for (i2 = i + 1; i2 < m_RigidBodyList.size() && !MaxCollisionReached; ++i2)
@@ -46,7 +50,7 @@ void Physic::ComputePhysic()
 			MaxCollisionReached = m_CollisionHandler.AddCollision(m_ColliderDispatcher.Dispatch(*(m_RigidBodyList[i]->GetCollider()), *(m_RigidBodyList[i2]->GetCollider())), m_RigidBodyList[i], m_RigidBodyList[i2]);
 		}
 	}
-	m_CollisionHandler.HandleCollision();*/
+	m_CollisionHandler.HandleCollision();
 }
 
 void Physic::AddRigidBody(RigidBody& rigidbody, int id)

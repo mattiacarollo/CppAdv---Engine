@@ -71,6 +71,7 @@
     <ClInclude Include="CollisionAlgorithms.h" />
     <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="CollisionHandler.h" />
+    <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Physic.h" />
     <ClInclude Include="Quaternion.h" />
