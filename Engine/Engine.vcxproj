@@ -99,7 +99,7 @@
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="TerrainManager.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureClass.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -127,7 +127,7 @@
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="TerrainManager.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureClass.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
