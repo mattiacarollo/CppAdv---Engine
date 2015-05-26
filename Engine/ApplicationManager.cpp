@@ -60,7 +60,7 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	m_Camera->SetPosition(cameraX, cameraY, cameraZ);
 
 	// Create and Initialize the timer object.
-	m_Timer = new TimerClass;
+	m_Timer = new Timer;
 	if (!m_Timer)	{	return false;	}
 	result = m_Timer->Initialize();
 	if (!result)

@@ -50,19 +50,19 @@ DirectX::XMFLOAT4 LightManager::GetAmbientColor()
 }
 
 
-DirectX::XMFLOAT4 LightClass::GetDiffuseColor()
+DirectX::XMFLOAT4 LightManager::GetDiffuseColor()
 {
 	return m_diffuseColor;
 }
 
 
-DirectX::XMVECTOR LightClass::GetPosition()
+DirectX::XMVECTOR LightManager::GetPosition()
 {
 	return m_position;
 }
 
 
-void LightClass::GenerateViewMatrix()
+void LightManager::GenerateViewMatrix()
 {
 	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -73,14 +73,14 @@ void LightClass::GenerateViewMatrix()
 }
 
 
-void LightClass::GetViewMatrix(DirectX::XMMATRIX& viewMatrix)
+void LightManager::GetViewMatrix(DirectX::XMMATRIX& viewMatrix)
 {
 	viewMatrix = m_viewMatrix;
 	return;
 }
 
 
-void LightClass::GenerateOrthoMatrix(float width, float depthPlane, float nearPlane)
+void LightManager::GenerateOrthoMatrix(float width, float depthPlane, float nearPlane)
 {
 	// Create the orthographic matrix for the light.
 	m_orthoMatrix=DirectX::XMMatrixOrthographicLH(width, width, nearPlane, depthPlane);
@@ -89,21 +89,21 @@ void LightClass::GenerateOrthoMatrix(float width, float depthPlane, float nearPl
 }
 
 
-void LightClass::GetOrthoMatrix(DirectX::XMMATRIX& orthoMatrix)
+void LightManager::GetOrthoMatrix(DirectX::XMMATRIX& orthoMatrix)
 {
 	orthoMatrix = m_orthoMatrix;
 	return;
 }
 
 
-void LightClass::SetDirection(float x, float y, float z)
+void LightManager::SetDirection(float x, float y, float z)
 {
 	m_direction = DirectX::XMFLOAT3(x, y, z);
 	return;
 }
 
 
-DirectX::XMFLOAT3 LightClass::GetDirection()
+DirectX::XMFLOAT3 LightManager::GetDirection()
 {
 	return m_direction;
 }

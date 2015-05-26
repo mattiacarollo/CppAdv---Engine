@@ -29,7 +29,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_Camera = camera;
 	bool result;
 	// Create and Initialize the terrain object.
-	m_Terrain = new TerrainClass;
+	m_Terrain = new Terrain;
 	if (!m_Terrain)	{ return false; }
 	result = m_Terrain->Initialize(m_D3D->GetDevice());
 	if (!result)
@@ -49,7 +49,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	}
 
 	// Create, initialize and set position of the CUBE model object.
-	m_CubeModel = new ModelClass;
+	m_CubeModel = new Model;
 	if (!m_CubeModel)	{	return false;	}
 	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/wall01.dds");
 	if (!result)
@@ -60,7 +60,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_CubeModel->SetPosition(50.0f, 2.0f, 10.0f);
 
 	// Create, initialize and set position of the SPHERE model object.
-	m_SphereModel = new ModelClass;
+	m_SphereModel = new Model;
 	if (!m_SphereModel)	{	return false;	}
 	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/sphere.txt", L"../Engine/data/ice.dds");
 	if (!result)
@@ -71,7 +71,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_SphereModel->SetPosition(50.0f, 10.0f, 10.0f);
 
 	// Create and initialize the light object.
-	m_Light = new LightClass;
+	m_Light = new LightManager;
 	if (!m_Light)	{	return false;	}
 	m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -88,7 +88,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	}
 
 	// Create and Initialize the render to texture object.
-	m_RenderTexture = new RenderTextureClass;
+	m_RenderTexture = new RenderToTexture;
 	if (!m_RenderTexture)	{	return false;	}
 	result = m_RenderTexture->Initialize(m_D3D->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SHADOWMAP_DEPTH, SHADOWMAP_NEAR);
 	if (!result)

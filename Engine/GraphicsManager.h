@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "LightManager.h"
-#include "RenderTexture.h"
+#include "RenderToTexture.h"
 #include "DepthShader.h"
 
 
@@ -40,10 +40,10 @@ private:
 	DXManager* m_D3D;
 	LightManager* m_Light;
 	Terrain* m_Terrain;
-	ModelClass* m_CubeModel;
-	ModelClass* m_SphereModel;	
+	Model* m_CubeModel;
+	Model* m_SphereModel;	
 	Camera* m_Camera;
-	RenderTextureClass* m_RenderTexture;
+	RenderToTexture* m_RenderTexture;
 	ColorShaderClass* m_ColorShader;
 	ShadowShaderClass* m_ShadowShader;
 	DepthShaderClass* m_DepthShader;
