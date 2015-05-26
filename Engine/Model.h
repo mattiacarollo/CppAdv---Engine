@@ -1,26 +1,23 @@
 #pragma once
 
+
 #include <d3d11.h>
 #include <fstream>
 #include "DataType.h"
-using namespace std;
-
 #include "textureclass.h"
 
-class ModelClass
+
+using namespace std;
+
+
+class Model
 {
 private:
-	struct ModelType
-	{
-		float x, y, z;
-		float tu, tv;
-		float nx, ny, nz;
-	};
 
 public:
-	ModelClass();
-	ModelClass(const ModelClass&);
-	~ModelClass();
+	Model();
+	Model(const Model&);
+	~Model();
 
 	bool Initialize(ID3D11Device*, char*, WCHAR*);
 	void Shutdown();
@@ -47,7 +44,7 @@ private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	TextureClass* m_Texture;
-	ModelType* m_model;
+	utility::ModelType* m_model;
 	float m_positionX, m_positionY, m_positionZ;
 };
 

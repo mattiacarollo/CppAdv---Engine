@@ -93,6 +93,12 @@
     <ClCompile Include="ShadowShader.cpp">
       <Filter>Shaders\Shadow</Filter>
     </ClCompile>
+    <ClCompile Include="shadermanagerclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textureshaderclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model.h">
@@ -139,6 +145,12 @@
     </ClInclude>
     <ClInclude Include="ShadowShader.h">
       <Filter>Shaders\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="shadermanagerclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textureshaderclass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -61,4 +61,19 @@ namespace utility
 		DirectX::XMFLOAT3 biNormal;
 		DirectX::XMFLOAT2 texCoord;
 	};
+
+	struct VertexType
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT2 texture;
+		DirectX::XMFLOAT3 normal;
+	};
+
+	struct ModelType
+	{
+		float x, y, z;
+		float tu, tv;
+		float nx, ny, nz;
+	};
+
 }

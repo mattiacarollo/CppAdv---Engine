@@ -1,7 +1,7 @@
 #include "model.h"
 
 
-ModelClass::ModelClass()
+Model::Model()
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
@@ -10,17 +10,17 @@ ModelClass::ModelClass()
 }
 
 
-ModelClass::ModelClass(const ModelClass& other)
+Model::Model(const Model& other)
 {
 }
 
 
-ModelClass::~ModelClass()
+Model::~Model()
 {
 }
 
 
-bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename)
+bool Model::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename)
 {
 	bool result;
 
@@ -50,7 +50,7 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 }
 
 
-void ModelClass::Shutdown()
+void Model::Shutdown()
 {
 	// Release the model texture.
 	ReleaseTexture();
@@ -65,7 +65,7 @@ void ModelClass::Shutdown()
 }
 
 
-void ModelClass::Render(ID3D11DeviceContext* deviceContext)
+void Model::Render(ID3D11DeviceContext* deviceContext)
 {
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	RenderBuffers(deviceContext);
@@ -74,21 +74,21 @@ void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 }
 
 
-int ModelClass::GetIndexCount()
+int Model::GetIndexCount()
 {
 	return m_indexCount;
 }
 
 
-ID3D11ShaderResourceView* ModelClass::GetTexture()
+ID3D11ShaderResourceView* Model::GetTexture()
 {
 	return m_Texture->GetTexture();
 }
 
 
-bool ModelClass::InitializeBuffers(ID3D11Device* device)
+bool Model::InitializeBuffers(ID3D11Device* device)
 {
-	utility::PositionNormalTex2* vertices;
+	utility::VertexType* vertices;
 	unsigned long* indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -97,7 +97,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 
 	// Create the vertex array.
-	vertices = new utility::PositionNormalTex2[m_vertexCount];
+	vertices = new utility::VertexType[m_vertexCount];
 	if (!vertices)
 	{
 		return false;
@@ -114,7 +114,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	for (i = 0; i<m_vertexCount; i++)
 	{
 		vertices[i].position = DirectX::XMFLOAT3(m_model[i].x, m_model[i].y, m_model[i].z);
-		vertices[i].texCoord = DirectX::XMFLOAT2(m_model[i].tu, m_model[i].tv);
+		vertices[i].texture = DirectX::XMFLOAT2(m_model[i].tu, m_model[i].tv);
 		vertices[i].normal = DirectX::XMFLOAT3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
 
 		indices[i] = i;
@@ -122,7 +122,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(utility::PositionNormalTex2) * m_vertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(utility::VertexType) * m_vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -171,7 +171,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 }
 
 
-void ModelClass::ShutdownBuffers()
+void Model::ShutdownBuffers()
 {
 	// Release the index buffer.
 	if (m_indexBuffer)
@@ -191,14 +191,14 @@ void ModelClass::ShutdownBuffers()
 }
 
 
-void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
+void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
 {
 	unsigned int stride;
 	unsigned int offset;
 
 
 	// Set vertex buffer stride and offset.
-	stride = sizeof(utility::PositionNormalTex2);
+	stride = sizeof(utility::VertexType);
 	offset = 0;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
@@ -214,7 +214,7 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 }
 
 
-bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
+bool Model::LoadTexture(ID3D11Device* device, WCHAR* filename)
 {
 	bool result;
 
@@ -237,7 +237,7 @@ bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 }
 
 
-void ModelClass::ReleaseTexture()
+void Model::ReleaseTexture()
 {
 	// Release the texture object.
 	if (m_Texture)
@@ -251,7 +251,7 @@ void ModelClass::ReleaseTexture()
 }
 
 
-bool ModelClass::LoadModel(char* filename)
+bool Model::LoadModel(char* filename)
 {
 	ifstream fin;
 	char input;
@@ -281,7 +281,7 @@ bool ModelClass::LoadModel(char* filename)
 	m_indexCount = m_vertexCount;
 
 	// Create the model using the vertex count that was read in.
-	m_model = new ModelType[m_vertexCount];
+	m_model = new utility::ModelType[m_vertexCount];
 	if (!m_model)
 	{
 		return false;
@@ -311,7 +311,7 @@ bool ModelClass::LoadModel(char* filename)
 }
 
 
-void ModelClass::ReleaseModel()
+void Model::ReleaseModel()
 {
 	if (m_model)
 	{
@@ -323,7 +323,7 @@ void ModelClass::ReleaseModel()
 }
 
 
-void ModelClass::SetPosition(float x, float y, float z)
+void Model::SetPosition(float x, float y, float z)
 {
 	m_positionX = x;
 	m_positionY = y;
@@ -332,7 +332,7 @@ void ModelClass::SetPosition(float x, float y, float z)
 }
 
 
-void ModelClass::GetPosition(float& x, float& y, float& z)
+void Model::GetPosition(float& x, float& y, float& z)
 {
 	x = m_positionX;
 	y = m_positionY;
