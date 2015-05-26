@@ -25,14 +25,11 @@ RigidBody::~RigidBody()
 void RigidBody::DoPhysicJump(float DeltaTime)
 {
 	Vector3 tmp(m_vForceSum * DeltaTime);
+	m_vQuantityOfMotion += tmp;						//quantity of motion (p = m*v)
 	
-	//quantity of motion (p = m*v)
-	m_vQuantityOfMotion += tmp;
-
 	tmp = m_vMomentumSum * DeltaTime;
 	m_vAngularMomentum += tmp;
-	//velocity of center of gravity(baricentro) (v = p/m)
-	m_vVelocity = m_vQuantityOfMotion / m_fMass;
+	m_vVelocity = m_vQuantityOfMotion / m_fMass;	//velocity of center of gravity(baricentro) (v = p/m)
 
 	tmp = m_vVelocity * DeltaTime;
 	m_vPosition += tmp;
@@ -43,16 +40,21 @@ void RigidBody::DoPhysicJump(float DeltaTime)
 	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
 	m_vAngularVelocity.SetZ(m_vAngularVelocity.getZ() / m_vInertia.getZ());
 
-	Quaternion Rot(1, m_vAngularVelocity.getX()*DeltaTime / 2, m_vAngularVelocity.getY()*DeltaTime / 2, m_vAngularVelocity.getZ()*DeltaTime / 2);
+	Quaternion Rot(
+		1, 
+		m_vAngularVelocity.getX()*DeltaTime / 2, 
+		m_vAngularVelocity.getY()*DeltaTime / 2, 
+		m_vAngularVelocity.getZ()*DeltaTime / 2
+	);
 
 	Rot.Normalize();
-	m_qRotation = m_qRotation*Rot;
+	m_qRotation = m_qRotation * Rot;
 	m_qRotation.Normalize();
 	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 	
 	m_mRotationMatrix = m_qRotation.ToMatrix();
 
-	m_vForceSum = Physic::mk_vGravity*m_fMass;
+	m_vForceSum = Physic::mk_vGravity * m_fMass;
 
 	//movimento laterale sul terreno
 	//5 è il raggio
@@ -79,7 +81,7 @@ void RigidBody::DoPhysicJump(float DeltaTime)
 	}*/
 }
 
-void RigidBody::DoPhysicMove(float DeltaTime)
+void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 {
 	Vector3 tmp(m_vForceSum * DeltaTime);
 
@@ -101,23 +103,23 @@ void RigidBody::DoPhysicMove(float DeltaTime)
 	Quaternion Rot(1, m_vAngularVelocity.getX()*DeltaTime / 2, m_vAngularVelocity.getY()*DeltaTime / 2, m_vAngularVelocity.getZ()*DeltaTime / 2);
 
 	Rot.Normalize();
-	m_qRotation = m_qRotation*Rot;
+	m_qRotation = m_qRotation * Rot;
 	m_qRotation.Normalize();
 	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 
 	m_mRotationMatrix = m_qRotation.ToMatrix();
 
-	Vector3 mk_vBallVelocity = Vector3(0.5f, 0.0f, 0.0f);
-	m_vForceSum = mk_vBallVelocity*m_fMass;
+	Vector3 mk_vBallVelocity = Vector3(direction, 0.0f, 0.0f);
+	m_vForceSum = mk_vBallVelocity * m_fMass;
 
 	//movimento laterale sul terreno
 	//5 è il raggio
-	if (m_vPosition[1] + 5 < 1) {
-		float d = 1 - (m_vPosition[1] + 5);
-		d *= 4000;
-		d -= m_vVelocity[1] * 100;
-		if (d > 0) m_vForceSum[1] += d;
-	}
+	//if (m_vPosition[1] + 5 < 1) {
+	//	float d = 1 - (m_vPosition[1] + 5);
+	//	d *= 4000;
+	//	d -= m_vVelocity[1] * 100;
+	//	if (d > 0) m_vForceSum[1] += d;
+	//}
 
 	/*if (5 - m_vPosition[0] < 1) {
 	float d = 1 - (5 - m_vPosition[0]);

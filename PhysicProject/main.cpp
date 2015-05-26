@@ -19,7 +19,7 @@ Vector3 SphereInertia(float mass, float radius)
 
 Physic p;
 RigidBody* rBSphere0 = new RigidBody(Vector3(-4.0f, -4.0f, 1.0f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
-RigidBody* rBSphere1 = new RigidBody(Vector3(4.0f, 0.0f, 1.0f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
+RigidBody* rBSphere1 = new RigidBody(Vector3(4.0f, -4.0f, 1.0f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
 float DT = 0.005f;
 double TempoTotale = 0;

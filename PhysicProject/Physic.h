@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Vector3.h"
 #include "RigidBody.h"
 #include "Collider.h"
 #include "SphereCollider.h"
