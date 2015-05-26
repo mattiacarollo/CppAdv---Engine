@@ -19,8 +19,8 @@ public:
 	RigidBody(const RigidBody& other);
 	~RigidBody();
 
-	void DoPhysicJump(float);
-	void DoPhysicMove(float);
+	void DoPhysicJump(float DeltaTime);
+	void DoPhysicMove(float DeltaTime, float direction);
 	void ApplyForce(const Vector3& force, const Vector3& pointOfApplication);
 	void SumForceToTotalForce(const Vector3&);
 	void SumMomentumToTotalMomentum(const Vector3&);
