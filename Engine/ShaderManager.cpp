@@ -1,7 +1,7 @@
-#include "shadermanagerclass.h"
+#include "ShaderManager.h"
 
 
-ShaderManagerClass::ShaderManagerClass()
+ShaderManager::ShaderManager()
 {
 	m_TextureShader = 0;
 	/*m_LightShader = 0;
@@ -9,23 +9,23 @@ ShaderManagerClass::ShaderManagerClass()
 }
 
 
-ShaderManagerClass::ShaderManagerClass(const ShaderManagerClass& other)
+ShaderManager::ShaderManager(const ShaderManager& other)
 {
 }
 
 
-ShaderManagerClass::~ShaderManagerClass()
+ShaderManager::~ShaderManager()
 {
 }
 
 
-bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
+bool ShaderManager::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
 
 
 	// Create the texture shader object.
-	m_TextureShader = new TextureShaderClass;
+	m_TextureShader = new TextureShader;
 	if (!m_TextureShader)
 	{
 		return false;
@@ -73,7 +73,7 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 }
 
 
-void ShaderManagerClass::Shutdown()
+void ShaderManager::Shutdown()
 {
 	// Release the bump map shader object.
 	//if (m_BumpMapShader)

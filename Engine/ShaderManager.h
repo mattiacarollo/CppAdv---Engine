@@ -2,15 +2,15 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "textureshaderclass.h"
+#include "TextureShader.h"
 
 
-class ShaderManagerClass
+class ShaderManager
 {
 public:
-	ShaderManagerClass();
-	ShaderManagerClass(const ShaderManagerClass&);
-	~ShaderManagerClass();
+	ShaderManager();
+	ShaderManager(const ShaderManager&);
+	~ShaderManager();
 
 	bool Initialize(ID3D11Device*, HWND);
 	void Shutdown();
@@ -24,7 +24,7 @@ public:
 		ID3D11ShaderResourceView*, DirectX::XMFLOAT3, DirectX::XMFLOAT4);
 		*/
 private:
-	TextureShaderClass* m_TextureShader;
+	TextureShader* m_TextureShader;
 	//LightShaderClass* m_LightShader;
 	//BumpMapShaderClass* m_BumpMapShader;
 };

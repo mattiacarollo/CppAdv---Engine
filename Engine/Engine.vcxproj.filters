@@ -84,12 +84,6 @@
     <ClCompile Include="ShadowShader.cpp">
       <Filter>Shaders\Shadow</Filter>
     </ClCompile>
-    <ClCompile Include="shadermanagerclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="textureshaderclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="RenderToTexture.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>Shaders\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +137,6 @@
     <ClInclude Include="ShadowShader.h">
       <Filter>Shaders\Shadow</Filter>
     </ClInclude>
-    <ClInclude Include="shadermanagerclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="textureshaderclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -154,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="RenderToTexture.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShader.h">
+      <Filter>Shaders\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +194,12 @@
     </FxCompile>
     <FxCompile Include="Shaders\vertexShader.hlsl">
       <Filter>Shaders\Simple</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturePixelShader.hlsl">
+      <Filter>Shaders\Texture</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVertexShader.hlsl">
+      <Filter>Shaders\Texture</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
-#include "textureshaderclass.h"
+#include "TextureShader.h"
 
 
-TextureShaderClass::TextureShaderClass()
+TextureShader::TextureShader()
 {
 	m_vertexShader = 0;
 	m_pixelShader = 0;
@@ -11,17 +11,17 @@ TextureShaderClass::TextureShaderClass()
 }
 
 
-TextureShaderClass::TextureShaderClass(const TextureShaderClass& other)
+TextureShader::TextureShader(const TextureShader& other)
 {
 }
 
 
-TextureShaderClass::~TextureShaderClass()
+TextureShader::~TextureShader()
 {
 }
 
 
-bool TextureShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
+bool TextureShader::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
 
@@ -37,7 +37,7 @@ bool TextureShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 }
 
 
-void TextureShaderClass::Shutdown()
+void TextureShader::Shutdown()
 {
 	// Shutdown the vertex and pixel shaders as well as the related objects.
 	ShutdownShader();
@@ -46,7 +46,7 @@ void TextureShaderClass::Shutdown()
 }
 
 
-bool TextureShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix,
+bool TextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix,
 	DirectX::XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
 {
 	bool result;
@@ -66,7 +66,7 @@ bool TextureShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCou
 }
 
 
-bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename)
+bool TextureShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -84,8 +84,8 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 	pixelShaderBuffer = 0;
 
 	// Compile the vertex shader code.
-	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-		&vertexShaderBuffer, &errorMessage, NULL);
+	ID3DBlob* vs = nullptr;
+	result = utility::ShaderLoader::vertexPreBuiltLoad(L"./TextureVertexShader.cso", device, &m_vertexShader, &vs);
 	if (FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
@@ -93,18 +93,18 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 		{
 			OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
 		}
-		// If there was nothing in the error message then it simply could not find the shader file itself.
+		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
-			MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
+			MessageBox(hwnd, vsFilename, L"Missing Vertex Shader File", MB_OK);
 		}
 
 		return false;
 	}
 
+	ID3DBlob* ps = nullptr;
 	// Compile the pixel shader code.
-	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-		&pixelShaderBuffer, &errorMessage, NULL);
+	result = utility::ShaderLoader::pixelPreBuiltLoad(L"./TexturePixelShader.cso", device, &m_pixelShader, &ps);
 	if (FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
@@ -112,26 +112,12 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 		{
 			OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
 		}
-		// If there was  nothing in the error message then it simply could not find the file itself.
+		// If there was nothing in the error message then it simply could not find the file itself.
 		else
 		{
-			MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
+			MessageBox(hwnd, psFilename, L"Missing Pixel Shader File", MB_OK);
 		}
 
-		return false;
-	}
-
-	// Create the vertex shader from the buffer.
-	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	// Create the pixel shader from the buffer.
-	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-	if (FAILED(result))
-	{
 		return false;
 	}
 
@@ -156,20 +142,16 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
-	// Create the vertex input layout.
-	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-		&m_layout);
+	// Create the vertex input layout.	
+	result = utility::ShaderLoader::createInputLayout(L"./TextureVertexShader.cso", device, polygonLayout, numElements, &m_layout);
 	if (FAILED(result))
 	{
 		return false;
 	}
-
-	// Release the vertex shader buffer and pixel shader buffer since they are no longer needed.
-	vertexShaderBuffer->Release();
-	vertexShaderBuffer = 0;
-
-	pixelShaderBuffer->Release();
-	pixelShaderBuffer = 0;
+	vs->Release();
+	vs = 0;
+	ps->Release();
+	ps = 0;
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -212,7 +194,7 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 }
 
 
-void TextureShaderClass::ShutdownShader()
+void TextureShader::ShutdownShader()
 {
 	// Release the sampler state.
 	if (m_sampleState)
@@ -253,7 +235,7 @@ void TextureShaderClass::ShutdownShader()
 }
 
 
-void TextureShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void TextureShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
@@ -289,7 +271,7 @@ void TextureShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND
 }
 
 
-bool TextureShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix,
+bool TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix,
 	DirectX::XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
@@ -299,9 +281,9 @@ bool TextureShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+	viewMatrix = XMMatrixTranspose(viewMatrix);
+	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -334,7 +316,7 @@ bool TextureShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 }
 
 
-void TextureShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void TextureShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout(m_layout);

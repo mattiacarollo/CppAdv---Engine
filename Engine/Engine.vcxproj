@@ -87,7 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DepthShader.cpp" />
-    <ClCompile Include="shadermanagerclass.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="RenderToTexture.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
@@ -104,7 +104,7 @@
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TextureClass.cpp" />
-    <ClCompile Include="textureshaderclass.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -120,7 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepthShader.h" />
-    <ClInclude Include="shadermanagerclass.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="RenderToTexture.h" />
     <ClInclude Include="ShadowShader.h" />
@@ -137,7 +137,7 @@
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TextureClass.h" />
-    <ClInclude Include="textureshaderclass.h" />
+    <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
@@ -197,6 +197,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ShadowVertexShader</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ShadowVertexShader</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="TexturePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TexturePixelShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TexturePixelShader</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="TextureVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TextureVertexShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TextureVertexShader</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
