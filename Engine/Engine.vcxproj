@@ -87,9 +87,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DepthShader.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="shadermanagerclass.cpp" />
+    <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="RenderToTexture.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="ApplicationManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -102,10 +102,10 @@
     <ClCompile Include="PositionManager.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SystemManager.cpp" />
-    <ClCompile Include="TerrainManager.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TextureClass.cpp" />
     <ClCompile Include="textureshaderclass.cpp" />
-    <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +120,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepthShader.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="shadermanagerclass.h" />
+    <ClInclude Include="LightManager.h" />
+    <ClInclude Include="RenderToTexture.h" />
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="ApplicationManager.h" />
     <ClInclude Include="Camera.h" />
@@ -135,10 +135,10 @@
     <ClInclude Include="PositionManager.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="TerrainManager.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="textureshaderclass.h" />
-    <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

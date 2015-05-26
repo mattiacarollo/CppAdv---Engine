@@ -1,14 +1,16 @@
 #pragma once
 
+
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-class RenderTextureClass
+
+class RenderToTexture
 {
 public:
-	RenderTextureClass();
-	RenderTextureClass(const RenderTextureClass&);
-	~RenderTextureClass();
+	RenderToTexture();
+	RenderToTexture(const RenderToTexture&);
+	~RenderToTexture();
 
 	bool Initialize(ID3D11Device*, int, int, float, float);
 	void Shutdown();
@@ -28,5 +30,4 @@ private:
 	D3D11_VIEWPORT m_viewport;
 	DirectX::XMMATRIX m_projectionMatrix;
 	DirectX::XMMATRIX m_orthoMatrix;
-
 };

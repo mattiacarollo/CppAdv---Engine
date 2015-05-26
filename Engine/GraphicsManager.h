@@ -1,22 +1,25 @@
 #pragma once
 
-#include "TerrainManager.h"
+
+#include "Terrain.h"
 #include "ColorShader.h"
 #include "ShadowShader.h"
 #include "DXManager.h"
 #include "Camera.h"
 #include "Model.h"
-#include "Light.h"
+#include "LightManager.h"
 #include "RenderTexture.h"
 #include "DepthShader.h"
+
 
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
 const float SHADOWMAP_DEPTH = 50.0f;
 const float SHADOWMAP_NEAR = 1.0f;
 
-class Application;
+
 class Camera;
+
 
 class GraphicsManager
 {
@@ -35,14 +38,13 @@ private:
 
 private:
 	DXManager* m_D3D;
-	TerrainClass* m_Terrain;
-	ColorShaderClass* m_ColorShader;
-	ShadowShaderClass* m_ShadowShader;
-	Application* m_App;
+	LightManager* m_Light;
+	Terrain* m_Terrain;
 	ModelClass* m_CubeModel;
-	ModelClass* m_SphereModel;
-	LightClass* m_Light;
+	ModelClass* m_SphereModel;	
 	Camera* m_Camera;
 	RenderTextureClass* m_RenderTexture;
+	ColorShaderClass* m_ColorShader;
+	ShadowShaderClass* m_ShadowShader;
 	DepthShaderClass* m_DepthShader;
 };

@@ -1,13 +1,15 @@
 #pragma once
 
+
 #include <DirectXMath.h>
 
-class LightClass
+
+class LightManager
 {
 public:
-	LightClass();
-	LightClass(const LightClass&);
-	~LightClass();
+	LightManager();
+	LightManager(const LightManager&);
+	~LightManager();
 
 	void SetAmbientColor(float, float, float, float);
 	void SetDiffuseColor(float, float, float, float);

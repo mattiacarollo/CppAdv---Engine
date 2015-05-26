@@ -1,5 +1,4 @@
-#ifndef _INPUTCLASS_H_
-#define _INPUTCLASS_H_
+#pragma once
 
 #define DIRECTINPUT_VERSION 0x0800
 
@@ -47,5 +46,3 @@ private:
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
 };
-
-#endif
