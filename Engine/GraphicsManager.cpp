@@ -212,20 +212,27 @@ bool GraphicsManager::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 	projectionMatrix = m_D3D->GetTransf()->projection;
 
+
+	m_Terrain->Render(m_D3D->GetDeviceContext());
+	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	worldMatrix = m_D3D->GetTransf()->world;
+	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	projectionMatrix = m_D3D->GetTransf()->projection;
+
+
 	//m_D3D->GetWorldMatrix(worldMatrix);
 	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	translateMatrix = DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	m_CubeModel->GetPosition(posX,posY,posZ);
+	translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
 	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 	//D3DXMatrixRotationY(&worldMatrix, rotation);
 	//D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
 	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
-
-	//m_Terrain->Render(m_D3D->GetDeviceContext());
-	//result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), trans.world, trans.view, trans.projection);
-	//if (!result)
-	//{
-	//	return false;
-	//}
 
 	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_CubeModel->Render(m_D3D->GetDeviceContext());
@@ -240,7 +247,8 @@ bool GraphicsManager::Render(float rotation)
 
 	//m_D3D->GetWorldMatrix(worldMatrix);
 	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	translateMatrix = DirectX::XMMatrixTranslation(-5.0f, 5.0f, 0.0f);
+	m_SphereModel->GetPosition(posX, posY, posZ);
+	translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
 	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 
 
