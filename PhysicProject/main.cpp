@@ -358,18 +358,16 @@ int WINAPI WinMain(HINSTANCE	hInstance,
 	LPSTR		lpCmdLine,
 	int			nCmdShow)
 {
-	
-	//Vector3 zeros(0.0f, 0.0f, 0.0f);
-	//SphereCollider* sC = new SphereCollider(rB->GetPosition(), zeros, 5.0);
+
 	SphereCollider* sC0 = new SphereCollider(rBSphere0->GetPosition(), 5.0);
 	rBSphere0->AttachCollider(sC0);
 	p.AddRigidBody(*rBSphere0, rBSphere0->GetID());
-	rBSphere0->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	//rBSphere0->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 
 	SphereCollider* sC1 = new SphereCollider(rBSphere1->GetPosition(), 5.0);
 	rBSphere1->AttachCollider(sC1);
 	p.AddRigidBody(*rBSphere1, rBSphere1->GetID());
-	rBSphere1->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	//rBSphere1->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 
 
 
