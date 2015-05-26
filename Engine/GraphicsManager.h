@@ -35,7 +35,7 @@ public:
 
 private:
 	bool RenderSceneToTexture();
-	bool Render();
+	bool Render(float);
 
 private:
 	DXManager* m_D3D;

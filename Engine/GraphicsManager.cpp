@@ -27,7 +27,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_D3D = D3D;
 	m_Camera = camera;
 	bool result;
-	
+
 	// Create and Initialize the terrain object.
 	m_Terrain = new Terrain;
 	if (!m_Terrain)	{ return false; }
@@ -37,17 +37,17 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
 		return false;
 	}
-		
+
 	// Create and Initialize the shader manager object.
 	m_ShaderManager = new ShaderManager;
-	if (!m_ShaderManager){	return false;	}		
+	if (!m_ShaderManager){ return false; }
 	result = m_ShaderManager->Initialize(m_D3D->GetDevice(), hwnd);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the shader manager object.", L"Error", MB_OK);
 		return false;
 	}
-		
+
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
@@ -77,7 +77,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->GenerateOrthoMatrix(20.0f, SHADOWMAP_DEPTH, SHADOWMAP_NEAR);
 
-	
+
 	// Create and Initialize the render to texture object.
 	m_RenderToTexture = new RenderToTexture;
 	if (!m_RenderToTexture)	{ return false; }
@@ -88,7 +88,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 		return false;
 	}
 
-	
+
 	return true;
 }
 
@@ -120,8 +120,18 @@ bool GraphicsManager::Frame(float frameTime)
 	m_Light->SetPosition(lightPosX, 8.0f, -0.1f);
 	m_Light->SetLookAt(-lightPosX, 0.0f, 0.0f);
 
+	static float rotation = 0.0f;
+
+
+	// Update the rotation variable each frame.
+	rotation += (float)DirectX::XM_PI * 0.005f;
+	if (rotation > 360.0f)
+	{
+		rotation -= 360.0f;
+	}
+
 	// Render the graphics scene.
-	result = Render();
+	result = Render(rotation);
 	if (!result)	{ return false; }
 
 	return true;
@@ -186,28 +196,29 @@ bool GraphicsManager::RenderSceneToTexture()
 	return true;
 }
 
-bool GraphicsManager::Render()
+bool GraphicsManager::Render(float rotation)
 {
 	bool result;
-	utility::Transformations trans;
-	DirectX::XMMATRIX lightViewMatrix, lightOrthoMatrix;
+	DirectX::XMMATRIX lightViewMatrix, lightOrthoMatrix, translateMatrix, worldMatrix, viewMatrix, projectionMatrix;
 	float posX, posY, posZ;
 
 	// First render the scene to a texture.
 	result = RenderSceneToTexture();
 	if (!result)	{ return false; }
-		
+
 	m_Camera->Render(); //Render camera
-	m_Light->GenerateViewMatrix();
 
-	trans.world = m_D3D->GetTransf()->world;
-	m_Camera->GetViewMatrix(trans.view); //Get camera matrix
-	trans.projection = m_D3D->GetTransf()->projection;
+	worldMatrix = m_D3D->GetTransf()->world;
+	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	projectionMatrix = m_D3D->GetTransf()->projection;
 
-	m_Light->GetViewMatrix(lightViewMatrix);
-	m_Light->GetOrthoMatrix(lightOrthoMatrix);
-
-
+	//m_D3D->GetWorldMatrix(worldMatrix);
+	worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	translateMatrix = DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+	//D3DXMatrixRotationY(&worldMatrix, rotation);
+	//D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
+	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
 
 	//m_Terrain->Render(m_D3D->GetDeviceContext());
 	//result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), trans.world, trans.view, trans.projection);
@@ -216,40 +227,26 @@ bool GraphicsManager::Render()
 	//	return false;
 	//}
 
-	//return true;
-
-
-
-
-	// Setup the translation matrix for the cube model.
-	m_CubeModel->GetPosition(posX, posY, posZ);
-	trans.world = DirectX::XMMatrixTranslation(posX, posY, posZ);
-
 	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_CubeModel->Render(m_D3D->GetDeviceContext());
-
 	// Render the model using the shadow shader.
-	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), trans.world, trans.view, trans.projection,
+	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 		m_CubeModel->GetTexture());
 	if (!result)	{ return false; }
 
-	trans.world = m_D3D->GetTransf()->world;
+	worldMatrix = m_D3D->GetTransf()->world;
+	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	projectionMatrix = m_D3D->GetTransf()->projection;
 
-	trans.world = m_D3D->GetTransf()->world;
-	// Setup the translation matrix for the sphere model.
-	m_SphereModel->GetPosition(posX, posY, posZ);
-	trans.world = DirectX::XMMatrixTranslation(posX, posY, posZ);
+	//m_D3D->GetWorldMatrix(worldMatrix);
+	worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	translateMatrix = DirectX::XMMatrixTranslation(-5.0f, 5.0f, 0.0f);
+	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	/*m_SphereModel->Render(m_D3D->GetDeviceContext());
-	result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), trans.world, trans.view, trans.projection, lightViewMatrix,
-	lightOrthoMatrix, m_SphereModel->GetTexture(), m_RenderToTexture->GetShaderResourceView(), m_Light->GetDirection(),
-	m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-	if (!result)	{ return false; }*/
 
 	// Render the first model using the texture shader.
 	m_SphereModel->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), trans.world, trans.view, trans.projection);
+	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;
@@ -265,7 +262,7 @@ void GraphicsManager::Shutdown()
 	{
 		delete m_Terrain;
 		m_Terrain = 0;
-	}	
+	}
 	if (m_Camera)
 	{
 		delete m_Camera;
@@ -280,7 +277,7 @@ void GraphicsManager::Shutdown()
 	{
 		delete m_SphereModel;
 		m_SphereModel = 0;
-	}	
+	}
 	if (m_Light)
 	{
 		delete m_Light;
@@ -290,7 +287,7 @@ void GraphicsManager::Shutdown()
 	{
 		delete m_RenderToTexture;
 		m_RenderToTexture = 0;
-	}	
+	}
 	// Release the shader manager object.
 	if (m_ShaderManager)
 	{
