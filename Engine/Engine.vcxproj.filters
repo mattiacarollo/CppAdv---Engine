@@ -34,6 +34,9 @@
     <Filter Include="Shaders\Simple">
       <UniqueIdentifier>{7280002b-d333-488c-9a16-4ebef8f51c88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Texture">
+      <UniqueIdentifier>{3730a367-15d9-44ff-bcf7-e86d95b25fa1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -85,7 +88,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="textureshaderclass.cpp">
-	<Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
@@ -138,7 +141,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="textureshaderclass.h">
-	<Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
