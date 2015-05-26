@@ -1,5 +1,4 @@
-#ifndef _APPLICATIONCLASS_H_
-#define _APPLICATIONCLASS_H_
+#pragma once
 
 
 const bool FULL_SCREEN = false;
@@ -41,5 +40,3 @@ private:
 	GraphicsManager* m_Graphic;
 	TimerClass* m_Timer;
 };
-
-#endif

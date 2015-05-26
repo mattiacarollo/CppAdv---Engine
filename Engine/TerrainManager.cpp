@@ -110,7 +110,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)(j + 1);
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -119,7 +119,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)(j + 1);
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -129,7 +129,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)(j + 1);
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -138,7 +138,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)j;
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -148,7 +148,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)j;
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -157,7 +157,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)j;
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -167,7 +167,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)j;
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 
@@ -176,7 +176,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 			positionZ = (float)(j + 1);
 
 			vertices[index].position = DirectX::XMFLOAT3(positionX, 0.0f, positionZ);
-			vertices[index].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[index].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 			indices[index] = index;
 			index++;
 		}

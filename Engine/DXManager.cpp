@@ -73,7 +73,6 @@ bool DXManager::Initialize(
 		return false;
 
 	// Setta il viewport
-	D3D11_VIEWPORT vp;
 	vp.Width = static_cast<float>(m_ScreenWidth);
 	vp.Height = static_cast<float>(m_ScreenHeight);
 	vp.MinDepth = 0.0f;
@@ -413,6 +412,23 @@ void DXManager::TurnOffAlphaBlending()
 {
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	mPd3dDeviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
+	return;
+}
+
+void DXManager::SetBackBufferRenderTarget()
+{
+	// Bind the render target view and depth stencil buffer to the output render pipeline.
+	mPd3dDeviceContext->OMSetRenderTargets(1, &mPRenderTargetView, mPDepthStencilView);
+
+	return;
+}
+
+
+void DXManager::ResetViewport()
+{
+	// Set the viewport.
+	mPd3dDeviceContext->RSSetViewports(1, &vp);
+
 	return;
 }
 

@@ -1,6 +1,4 @@
-#ifndef _COLORSHADERCLASS_H_
-#define _COLORSHADERCLASS_H_
-
+#pragma once
 
 #include <d3d11.h>
 #include <DirectXMath.h>
@@ -35,8 +33,4 @@ private:
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
-
-	utility::Transformations MatrixBufferType;
 };
-
-#endif

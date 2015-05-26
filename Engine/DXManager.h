@@ -34,6 +34,8 @@ public:
 	void TurnZBufferOff();
 	void TurnOnAlphaBlending();
 	void TurnOffAlphaBlending();
+	void SetBackBufferRenderTarget();
+	void ResetViewport();
 
 
 private:
@@ -58,7 +60,8 @@ private:
 	ID3D11BlendState* m_alphaEnableBlendingState;
 	ID3D11BlendState* m_alphaDisableBlendingState;
 	ID3D11RasterizerState* m_rasterState;
-
+	
+	D3D11_VIEWPORT vp;
 	HWND mHWnd;
 	D3D_DRIVER_TYPE mDriverType;
 	bool m_vsync_enabled;

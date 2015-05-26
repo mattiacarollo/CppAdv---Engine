@@ -22,6 +22,18 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{1801ea09-f949-458e-ae3a-a97a4432f9a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Color">
+      <UniqueIdentifier>{435c1c46-7c83-45c5-ba7b-237479a2d331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Depth">
+      <UniqueIdentifier>{62de3833-b55e-40d5-ac7a-53660c0fc84b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Shadow">
+      <UniqueIdentifier>{ea128037-a029-438f-8438-974796e3d979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Simple">
+      <UniqueIdentifier>{7280002b-d333-488c-9a16-4ebef8f51c88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,9 +60,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderLoader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -63,14 +72,26 @@
     <ClCompile Include="TerrainManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TimerManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureClass.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorShader.cpp">
+      <Filter>Shaders\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Shaders\Depth</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>Shaders\Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,20 +119,29 @@
     <ClInclude Include="TerrainManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColorShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TimerManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorShader.h">
+      <Filter>Shaders\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShader.h">
+      <Filter>Shaders\Depth</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowShader.h">
+      <Filter>Shaders\Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="colormap.dds">
-      <Filter>Data</Filter>
-    </Image>
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -121,25 +151,59 @@
     <ClInclude Include="Camera.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderLoader.h">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\pixelShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\vertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\ColorPixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\Color</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\ColorVertexShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Shaders\Color</Filter>
     </FxCompile>
+    <FxCompile Include="DepthPixelShader.hlsl">
+      <Filter>Shaders\Depth</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthVertexShader.hlsl">
+      <Filter>Shaders\Depth</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowPixelShader.hlsl">
+      <Filter>Shaders\Shadow</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowVertexShader.hlsl">
+      <Filter>Shaders\Shadow</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\pixelShader.hlsl">
+      <Filter>Shaders\Simple</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vertexShader.hlsl">
+      <Filter>Shaders\Simple</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\colormap.dds">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\ice.dds">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\metal001.dds">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\wall01.dds">
+      <Filter>Data</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\cube.txt">
+      <Filter>Data</Filter>
+    </Text>
+    <Text Include="Data\plane01.txt">
+      <Filter>Data</Filter>
+    </Text>
+    <Text Include="Data\sphere.txt">
+      <Filter>Data</Filter>
+    </Text>
   </ItemGroup>
 </Project>
