@@ -3,6 +3,7 @@
 #include <vector>
 #include "RigidBody.h"
 #include "Collider.h"
+#include "SphereCollider.h"
 #include "Collision.h"
 
 //class RigidBody;
@@ -24,7 +25,7 @@ public:
 	void DeleteRigidBody(int id);
 
 	bool CollisionDetection(Collider* colliderRb0, Collider* colliderRb1);
-	void ResolveCollision(RigidBody& rigidbody0, RigidBody& rigidbody1);
+	void ResolveCollision(RigidBody& rigidbody0, RigidBody& rigidbody1, Collider* colliderRb0, Collider* colliderRb1);
 
 	static const float mk_fDeltaTime;
 	static const Vector3 mk_vGravity;
@@ -36,5 +37,5 @@ private:
 	RigidBodyID m_RigidBodyID;
 	RigidBodyList m_RigidBodyList;
 
-	Collision m_Collision;
+	Collision* m_Collision;
 };

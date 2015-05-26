@@ -68,8 +68,6 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
-    <ClInclude Include="CollisionAlgorithms.h" />
-    <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Physic.h" />
     <ClInclude Include="Quaternion.h" />
