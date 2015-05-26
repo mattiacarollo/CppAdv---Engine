@@ -10,6 +10,7 @@
 #include "LightManager.h"
 #include "RenderToTexture.h"
 #include "DepthShader.h"
+#include "ShaderManager.h"
 
 
 const int SHADOWMAP_WIDTH = 1024;
@@ -39,12 +40,11 @@ private:
 private:
 	DXManager* m_D3D;
 	LightManager* m_Light;
+	ShaderManager* m_ShaderManager;
 	Terrain* m_Terrain;
 	Model* m_CubeModel;
 	Model* m_SphereModel;	
 	Camera* m_Camera;
-	RenderToTexture* m_RenderTexture;
-	ColorShaderClass* m_ColorShader;
-	ShadowShaderClass* m_ShadowShader;
-	DepthShaderClass* m_DepthShader;
+	RenderToTexture* m_RenderToTexture;
+	
 };
