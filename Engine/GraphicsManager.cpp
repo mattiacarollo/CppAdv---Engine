@@ -241,6 +241,30 @@ bool GraphicsManager::Render(float rotation)
 		m_CubeModel->GetTexture());
 	if (!result)	{ return false; }
 
+	////////////////////////////
+	worldMatrix = m_D3D->GetTransf()->world;
+	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	projectionMatrix = m_D3D->GetTransf()->projection;
+
+
+	//m_D3D->GetWorldMatrix(worldMatrix);
+	worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	m_CubeModel->GetPosition(posX, posY, posZ);
+	translateMatrix = DirectX::XMMatrixTranslation(posX+10, posY, posZ);
+	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+	//D3DXMatrixRotationY(&worldMatrix, rotation);
+	//D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
+	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
+
+	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_CubeModel->Render(m_D3D->GetDeviceContext());
+	// Render the model using the shadow shader.
+	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		m_CubeModel->GetTexture());
+	if (!result)	{ return false; }
+
+	/////////////////////////////
+
 	worldMatrix = m_D3D->GetTransf()->world;
 	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 	projectionMatrix = m_D3D->GetTransf()->projection;
@@ -266,33 +290,33 @@ bool GraphicsManager::Render(float rotation)
 
 void GraphicsManager::Shutdown()
 {
+	
 	if (m_Terrain)
 	{
+		m_Terrain->Shutdown();
 		delete m_Terrain;
 		m_Terrain = 0;
 	}
-	if (m_Camera)
-	{
-		delete m_Camera;
-		m_Camera = 0;
-	}
 	if (m_CubeModel)
 	{
+		m_CubeModel->Shutdown();
 		delete m_CubeModel;
 		m_CubeModel = 0;
 	}
 	if (m_SphereModel)
 	{
+		m_SphereModel->Shutdown();
 		delete m_SphereModel;
 		m_SphereModel = 0;
 	}
 	if (m_Light)
-	{
+	{		
 		delete m_Light;
 		m_Light = 0;
 	}
 	if (m_RenderToTexture)
 	{
+		m_RenderToTexture->Shutdown();
 		delete m_RenderToTexture;
 		m_RenderToTexture = 0;
 	}
@@ -303,5 +327,6 @@ void GraphicsManager::Shutdown()
 		delete m_ShaderManager;
 		m_ShaderManager = 0;
 	}
+	
 	return;
 }
