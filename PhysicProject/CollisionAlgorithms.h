@@ -1,5 +1,4 @@
 #pragma once
-
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "Collision.h"
@@ -29,7 +28,7 @@ namespace CollisionAlgorithm
 			Vector3 SecondBoxCenterInFirstBoxSystem(CentersDistance);
 			CentersDistance -= first->GetWorldPosition();
 			CentersDistance *= -1.0f;
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SecondBoxCenterInFirstBoxSystem, SecondBoxCenterInFirstBoxSystem);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SecondBoxCenterInFirstBoxSystem, SecondBoxCenterInFirstBoxSystem);
 			Vector3 radiiSum(first->GetHalfSize());
 			radiiSum += second->GetHalfSize();
 			
@@ -46,11 +45,11 @@ namespace CollisionAlgorithm
 			//Compute Min and Max for first box
 			Vector3 Min(first->GetWorldPosition() - first->GetHalfSize());
 			Vector3 Max(first->GetWorldPosition() + first->GetHalfSize());
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Min, Min);
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Max, Max);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Min, Min);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Max, Max);
 			Vector3 SecondHalfSizeInFistSystem(second->GetHalfSize());
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(second->GetRotation().ToMatrix(), SecondHalfSizeInFistSystem, SecondHalfSizeInFistSystem);
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SecondHalfSizeInFistSystem, SecondHalfSizeInFistSystem);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(second->GetRotation().ToMatrix(), SecondHalfSizeInFistSystem, SecondHalfSizeInFistSystem);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SecondHalfSizeInFistSystem, SecondHalfSizeInFistSystem);
 			//Second vs first
 			//Optimization TO DO
 			//0 1 3 7 6 4 5 2
@@ -166,7 +165,7 @@ namespace CollisionAlgorithm
 			}
 
 			//first vs Second
-//			Vector3 Vertex[8];
+			Vector3 Vertex[8];
 			Vertex[0] = (SecondBoxCenterInFirstBoxSystem);
 			Vertex[0][0] += SecondHalfSizeInFistSystem[0];
 			Vertex[0][1] += SecondHalfSizeInFistSystem[1];
@@ -208,10 +207,10 @@ namespace CollisionAlgorithm
 			Vertex[7][2] -= SecondHalfSizeInFistSystem[2];
 
 			
-			//int indexes[8];
-			//float compenetration[8];
-			pointsInside = 0;
-			isInside = false;
+			int indexes[8];
+			float compenetration[8];
+			unsigned int pointsInside = 0;
+			bool isInside = false;
 			for (unsigned int i = 0; i < 8; ++i)
 			{
 				isInside = Vertex[i][0] > Min[0] && Vertex[i][1] > Min[1] && Vertex[i][2] > Min[2] &&
@@ -328,11 +327,11 @@ namespace CollisionAlgorithm
 		{
 	
 			Vector3 SphereCenterInBoxSystem(second->GetWorldPosition());
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SphereCenterInBoxSystem, SphereCenterInBoxSystem);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), SphereCenterInBoxSystem, SphereCenterInBoxSystem);
 			Vector3 Min(first->GetWorldPosition() - first->GetHalfSize());
 			Vector3 Max(first->GetWorldPosition() + first->GetHalfSize());
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Min, Min);
-			//MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Max, Max);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Min, Min);
+			MatrixOp::Rotate<MatrixOp::ToObjSpace>(first->GetRotation().ToMatrix(), Max, Max);
 
 			float distance = 0;
 			if (SphereCenterInBoxSystem.getX() < Min.getX())

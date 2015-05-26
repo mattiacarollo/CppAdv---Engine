@@ -10,15 +10,16 @@
 #include "RigidBody.h"
 #include "SphereCollider.h"
 
-//MATTIA
 Vector3 SphereInertia(float mass, float radius)
 {
-	float tmp = 2 * mass*radius*radius / 5;
-	return Vector3(tmp, tmp, tmp);
+	//inertia moment of full sphere (I = 2/5 * (m*r^2))
+	float inertia = 2 * mass*radius*radius / 5;
+	return Vector3(inertia, inertia, inertia);
 }
 
 Physic p;
-RigidBody* rB = new RigidBody(Vector3(1.0f, 4.0f, 1.0f), 0, 5.0f, SphereInertia(5.0f, 5.0f));
+RigidBody* rBSphere0 = new RigidBody(Vector3(-4.0f, -4.0f, 1.0f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
+RigidBody* rBSphere1 = new RigidBody(Vector3(4.0f, 0.0f, 1.0f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
 float DT = 0.005f;
 double TempoTotale = 0;
@@ -91,7 +92,8 @@ void DisegnaSfera(Vector3 pos, float R)
 static void VisualizzaSistema()
 {
 	DisegnaPianoXZ(-5);
-	DisegnaSfera(rB->GetPosition(), 1); 
+	DisegnaSfera(rBSphere0->GetPosition(), 1);
+	DisegnaSfera(rBSphere1->GetPosition(), 1);
 }
 static void TastoPremuto(unsigned char Tasto){}
 HDC			hDC = NULL;
@@ -356,15 +358,20 @@ int WINAPI WinMain(HINSTANCE	hInstance,
 	LPSTR		lpCmdLine,
 	int			nCmdShow)
 {
-
-	//MATTIA
-
+	
 	//Vector3 zeros(0.0f, 0.0f, 0.0f);
 	//SphereCollider* sC = new SphereCollider(rB->GetPosition(), zeros, 5.0);
-	SphereCollider* sC = new SphereCollider(rB->GetPosition(), 5.0);
-	rB->AttachCollider(sC);
-	p.AddRigidBody(*rB, rB->GetID());
-	rB->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	SphereCollider* sC0 = new SphereCollider(rBSphere0->GetPosition(), 5.0);
+	rBSphere0->AttachCollider(sC0);
+	p.AddRigidBody(*rBSphere0, rBSphere0->GetID());
+	rBSphere0->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+
+	SphereCollider* sC1 = new SphereCollider(rBSphere1->GetPosition(), 5.0);
+	rBSphere1->AttachCollider(sC1);
+	p.AddRigidBody(*rBSphere1, rBSphere1->GetID());
+	rBSphere1->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+
+
 
 
 	MSG		msg;

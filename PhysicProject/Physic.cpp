@@ -4,22 +4,12 @@ const float Physic::mk_fDeltaTime = 0.025f;
 const Vector3 Physic::mk_vGravity = Vector3( 0.0f, -9.8f, 0.0f );
 
 Physic::Physic()
-{/*
-	m_ColliderDispatcher.Add<BoxCollider, BoxCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, BoxCollider>::Fire);
-	m_ColliderDispatcher.Add<BoxCollider, SphereCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, SphereCollider>::Fire<BoxCollider, SphereCollider>);
-	m_ColliderDispatcher.Add<SphereCollider, BoxCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<BoxCollider, SphereCollider>::Fire<SphereCollider, BoxCollider>);
-	m_ColliderDispatcher.Add<SphereCollider, SphereCollider>(CollisionAlgorithm::CollisionDetectionAlgorithm<SphereCollider, SphereCollider>::Fire);*/
+{
 }
 
 Physic::~Physic()
 {
 	unsigned int i;
-
-	for (i = 0; i < m_ColliderList.size(); ++i)
-	{
-		delete m_ColliderList[i];
-	}
-	m_ColliderList.clear();
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
@@ -31,22 +21,28 @@ Physic::~Physic()
 
 void Physic::ComputePhysic()
 {
-	unsigned int i, i2;
-	bool MaxCollisionReached = false;
+	unsigned int i, j;
+
+	/*for (i = 0; i < m_RigidBodyList.size(); ++i)
+	{
+		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
+	}*/
+	
+	m_RigidBodyList[0]->DoPhysicMove(Physic::mk_fDeltaTime);
+	m_RigidBodyList[1]->DoPhysicJump(Physic::mk_fDeltaTime);
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
-		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
-	}
-	/*
-	for (i = 0; i < m_RigidBodyList.size() && !MaxCollisionReached; ++i)
-	{
-		for (i2 = i + 1; i2 < m_RigidBodyList.size() && !MaxCollisionReached; ++i2)
+		for (j = i + 1; j < m_RigidBodyList.size(); ++j)
 		{
-			MaxCollisionReached = m_CollisionHandler.AddCollision(m_ColliderDispatcher.Dispatch(*(m_RigidBodyList[i]->GetCollider()), *(m_RigidBodyList[i2]->GetCollider())), m_RigidBodyList[i], m_RigidBodyList[i2]);
+			if (CollisionDetection(
+				m_RigidBodyList[i]->GetCollider(), 
+				m_RigidBodyList[j]->GetCollider(),))
+			{
+				ResolveCollision(*m_RigidBodyList[i], *m_RigidBodyList[j]);
+			}
 		}
 	}
-	m_CollisionHandler.HandleCollision();*/
 }
 
 void Physic::AddRigidBody(RigidBody& rigidbody, int id)
@@ -87,7 +83,26 @@ void Physic::DeleteRigidBody(int id)
 	}
 }
 
-void Physic::AddCollider(Collider* col)
+bool Physic::CollisionDetection(Collider* colliderRb0, Collider* colliderRb1)
 {
-	m_ColliderList.push_back(col);
+	float xd = colliderRb0->GetWorldPosition().getX() - colliderRb1->GetWorldPosition().getX();
+	float yd = colliderRb0->GetWorldPosition().getY() - colliderRb1->GetWorldPosition().getY();
+
+	float sumRadius =  + ball.getRadius();
+	float sqrRadius = sumRadius * sumRadius;
+
+	float distSqr = (xd * xd) + (yd * yd);
+	
+	if (distSqr <= sqrRadius)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+void Physic::ResolveCollision(RigidBody& rigidbody0, RigidBody& rigidbody1)
+{
+	//m_Collision = new Collision(rigidbody0, rigidbody1);
 }

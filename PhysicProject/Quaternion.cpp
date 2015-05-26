@@ -113,7 +113,7 @@ void Quaternion::Normalize()
 		*this /= a;
 	}
 };
-/*
+
 Matrix<3, 3> Quaternion::ToMatrix() const
 {
 	float X2 = GetValue(1) * GetValue(1);
@@ -137,4 +137,4 @@ Matrix<3, 3> Quaternion::ToMatrix() const
 	result.SetElementAt(7, 2.0f * (YZ + SX));
 	result.SetElementAt(8, 1.0f - 2.0f * (X2 + Y2));
 	return result;
-};*/
+};

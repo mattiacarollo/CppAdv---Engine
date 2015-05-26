@@ -3,56 +3,123 @@
 #include <math.h>
 #include "Vector3.h"
 
+template<int Row, int Col>
 class Matrix
 {
+	template<int, int>
+	friend class Matrix;
 public:
-
-	inline static void SommaVettori(const Vector3& p3, const Vector3& s3, Vector3& o3)
+	float GetElementAt(int i, int j) const
 	{
-		o3.SetX(p3.getX() + s3.getX());
-		o3.SetY(p3.getY() + s3.getY());
-		o3.SetZ(p3.getZ() + s3.getZ());
-	}
-
-	inline static void SottraiVettori(const Vector3& p3, const Vector3& s3, Vector3& o3)
+		return _matrix[i*Col + j];
+	};
+	float GetElementAt(int i) const
 	{
-		o3.SetX(p3.getX() - s3.getX());
-		o3.SetY(p3.getY() - s3.getY());
-		o3.SetZ(p3.getZ() - s3.getZ());
-	}
-
-	inline static void MoltiplicaVettoreScalare(const Vector3& p3, float s, Vector3& o3)
+		return _matrix[i];
+	};
+	void SetElementAt(int i, float val)
 	{
-		o3.SetX(p3.getX() * s);
-		o3.SetY(p3.getY() * s);
-		o3.SetZ(p3.getZ() * s);
-	}
+		_matrix[i] = val;
+	};
 
-	inline static void DividiVettoreScalare(const Vector3& p3, float s, Vector3& o3)
+	void SetElementAt(int i, int j, float val)
 	{
-		o3.SetX(p3.getX() / s);
-		o3.SetY(p3.getY() / s);
-		o3.SetZ(p3.getZ() / s);
+		_matrix[i*Col + j] = val;
+	};
+	void SetRow(int Nrow, float* value)
+	{
+		for (int i = 0; i < Col; ++i)
+		{
+			_matrix[Nrow*Col + i] = value[i];
+		}
+	};
+	Matrix(){
+		for (int i = 0; i < Row*Col; ++i)
+		{
+			_matrix[i] = 0;
+		}
 	}
-	
-	float ProdottoScalare(const Vector3& p3, const Vector3& s3);
-	void ProdottoVettoriale(const Vector3& p3, const Vector3& s3, Vector3& o3);
-	
-	void NormalizzaVettore(const Vector3& p3, Vector3& o3);
-	
-	void RigaXmatrice(const float *i4x4, const float *Matrice4x4, float *o4x4);
-	void MatriceXmatrice(const float *i4x4, const float *Matrice4x4, float *o4x4);
-	
-	void RuotaAssolute(const float *Matrice3x3, const float *i3, float *o3);
-	void RuotaRelative(const float *Matrice3x3, const float *i3, float *o3);
-	
-	void SommaQuaternioni(const float *p4, const float *s4, float *o4);
-	void SottraiQuaternioni(const float *p4, const float *s4, float *o4);
-	void MoltiplicaQuaternioni(const float *p4, const float *s4, float *o4);
-	float ModuloQuaternione(const float *q4);
-	void NormalizzaQuaternione(const float *q4, float *o4);
-	void MatriceDaQuaternione(const float *q4, float *Matrice3x3);
+	template<int OtherDim>
+	float MultiplyRowCol(int Nrow, int Ncol, const Matrix<Col, OtherDim>& secondMatrix) const
+	{
+		float result = 0;
+		const float* row = GetRow(Nrow);
+		const float* col = secondMatrix.GetCol(Ncol);
+		for (int i = 0; i < Col; ++i)
+		{
+			result += row[i] * col[i*Col];
+		}
+		return result;
+	};
 
+	Matrix(const Matrix<Row, Col>& other)
+	{
+		for (int i = 0; i < Row*Col; ++i)
+		{
+
+			_matrix[i] = other.GetElementAt(i);
+		}
+	}
+	Matrix<Row, Col>& operator=(const Matrix<Row, Col> other)
+	{
+		if (this != &other)
+		{
+			for (int i = 0; i < Row*Col; i++)
+				_matrix[i] = other.GetElementAt(i);
+		}
+		return *this;
+	}
+	Matrix<Col, Row>& Transpose()
+	{
+		Matrix<Col, Row> result;
+		for (int i = 0; i < Row; ++i)
+		{
+			for (int j = 0; j < Col; ++j)
+			{
+				result.SetElementAt(j, i, GetElementAt(i, j));
+			}
+		}
+		return result
+	}
 private:
-	float ModuloVettore(const Vector3& p3);
+	const float* GetRow(int i) const
+	{
+		return  &_matrix[i*Col];
+	};
+	const float* GetCol(int i)  const
+	{
+		return &_matrix[i];
+	};
+
+	float _matrix[Row*Col];
 };
+
+namespace MatrixOp{
+	template<int Row, int Col, int secondMatrixCol>
+	void MultiplyMatrix(const Matrix<Row, Col>& first, const Matrix<Col, secondMatrixCol>& second, Matrix<Row, secondMatrixCol>& result)
+	{
+		float rowR[secondMatrixCol];
+		for (int i = 0; i < Row; ++i)
+		{
+			for (int j = 0; j < secondMatrixCol; ++j)
+			{
+				rowR[j] = first.MultiplyRowCol(i, j, second);
+			}
+			result.SetRow(i, rowR);
+		}
+	}
+	template<int Row, int Col>
+	void Rotate(const Matrix<Row, Col>& Matrix, const float* vector, float * result);
+
+	enum RotateTo
+	{
+		ToWorldSpace = false,
+		ToObjSpace = true
+	};
+	template<RotateTo To>
+	void Rotate(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+	template<>
+	void Rotate<ToWorldSpace>(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+	template<>
+	void Rotate<ToObjSpace>(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+}

@@ -1,4 +1,4 @@
-#pragma once
+#pragma once/*
 class Collider;
 //OLD CLASS NO ONE USE IT
 #include <iostream> //DEBUG ONLY
@@ -31,8 +31,7 @@ private:
 	};
 	static Collision* DetectCollision(SphereCollider* first, SphereCollider* second)
 	{
-		//float distance = Vector3::DistanceBetween(first->GetWorldPosition(), second->GetWorldPosition());
-		float distance = VectorOp::DistanceBetween(first->GetWorldPosition(), second->GetWorldPosition());
+		float distance = Vector3::DistanceBetween(first->GetWorldPosition(), second->GetWorldPosition());
 		float radiusSum = first->GetRadius() + second->GetRadius();
 		float compenetrarion = distance-radiusSum;
 		if (compenetrarion < 0)
@@ -44,3 +43,4 @@ private:
 		return nullptr;
 	};
 };
+*/

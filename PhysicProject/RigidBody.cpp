@@ -10,7 +10,7 @@ RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inert
 	m_vAngularMomentum = VectorOp::Zero;
 	m_vForceSum = VectorOp::Zero;
 	m_vMomentumSum = VectorOp::Zero;
-	//m_mRotationMatrix = m_qRotation.ToMatrix();
+	m_mRotationMatrix = m_qRotation.ToMatrix();
 }
 
 RigidBody::RigidBody(const RigidBody& other)
@@ -22,20 +22,22 @@ RigidBody::~RigidBody()
 {
 }
 
-void RigidBody::DoPhysic(float DeltaTime)
+void RigidBody::DoPhysicJump(float DeltaTime)
 {
 	Vector3 tmp(m_vForceSum * DeltaTime);
 	
+	//quantity of motion (p = m*v)
 	m_vQuantityOfMotion += tmp;
 
 	tmp = m_vMomentumSum * DeltaTime;
 	m_vAngularMomentum += tmp;
+	//velocity of center of gravity(baricentro) (v = p/m)
 	m_vVelocity = m_vQuantityOfMotion / m_fMass;
 
 	tmp = m_vVelocity * DeltaTime;
 	m_vPosition += tmp;
 	
-	//MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
+	MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
 
 	m_vAngularVelocity.SetX(m_vAngularVelocity.getX() / m_vInertia.getX());
 	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
@@ -46,51 +48,92 @@ void RigidBody::DoPhysic(float DeltaTime)
 	Rot.Normalize();
 	m_qRotation = m_qRotation*Rot;
 	m_qRotation.Normalize();
-	//MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
+	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 	
-	//m_mRotationMatrix = m_qRotation.ToMatrix();
+	m_mRotationMatrix = m_qRotation.ToMatrix();
 
-	//m_vForceSum += Physic::mk_vGravity*m_fMass;
-	m_vForceSum += Physic::mk_vGravity/m_fMass;
+	m_vForceSum = Physic::mk_vGravity*m_fMass;
+
+	//movimento laterale sul terreno
+	//5 è il raggio
+	if (m_vPosition[1] + 5 < 1) {
+		float d = 1 - (m_vPosition[1] + 5);
+		d *= 4000;
+		d -= m_vVelocity[1] * 100;
+		if (d > 0) m_vForceSum[1] += d;
+	}
+
+	/*if (5 - m_vPosition[0] < 1) {
+		float d = 1 - (5 - m_vPosition[0]);
+		d *= 4000;
+		d -= m_vVelocity[1] * 50;
+		if (d > 0) m_vForceSum[0] -= d;
+	}
+		
+	if (m_vPosition[0] + 5 < 1)
+	{
+		float d = 1 - (m_vPosition[0] + 5);
+		d *= 4000;
+		d += m_vVelocity[1] * 50;
+		if (d > 0) m_vForceSum[0] += d;
+	}*/
 }
 
-//void RigidBody::DoPhysic(float DeltaTime)
-//{
-//	Vector3 m_vF;
-//	Vector3 m_vA;
-//
-//	Matrix::MoltiplicaVettoreScalare(Physic::mk_vGravity, m_fMass, m_vF);
-//
-//	//movimento laterale sul terreno
-//	if (m_vPosition[1] + 5 < 1) {
-//		float d = 1 - (m_vPosition[1] + 5);
-//		d *= 4000;
-//		d -= m_vVelocity[1] * 100;
-//		if (d > 0) m_vF[1] += d;
-//	}
-//
-//	if (5 - m_vPosition[0] < 1) {
-//		float d = 1 - (5 - m_vPosition[0]);
-//		d *= 4000;
-//		d -= m_vVelocity[1] * 50;
-//		if (d > 0) m_vF[0] -= d;
-//	}
-//
-//	if (m_vPosition[0] + 5 < 1)
-//	{
-//		float d = 1 - (m_vPosition[0] + 5);
-//		d *= 4000;
-//		d += m_vVelocity[1] * 50;
-//		if (d > 0) m_vF[0] += d;
-//	}
-//
-//	//movimento di caduta
-//	Matrix::DividiVettoreScalare(m_vF, m_fMass, m_vA);
-//	Matrix::MoltiplicaVettoreScalare(m_vA, DeltaTime, m_vA);
-//	Matrix::SommaVettori(m_vVelocity, m_vA, m_vVelocity);
-//	Matrix::MoltiplicaVettoreScalare(m_vVelocity, DeltaTime, m_vA);
-//	Matrix::SommaVettori(m_vPosition, m_vA, m_vPosition);
-//}
+void RigidBody::DoPhysicMove(float DeltaTime)
+{
+	Vector3 tmp(m_vForceSum * DeltaTime);
+
+	m_vQuantityOfMotion += tmp;
+
+	tmp = m_vMomentumSum * DeltaTime;
+	m_vAngularMomentum += tmp;
+	m_vVelocity = m_vQuantityOfMotion / m_fMass;
+
+	tmp = m_vVelocity * DeltaTime;
+	m_vPosition += tmp;
+
+	MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
+
+	m_vAngularVelocity.SetX(m_vAngularVelocity.getX() / m_vInertia.getX());
+	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
+	m_vAngularVelocity.SetZ(m_vAngularVelocity.getZ() / m_vInertia.getZ());
+
+	Quaternion Rot(1, m_vAngularVelocity.getX()*DeltaTime / 2, m_vAngularVelocity.getY()*DeltaTime / 2, m_vAngularVelocity.getZ()*DeltaTime / 2);
+
+	Rot.Normalize();
+	m_qRotation = m_qRotation*Rot;
+	m_qRotation.Normalize();
+	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
+
+	m_mRotationMatrix = m_qRotation.ToMatrix();
+
+	Vector3 mk_vBallVelocity = Vector3(0.5f, 0.0f, 0.0f);
+	m_vForceSum = mk_vBallVelocity*m_fMass;
+
+	//movimento laterale sul terreno
+	//5 è il raggio
+	if (m_vPosition[1] + 5 < 1) {
+		float d = 1 - (m_vPosition[1] + 5);
+		d *= 4000;
+		d -= m_vVelocity[1] * 100;
+		if (d > 0) m_vForceSum[1] += d;
+	}
+
+	/*if (5 - m_vPosition[0] < 1) {
+	float d = 1 - (5 - m_vPosition[0]);
+	d *= 4000;
+	d -= m_vVelocity[1] * 50;
+	if (d > 0) m_vForceSum[0] -= d;
+	}
+
+	if (m_vPosition[0] + 5 < 1)
+	{
+	float d = 1 - (m_vPosition[0] + 5);
+	d *= 4000;
+	d += m_vVelocity[1] * 50;
+	if (d > 0) m_vForceSum[0] += d;
+	}*/
+}
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {
@@ -130,10 +173,10 @@ float RigidBody::GetMass() const
 	return m_fMass;
 }
 
-//const Matrix<3, 3>& RigidBody::GetRotationMatrix() const
-//{
-//	return m_mRotationMatrix;
-//};
+const Matrix<3, 3>& RigidBody::GetRotationMatrix() const
+{
+	return m_mRotationMatrix;
+};
 
 const Quaternion& RigidBody::GetRotationQuaternion() const
 {

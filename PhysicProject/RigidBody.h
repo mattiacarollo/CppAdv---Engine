@@ -5,9 +5,9 @@
 #include "Quaternion.h"
 #include "Physic.h"
 
-/*
+
 template<int row, int col>
-class Matrix;*/
+class Matrix;
 
 class Collider;
 class RigidBody
@@ -19,7 +19,8 @@ public:
 	RigidBody(const RigidBody& other);
 	~RigidBody();
 
-	void DoPhysic(float);
+	void DoPhysicJump(float);
+	void DoPhysicMove(float);
 	void ApplyForce(const Vector3& force, const Vector3& pointOfApplication);
 	void SumForceToTotalForce(const Vector3&);
 	void SumMomentumToTotalMomentum(const Vector3&);
@@ -29,14 +30,14 @@ public:
 
 	int GetID() const;
 	float GetMass() const;
-	//const Matrix<3, 3>& GetRotationMatrix() const;
+	const Matrix<3, 3>& GetRotationMatrix() const;
 	const Quaternion& GetRotationQuaternion() const;
 	const Vector3& GetPosition() const;
 	Vector3 GetVelocity() const;
 	Collider* GetCollider() const;
 
 	void SetPosition(const Vector3&);
-	void SetVelocity(const Vector3&);	
+	void SetVelocity(const Vector3&);
 
 private:
 
@@ -50,7 +51,7 @@ private:
 	Vector3 m_vForceSum;
 	Vector3 m_vMomentumSum;
 	Quaternion m_qRotation;
-	//Matrix<3,3> m_mRotationMatrix;
+	Matrix<3,3> m_mRotationMatrix;
 	Collider* m_cCollider;
 	int m_iID;
 };
