@@ -1,50 +1,50 @@
-#include "Light.h"
+#include "LightManager.h"
 
 
-LightClass::LightClass()
+LightManager::LightManager()
 {
 }
 
 
-LightClass::LightClass(const LightClass& other)
+LightManager::LightManager(const LightManager& other)
 {
 }
 
 
-LightClass::~LightClass()
+LightManager::~LightManager()
 {
 }
 
 
-void LightClass::SetAmbientColor(float red, float green, float blue, float alpha)
+void LightManager::SetAmbientColor(float red, float green, float blue, float alpha)
 {
 	m_ambientColor = DirectX::XMFLOAT4(red, green, blue, alpha);
 	return;
 }
 
 
-void LightClass::SetDiffuseColor(float red, float green, float blue, float alpha)
+void LightManager::SetDiffuseColor(float red, float green, float blue, float alpha)
 {
 	m_diffuseColor = DirectX::XMFLOAT4(red, green, blue, alpha);
 	return;
 }
 
 
-void LightClass::SetPosition(float x, float y, float z)
+void LightManager::SetPosition(float x, float y, float z)
 {
 	m_position = DirectX::XMVectorSet(x, y, z, 0.0f);
 	return;
 }
 
 
-void LightClass::SetLookAt(float x, float y, float z)
+void LightManager::SetLookAt(float x, float y, float z)
 {
 	m_lookAt = DirectX::XMVectorSet(x, y, z, 0.0f);
 	return;
 }
 
 
-DirectX::XMFLOAT4 LightClass::GetAmbientColor()
+DirectX::XMFLOAT4 LightManager::GetAmbientColor()
 {
 	return m_ambientColor;
 }

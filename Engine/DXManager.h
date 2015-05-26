@@ -1,10 +1,13 @@
 #pragma once
 
+
 #include <dxgi.h>
 #include "DataType.h"
 #include "Utility.h"
 
+
 using namespace utility;
+
 
 class DXManager {
 public:

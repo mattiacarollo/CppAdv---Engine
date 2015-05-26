@@ -1,11 +1,12 @@
 #pragma once
 
+
 #include <d3d11.h>
 #include <fstream>
 #include "DataType.h"
+#include "textureclass.h"
 using namespace std;
 
-#include "textureclass.h"
 
 class ModelClass
 {

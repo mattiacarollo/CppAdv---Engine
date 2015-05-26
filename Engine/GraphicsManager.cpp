@@ -4,7 +4,6 @@ GraphicsManager::GraphicsManager()
 {
 	m_Terrain = 0;
 	m_ColorShader = 0;
-	m_App = 0;
 	m_Camera = 0;
 	m_CubeModel = 0;
 	m_SphereModel = 0;
@@ -282,15 +281,10 @@ void GraphicsManager::Shutdown()
 		delete m_ColorShader;
 		m_ColorShader = 0;
 	}
-	if (m_App)
-	{
-		delete m_App;
-		m_App = 0;
-	}
 	if (m_Camera)
 	{
-		delete m_App;
-		m_App = 0;
+		delete m_Camera;
+		m_Camera = 0;
 	}
 	if (m_CubeModel)
 	{

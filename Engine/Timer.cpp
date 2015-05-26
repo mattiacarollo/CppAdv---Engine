@@ -1,25 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-// Filename: timerclass.cpp
-///////////////////////////////////////////////////////////////////////////////
-#include "timermanager.h"
+#include "Timer.h"
 
 
-TimerClass::TimerClass()
+Timer::Timer()
 {
 }
 
 
-TimerClass::TimerClass(const TimerClass& other)
+Timer::Timer(const Timer& other)
 {
 }
 
 
-TimerClass::~TimerClass()
+Timer::~Timer()
 {
 }
 
 
-bool TimerClass::Initialize()
+bool Timer::Initialize()
 {
 	// Check to see if this system supports high performance timers.
 	QueryPerformanceFrequency((LARGE_INTEGER*)&m_frequency);
@@ -37,7 +34,7 @@ bool TimerClass::Initialize()
 }
 
 
-void TimerClass::Frame()
+void Timer::Frame()
 {
 	INT64 currentTime;
 	float timeDifference;
@@ -59,7 +56,7 @@ void TimerClass::Frame()
 }
 
 
-float TimerClass::GetTime()
+float Timer::GetTime()
 {
 	return m_frameTime;
 }

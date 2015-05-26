@@ -12,10 +12,11 @@ const float SCREEN_NEAR = 0.1f;
 #include "Camera.h"
 #include "GraphicsManager.h"
 #include "PositionManager.h"
-#include "timerManager.h" 
+#include "Timer.h" 
 
-class Application;
+
 class GraphicsManager;
+
 
 class ApplicationManager
 {
@@ -38,5 +39,5 @@ private:
 	DXManager* m_D3D;
 	Camera* m_Camera;
 	GraphicsManager* m_Graphic;
-	TimerClass* m_Timer;
+	Timer* m_Timer;
 };

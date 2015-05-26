@@ -1,27 +1,24 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: terrainclass.cpp
-////////////////////////////////////////////////////////////////////////////////
-#include "terrainmanager.h"
+#include "Terrain.h"
 
 
-TerrainClass::TerrainClass()
+Terrain::Terrain()
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 }
 
 
-TerrainClass::TerrainClass(const TerrainClass& other)
+Terrain::Terrain(const Terrain& other)
 {
 }
 
 
-TerrainClass::~TerrainClass()
+Terrain::~Terrain()
 {
 }
 
 
-bool TerrainClass::Initialize(ID3D11Device* device)
+bool Terrain::Initialize(ID3D11Device* device)
 {
 	bool result;
 
@@ -41,7 +38,7 @@ bool TerrainClass::Initialize(ID3D11Device* device)
 }
 
 
-void TerrainClass::Shutdown()
+void Terrain::Shutdown()
 {
 	// Release the vertex and index buffer.
 	ShutdownBuffers();
@@ -50,7 +47,7 @@ void TerrainClass::Shutdown()
 }
 
 
-void TerrainClass::Render(ID3D11DeviceContext* deviceContext)
+void Terrain::Render(ID3D11DeviceContext* deviceContext)
 {
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	RenderBuffers(deviceContext);
@@ -59,13 +56,13 @@ void TerrainClass::Render(ID3D11DeviceContext* deviceContext)
 }
 
 
-int TerrainClass::GetIndexCount()
+int Terrain::GetIndexCount()
 {
 	return m_indexCount;
 }
 
 
-bool TerrainClass::InitializeBuffers(ID3D11Device* device)
+bool Terrain::InitializeBuffers(ID3D11Device* device)
 {
 	VertexType* vertices;
 	unsigned long* indices;
@@ -233,7 +230,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device* device)
 }
 
 
-void TerrainClass::ShutdownBuffers()
+void Terrain::ShutdownBuffers()
 {
 	// Release the index buffer.
 	if (m_indexBuffer)
@@ -253,7 +250,7 @@ void TerrainClass::ShutdownBuffers()
 }
 
 
-void TerrainClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
+void Terrain::RenderBuffers(ID3D11DeviceContext* deviceContext)
 {
 	unsigned int stride;
 	unsigned int offset;
