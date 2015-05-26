@@ -149,7 +149,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC; // since we will be updating it each frame.
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType); //La nostra struttura che ha 3 matrici : world view projection
+	matrixBufferDesc.ByteWidth = sizeof(utility::Transformations); //La nostra struttura che ha 3 matrici : world view projection
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER; // Diciamo che è un costant buffer
 	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; //Usage, scrive su CPU
 	matrixBufferDesc.MiscFlags = 0;
