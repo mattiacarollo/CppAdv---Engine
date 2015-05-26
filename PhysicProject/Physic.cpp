@@ -33,13 +33,17 @@ void Physic::ComputePhysic()
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
+		//second loop not check a rigidbody with itself and previous rigidbody (double check)
 		for (j = i + 1; j < m_RigidBodyList.size(); ++j)
 		{
-			if (CollisionDetection(
-				m_RigidBodyList[i]->GetCollider(), 
-				m_RigidBodyList[j]->GetCollider(),))
+			if (CollisionDetection(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider()))
 			{
-				ResolveCollision(*m_RigidBodyList[i], *m_RigidBodyList[j]);
+				ResolveCollision(
+					*m_RigidBodyList[i], 
+					*m_RigidBodyList[j], 
+					m_RigidBodyList[i]->GetCollider(), 
+					m_RigidBodyList[j]->GetCollider()
+				);
 			}
 		}
 	}
@@ -88,7 +92,7 @@ bool Physic::CollisionDetection(Collider* colliderRb0, Collider* colliderRb1)
 	float xd = colliderRb0->GetWorldPosition().getX() - colliderRb1->GetWorldPosition().getX();
 	float yd = colliderRb0->GetWorldPosition().getY() - colliderRb1->GetWorldPosition().getY();
 
-	float sumRadius =  + ball.getRadius();
+	float sumRadius = ((SphereCollider*)colliderRb0)->GetRadius() + ((SphereCollider*)colliderRb1)->GetRadius();
 	float sqrRadius = sumRadius * sumRadius;
 
 	float distSqr = (xd * xd) + (yd * yd);
@@ -102,7 +106,14 @@ bool Physic::CollisionDetection(Collider* colliderRb0, Collider* colliderRb1)
 }
 
 
-void Physic::ResolveCollision(RigidBody& rigidbody0, RigidBody& rigidbody1)
+void Physic::ResolveCollision(RigidBody& rigidbody0, RigidBody& rigidbody1, Collider* colliderRb0, Collider* colliderRb1)
 {
-	//m_Collision = new Collision(rigidbody0, rigidbody1);
+	Vector3 force = rigidbody0.GetVelocity() + rigidbody1.GetVelocity();
+
+	Vector3 CentersDistance = colliderRb0->GetWorldPosition() - colliderRb1->GetWorldPosition();
+	CentersDistance.Normalize();
+	Vector3 poa = CentersDistance*((SphereCollider*)colliderRb0)->GetRadius();
+
+	m_Collision = new Collision(&rigidbody0, &rigidbody1, poa, force, CentersDistance);
+	m_Collision->ApplyCollision();
 }
