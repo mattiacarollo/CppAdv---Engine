@@ -46,7 +46,7 @@ void TextureShader::Shutdown()
 }
 
 
-bool TextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix,
+bool TextureShader::Render(ID3D11DeviceContext* deviceContext, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix,
 	DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
 {
 	bool result;
@@ -60,7 +60,7 @@ bool TextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, D
 	}
 
 	// Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(deviceContext, vertexCount, instanceCount);
 
 	return true;
 }
@@ -72,7 +72,7 @@ bool TextureShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsF
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -138,6 +138,14 @@ bool TextureShader::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsF
 	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
+
+	polygonLayout[2].SemanticName = "TEXCOORD";
+	polygonLayout[2].SemanticIndex = 1;
+	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[2].InputSlot = 1;
+	polygonLayout[2].AlignedByteOffset = 0;
+	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	polygonLayout[2].InstanceDataStepRate = 1;
 
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
@@ -316,7 +324,7 @@ bool TextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, Dire
 }
 
 
-void TextureShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void TextureShader::RenderShader(ID3D11DeviceContext* deviceContext, int vertexCount, int instanceCount)
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout(m_layout);
@@ -329,7 +337,8 @@ void TextureShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCo
 	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 
 	// Render the triangle.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	//deviceContext->DrawIndexed(indexCount, 0, 0);
+	deviceContext->DrawInstanced(vertexCount, instanceCount, 0, 0);
 
 	return;
 }

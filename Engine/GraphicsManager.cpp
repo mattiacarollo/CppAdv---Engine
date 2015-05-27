@@ -10,7 +10,8 @@ GraphicsManager::GraphicsManager()
 	m_ShaderManager = 0;
 	m_Light = 0;
 	//m_ListGameObject = 0;
-
+	m_TextDrawer = 0;
+	m_ArialFont = 0;
 }
 
 
@@ -55,7 +56,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
-	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/wall01.dds");
+	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/wall01.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cube model object.", L"Error", MB_OK);
@@ -66,7 +67,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the SPHERE model object.
 	m_SphereModel = new Model;
 	if (!m_SphereModel)	{ return false; }
-	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/sphere.txt", L"../Engine/data/ice.dds");
+	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/sphere.txt", L"../Engine/data/ice.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the sphere model object.", L"Error", MB_OK);
@@ -95,11 +96,38 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 		return false;
 	}
 
+	// Create the model list object.
+	m_ModelList = new ModelListClass;
+	if (!m_ModelList)
+	{
+		return false;
+	}
+
+	// Initialize the model list object.
+	result = m_ModelList->Initialize(25);
+	if (!result)
+	{
+		//MessageBox(hwnd, L"Could not initialize the model list object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the frustum object.
+	m_Frustum = new Frustum;
+	if (!m_Frustum)
+	{
+		return false;
+	}
+
+
+
+	//Create and initialize textdrawer and font objects
+	m_TextDrawer = new utility::TextDrawer(D3D->GetDeviceContext());
+	m_ArialFont = new utility::TextFont(D3D->GetDevice(), L"../Engine/Data/arial16.spritefont");
 
 	return true;
 }
 
-bool GraphicsManager::Frame(float frameTime)
+bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 {
 	bool result;
 	static float lightAngle = 270.0f;
@@ -131,10 +159,37 @@ bool GraphicsManager::Frame(float frameTime)
 
 	// Update the rotation variable each frame.
 	rotation += (float)DirectX::XM_PI * 0.005f;
-	if (rotation > 360.0f)
+	if (rotation > 360.0f)	{	rotation -= 360.0f;	}
+
+	// Render the FPS and CPU
+	m_TextDrawer->beginDraw();
+
+	std::wstring fpsText = L"FPS : ";
+	fpsText += std::to_wstring(fps);
+	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 10.0f));
+	m_TextDrawer->drawText(*m_ArialFont, fpsText);
+
+	/*int k = 0;
+	std::wstring testText = L"FPS : ";
+	for (int i = 0; i < 1200; i++)
 	{
-		rotation -= 360.0f;
+		k++; 
+		testText += std::to_wstring(k);
 	}
+	m_TextDrawer->setColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_TextDrawer->setPosition(DirectX::XMFLOAT2(100.0f, 100.0f));
+	m_TextDrawer->drawText(*m_ArialFont, testText);*/
+
+	std::wstring cpuText = L"CPU : ";
+	cpuText += std::to_wstring(cpu);
+	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 60.0f));
+	m_TextDrawer->drawText(*m_ArialFont, cpuText);
+
+	m_TextDrawer->endDraw();
+
+	
 
 	// Render the graphics scene.
 	result = Render(rotation);
@@ -145,87 +200,29 @@ bool GraphicsManager::Frame(float frameTime)
 
 bool GraphicsManager::RenderSceneToTexture()
 {
-	DirectX::XMMATRIX worldMatrix, lightViewMatrix, lightOrthoMatrix;
-	float posX, posY, posZ;
-	bool result;
-
-	// Set the render target to be the render to texture.
-	m_RenderToTexture->SetRenderTarget(m_D3D->GetDeviceContext());
-
-	// Clear the render to texture.
-	m_RenderToTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-
-	// Generate the light view matrix based on the light's position.
-	m_Light->GenerateViewMatrix();
-
-	// Get the world matrix from the d3d object.
-	worldMatrix = m_D3D->GetTransf()->world;
-
-	// Get the view and orthographic matrices from the light object.
-	m_Light->GetViewMatrix(lightViewMatrix);
-	m_Light->GetOrthoMatrix(lightOrthoMatrix);
-
-	// Setup the translation matrix for the cube model.
-	m_CubeModel->GetPosition(posX, posY, posZ);
-	worldMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
-
-	//start();
-
-	// Render the cube model with the depth shader.
-	m_CubeModel->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, lightViewMatrix, lightOrthoMatrix);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Reset the world matrix.
-	worldMatrix = m_D3D->GetTransf()->world;
-
-	// Setup the translation matrix for the sphere model.
-	m_SphereModel->GetPosition(posX, posY, posZ);
-	worldMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
-
-	// Render the sphere model with the depth shader.
-	m_SphereModel->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, lightViewMatrix, lightOrthoMatrix);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Create the model list object.
-	m_ModelList = new ModelListClass;
-	if (!m_ModelList)
-	{
-		return false;
-	}
-
-	// Initialize the model list object.
-	result = m_ModelList->Initialize(25);
-	if (!result)
-	{
-		//MessageBox(hwnd, L"Could not initialize the model list object.", L"Error", MB_OK);
-		return false;
-	}
-
-	// Create the frustum object.
-	m_Frustum = new Frustum;
-	if (!m_Frustum)
-	{
-		return false;
-	}
-	
-
-
-	// Reset the world matrix.
-	worldMatrix = m_D3D->GetTransf()->world;
-	// Reset the render target back to the original back buffer and not the render to texture anymore.
-	m_D3D->SetBackBufferRenderTarget();
-
-	// Reset the viewport back to the original.
-	m_D3D->ResetViewport();
-
+	//DirectX::XMMATRIX worldMatrix, lightViewMatrix, lightOrthoMatrix;
+	//float posX, posY, posZ;
+	//bool result;
+	//m_RenderToTexture->SetRenderTarget(m_D3D->GetDeviceContext());
+	//m_RenderToTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+	//m_Light->GenerateViewMatrix();
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_Light->GetViewMatrix(lightViewMatrix);
+	//m_Light->GetOrthoMatrix(lightOrthoMatrix);
+	//m_CubeModel->GetPosition(posX, posY, posZ);
+	//worldMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
+	//m_CubeModel->Render(m_D3D->GetDeviceContext());
+	//result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, lightViewMatrix, lightOrthoMatrix);
+	//if (!result)	{	return false;	}
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_SphereModel->GetPosition(posX, posY, posZ);
+	//worldMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
+	//m_SphereModel->Render(m_D3D->GetDeviceContext());
+	//result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, lightViewMatrix, lightOrthoMatrix);
+	//if (!result)	{	return false;	}
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_D3D->SetBackBufferRenderTarget();
+	//m_D3D->ResetViewport();
 	return true;
 }
 
@@ -243,10 +240,6 @@ bool GraphicsManager::Render(float rotation)
 	float positionX, positionY, positionZ, radius;
 	DirectX::XMFLOAT4 color;
 	bool renderModel;
-
-	// First render the scene to a texture.
-	result = RenderSceneToTexture();
-	if (!result)	{ return false; }
 
 	m_Camera->Render(); //Render camera
 
@@ -314,155 +307,50 @@ bool GraphicsManager::Render(float rotation)
 			////m_CubeModel->GetPosition(posX,posY,posZ);
 			//translateMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ); //translation
 			//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-
-			m_SphereModel->Render(m_D3D->GetDeviceContext());
+						
+			// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+			m_CubeModel->Render(m_D3D->GetDeviceContext());
 			// Render the model using the shadow shader.
-			result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				m_SphereModel->GetTexture());
+			result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTexture());
 			if (!result)	{ return false; }
 
 			worldMatrix = m_D3D->GetTransf()->world;
 
 			/////////////////
+				
 
 			// Since this model was rendered then increase the count for this frame.
 			renderCount++;
 		}
 	}
 
-	//// Set the number of models that was actually rendered this frame.
-	//result = m_Text->SetRenderCount(renderCount, m_D3D->GetDeviceContext());
-	//if (!result)
-	//{
-	//	return false;
-	//}
+	// Render the FPS and CPU
+	m_TextDrawer->beginDraw();
 
-	// Turn off the Z buffer to begin all 2D rendering.
-	//m_D3D->TurnZBufferOff();
+	std::wstring cpuText = L"COUNT : ";
+	cpuText += std::to_wstring(renderCount);
+	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 120.0f));
+	m_TextDrawer->drawText(*m_ArialFont, cpuText);
 
-	// Turn on the alpha blending before rendering the text.
-	//m_D3D->TurnOnAlphaBlending();
+	m_TextDrawer->endDraw();
 
-	// Render the text strings.
-	/*result = m_Text->Render(m_D3D->GetDeviceContext(), worldMatrix, projection);
-	if (!result)
-	{
-		return false;
-	}*/
-
-	// Turn off alpha blending after rendering the text.
-	//m_D3D->TurnOffAlphaBlending();
-
-	// Turn the Z buffer back on now that all 2D rendering has completed.
-	//m_D3D->TurnZBufferOn();
-
-	// Present the rendered scene to the screen.
-
-	///////////////////////
-	//for (int i = 0; i < m_ListGameObject.size(); i++){
-	//	Model *model = m_CubeModel;
-
-	//	switch (m_ListGameObject[i]->idModel)
-	//	{
-	//	case IdModel::cube:
-	//		model = m_CubeModel;
-
-	//		worldMatrix = m_D3D->GetTransf()->world;
-	//		m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	//		projectionMatrix = m_D3D->GetTransf()->projection;
-
-	//		m_ListGameObject[i]->getScale(scaleX, scaleY, scaleZ); //get scale object
-
-	//		//IMPORTANT :order is SCALING *  ROTATION  * TRANSLATE
-	//		worldMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ); //scaling
-	//		rotationMatrix = DirectX::XMMatrixRotationY(rotation); //rotation
-	//		worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, rotationMatrix);
-
-	//		m_ListGameObject[i]->getPosition(posX, posY, posZ); //get position
-
-	//		translateMatrix = DirectX::XMMatrixTranslation(posX + 10, posY, posZ); //translation
-	//		worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-
-	//		m_CubeModel->Render(m_D3D->GetDeviceContext());
-
-	//		break;
-	//	default:
-	//		break;
-	//	}
-
-	//	switch (m_ListGameObject[i]->idShader)
-	//	{
-	//	case IdShader::textureShaderId:
-	//		result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, model->GetTexture());
-	//		if (!result)	{ return false; }
-	//	default:
-	//		break;
-	//	}
-
-	//}
-
-	//////////////////////////////////////////
 	//worldMatrix = m_D3D->GetTransf()->world;
 	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 	//projectionMatrix = m_D3D->GetTransf()->projection;
 
-	////IMPORTANT :order is SCALING *  ROTATION  * TRANSLATE
-	//worldMatrix = DirectX::XMMatrixScaling(2, 2, 2); //scaling
-	//rotationMatrix = DirectX::XMMatrixRotationY(rotation); //rotation
-	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, rotationMatrix ); 
+	////worldMatrix = DirectX::XMMatrixRotationY(rotation);
 	//m_CubeModel->GetPosition(posX,posY,posZ);
-	//translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ); //translation
-	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-	//
-	//// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	//m_CubeModel->Render(m_D3D->GetDeviceContext());
-	//// Render the model using the shadow shader.
-	//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//	m_CubeModel->GetTexture());
-	//if (!result)	{ return false; }
-
-	//////////////////////////////////////
-	//worldMatrix = m_D3D->GetTransf()->world;
-	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	//projectionMatrix = m_D3D->GetTransf()->projection;
-
-
-	////m_D3D->GetWorldMatrix(worldMatrix);
-	//worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	//m_CubeModel->GetPosition(posX, posY, posZ);
-	//translateMatrix = DirectX::XMMatrixTranslation(posX+10, posY, posZ);
-	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-	////D3DXMatrixRotationY(&worldMatrix, rotation);
-	////D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
-	////D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
-
-	//// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	//m_CubeModel->Render(m_D3D->GetDeviceContext());
-	//// Render the model using the shadow shader.
-	//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//	m_CubeModel->GetTexture());
-	//if (!result)	{ return false; }
-
-	/////////////////////////////////
-
-	//worldMatrix = m_D3D->GetTransf()->world;
-	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	//projectionMatrix = m_D3D->GetTransf()->projection;
-
-	////m_D3D->GetWorldMatrix(worldMatrix);
-	//worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	//m_SphereModel->GetPosition(posX, posY, posZ);
 	//translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
 	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 
 
-	//// Render the first model using the texture shader.
-	//m_SphereModel->Render(m_D3D->GetDeviceContext());
-	//result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	//if (!result)
-	//{
-	//	return false;
-	//}
+	//// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	//m_CubeModel->Render(m_D3D->GetDeviceContext());
+	//// Render the model using the shadow shader.
+	//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTexture());
+	//if (!result)	{ return false; }
+
 
 	return true;
 }
@@ -500,15 +388,22 @@ void GraphicsManager::Shutdown()
 		delete m_RenderToTexture;
 		m_RenderToTexture = 0;
 	}
-	// Release the shader manager object.
 	if (m_ShaderManager)
 	{
 		m_ShaderManager->Shutdown();
 		delete m_ShaderManager;
 		m_ShaderManager = 0;
 	}
-
-
+	if (m_TextDrawer)
+	{
+		delete m_TextDrawer;
+		m_TextDrawer = 0;
+	}
+	if (m_ArialFont)
+	{
+		delete m_ArialFont;
+		m_ArialFont = 0;
+	}
 	return;
 }
 

@@ -154,13 +154,13 @@ void ShaderManager::Shutdown()
 }
 
 
-bool ShaderManager::RenderTextureShader(ID3D11DeviceContext* device, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix,
+bool ShaderManager::RenderTextureShader(ID3D11DeviceContext* device, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix,
 	ID3D11ShaderResourceView* texture)
 {
 	bool result;
 	
 	// Render the model using the texture shader.
-	result = m_TextureShader->Render(device, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_TextureShader->Render(device, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)	{	return false;	}
 
 	return true;

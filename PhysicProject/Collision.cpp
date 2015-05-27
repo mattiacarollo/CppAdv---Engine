@@ -11,11 +11,12 @@ Collision::~Collision()
 {
 }
 
-Collision::Collision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, const Vector3& pointOfApplication, const Vector3& force, const Vector3& normal)
-	: m_firstObj(rigidbodyfirst), 
-	  m_secondObj(rigidbodysecond), 
-	  m_vpointOfApplication(pointOfApplication), 
-	  m_vforce(force), 
+Collision::Collision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float deformation, const Vector3& pointOfApplication, const Vector3& force, const Vector3& normal)
+	: m_firstObj(rigidbodyfirst),
+	  m_secondObj(rigidbodysecond),
+	  m_fDeformation(deformation),
+	  m_vpointOfApplication(pointOfApplication),
+	  m_vforce(force),
 	  m_vnormal(normal)
 {
 }
@@ -27,8 +28,8 @@ void Collision::ApplyCollision()
 	Vector3 Vnorm = m_vnormal*vn;
 	Vector3 Vtang = m_vforce - Vnorm;
 
-	//f = (0.5f * _deformation) + (5.0f * vn);
-	force = (0.5f * 1.0f) + (5.0f * vn);	// K = coefficente elastico L = coefficente anaelastico  TO DO
+	// K = coefficente elastico L = coefficente anaelastico  TO DO
+	force = (0.5f * m_fDeformation) + (5.0f * vn);
 	m_vnormal *= force;
 
 	force *= 5;								// forza reagente (modulo) -> m = coefficente attrito TO DO

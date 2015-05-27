@@ -15,6 +15,7 @@
 #include "Frustum.h"
 #include "ModelList.h"
 #include <vector>
+#include "textDrawer.h"
 
 
 const int SHADOWMAP_WIDTH = 1024;
@@ -36,7 +37,7 @@ public:
 	~GraphicsManager();
 
 	bool Initialize(DXManager*, HWND, Camera*);
-	bool Frame(float);
+	bool Frame(float, int, int);
 	void Shutdown();
 
 	virtual void start(){ };
@@ -57,9 +58,9 @@ private:
 	Model* m_SphereModel;	
 	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
-	
 	vector<GameObject*> m_ListGameObject;
 	Frustum* m_Frustum;
 	ModelListClass* m_ModelList;
-	
+	TextDrawer* m_TextDrawer;
+	TextFont* m_ArialFont;
 };
