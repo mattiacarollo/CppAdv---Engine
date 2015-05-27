@@ -37,6 +37,24 @@
     <Filter Include="Shaders\Texture">
       <UniqueIdentifier>{3730a367-15d9-44ff-bcf7-e86d95b25fa1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility\FPS-Monitor">
+      <UniqueIdentifier>{ccac1b19-85ec-48ce-8d6c-27f52d2d5281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\CPU-Monitor">
+      <UniqueIdentifier>{cbbd2ab2-cb2a-4d2c-b910-29a183b3d81c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Camera">
+      <UniqueIdentifier>{57e061ad-5d6b-4abf-9f09-1cfaa516097f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\ShaderLoader">
+      <UniqueIdentifier>{e6a9828d-0c49-420c-958c-3e8a2f881035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\TextDrawer">
+      <UniqueIdentifier>{a2ce6b42-ab43-43b0-9779-071cdc5832b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\ErrorBox">
+      <UniqueIdentifier>{3f61a1b8-43bc-42d1-84da-ec4b0a991a7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,15 +74,6 @@
     </ClCompile>
     <ClCompile Include="DXManager.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderLoader.cpp">
-      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="ApplicationManager.cpp">
       <Filter>Source Files</Filter>
@@ -101,6 +110,24 @@
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>Utility\FPS-Monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU.cpp">
+      <Filter>Utility\CPU-Monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Utility\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLoader.cpp">
+      <Filter>Utility\ShaderLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="textDrawer.cpp">
+      <Filter>Utility\TextDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorBox.cpp">
+      <Filter>Utility\ErrorBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,18 +182,27 @@
     <ClInclude Include="ShaderManager.h">
       <Filter>Shaders</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Utility.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="FPS.h">
+      <Filter>Utility\FPS-Monitor</Filter>
     </ClInclude>
-    <ClInclude Include="DataType.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="CPU.h">
+      <Filter>Utility\CPU-Monitor</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Utility</Filter>
+      <Filter>Utility\Camera</Filter>
     </ClInclude>
     <ClInclude Include="ShaderLoader.h">
+      <Filter>Utility\ShaderLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="textDrawer.h">
+      <Filter>Utility\TextDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Errorbox.h">
+      <Filter>Utility\ErrorBox</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataType.h">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>

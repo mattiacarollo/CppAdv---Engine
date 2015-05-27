@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
 #include <fstream>
+#include <cstdlib>
 #include "DataType.h"
 #include "textureclass.h"
 
@@ -19,18 +20,20 @@ public:
 	Model(const Model&);
 	~Model();
 
-	bool Initialize(ID3D11Device*, char*, WCHAR*);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, unsigned int);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
-	int GetIndexCount();
+	void SetInstanceCount(int instanceCount) { m_instanceCount = instanceCount; };
+	int GetVertexCount();
+	int GetInstanceCount();
 	ID3D11ShaderResourceView* GetTexture();
 
 	void SetPosition(float, float, float);
 	void GetPosition(float&, float&, float&);
 
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers(ID3D11Device*, unsigned int);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 
@@ -41,8 +44,12 @@ private:
 	void ReleaseModel();
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
+	ID3D11Buffer* m_vertexBuffer;
+	ID3D11Buffer* m_instanceBuffer;
+
+	int m_vertexCount;
+	int m_instanceCount;
+
 	TextureClass* m_Texture;
 	utility::ModelType* m_model;
 	float m_positionX, m_positionY, m_positionZ;

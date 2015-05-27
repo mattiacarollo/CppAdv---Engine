@@ -3,7 +3,7 @@
 
 #include <dxgi.h>
 #include "DataType.h"
-#include "Utility.h"
+#include "ErrorBox.h"
 
 
 using namespace utility;

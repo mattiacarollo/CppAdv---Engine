@@ -86,7 +86,9 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CPU.cpp" />
     <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="FPS.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="RenderToTexture.cpp" />
@@ -103,10 +105,11 @@
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="textDrawer.cpp" />
     <ClCompile Include="TextureClass.cpp" />
     <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="ErrorBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXTK\DirectXTK_Desktop_2013.vcxproj">
@@ -119,7 +122,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPU.h" />
     <ClInclude Include="DepthShader.h" />
+    <ClInclude Include="FPS.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="RenderToTexture.h" />
@@ -136,10 +141,11 @@
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="textDrawer.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Errorbox.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DepthPixelShader.hlsl">

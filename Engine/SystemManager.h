@@ -30,7 +30,7 @@ private:
 private:
 	LPCWSTR m_applicationName; 
 	HINSTANCE m_hinstance; 
-	HWND m_hwnd; 
+	HWND m_hwnd;
 	ApplicationManager* m_AppManag;
 };
 

@@ -69,6 +69,16 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 		return false;
 	}
 
+	// Create and Initialize the fps object.
+	m_Fps = new FpsMonitor;
+	if (!m_Fps)	{	return false;	}
+	m_Fps->Initialize();
+
+	// Create and Initialize the cpu object.
+	m_Cpu = new CpuMonitor;
+	if (!m_Cpu)	{	return false;	}
+	m_Cpu->Initialize();
+
 	// Create and Initialize the position object.
 	m_Position = new PositionManager;
 	if (!m_Position)	{	return false;	}
@@ -123,6 +133,17 @@ void ApplicationManager::Shutdown()
 		delete m_Timer;
 		m_Timer = 0;
 	}
+	if (m_Cpu)
+	{
+		m_Cpu->Shutdown();
+		delete m_Cpu;
+		m_Cpu = 0;
+	}
+	if (m_Fps)
+	{
+		delete m_Fps;
+		m_Fps = 0;
+	}
 	return;
 }
 
@@ -131,14 +152,16 @@ bool ApplicationManager::Frame()
 {
 	bool result;
 
+	m_Timer->Frame();
+	m_Fps->Frame();
+	m_Cpu->Frame();
+
 	// Read the user input.
 	result = m_Input->Frame();
 	if (!result)	{	return false;	}
 
 	// Check if the user pressed escape and wants to exit the application.
 	if (m_Input->IsEscapePressed() == true)	{	return false;	}
-
-	m_Timer->Frame();
 
 	// Do the frame input processing.
 	result = HandleInput(m_Timer->GetTime());
@@ -205,7 +228,7 @@ bool ApplicationManager::RenderGraphics()
 
 	// Generate the view matrix based on the camera's position.
 
-	m_Graphic->Frame(m_Timer->GetTime());
+	m_Graphic->Frame(m_Timer->GetTime(), m_Fps->GetFps(), m_Cpu->GetCpuPercentage());
 
 	m_D3D->EndScene();
 

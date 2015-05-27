@@ -11,6 +11,7 @@
 #include "RenderToTexture.h"
 #include "DepthShader.h"
 #include "ShaderManager.h"
+#include "textDrawer.h"
 
 
 const int SHADOWMAP_WIDTH = 1024;
@@ -30,7 +31,7 @@ public:
 	~GraphicsManager();
 
 	bool Initialize(DXManager*, HWND, Camera*);
-	bool Frame(float);
+	bool Frame(float, int, int);
 	void Shutdown();
 
 private:
@@ -46,5 +47,6 @@ private:
 	Model* m_SphereModel;	
 	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
-	
+	TextDrawer* m_TextDrawer;
+	TextFont* m_ArialFont;
 };

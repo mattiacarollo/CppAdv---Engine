@@ -76,4 +76,8 @@ namespace utility
 		float nx, ny, nz;
 	};
 
+	struct InstanceType
+	{
+		DirectX::XMFLOAT3 position;
+	};
 }

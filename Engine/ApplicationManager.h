@@ -4,7 +4,7 @@
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
-const float SCREEN_NEAR = 0.1f;
+const float SCREEN_NEAR = 1.0f;
 
 
 #include "InputManager.h"
@@ -13,6 +13,8 @@ const float SCREEN_NEAR = 0.1f;
 #include "GraphicsManager.h"
 #include "PositionManager.h"
 #include "Timer.h" 
+#include "CPU.h"
+#include "FPS.h"
 
 
 class GraphicsManager;
@@ -40,4 +42,6 @@ private:
 	Camera* m_Camera;
 	GraphicsManager* m_Graphic;
 	Timer* m_Timer;
+	FpsMonitor* m_Fps;
+	CpuMonitor* m_Cpu;
 };
