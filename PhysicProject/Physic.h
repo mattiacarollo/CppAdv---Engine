@@ -44,4 +44,11 @@ private:
 
 	Collision* m_Collision;
 	float m_fCompenetration;
+
+	//attribute for box collision
+	Vector3 m_vBoxCentersDistance;
+	Vector3 m_vBoxVertex[8];
+	unsigned int m_iPointsInside;
+	int m_aBoxIndexes[8];
+	float m_aBoxCompenetration[8];
 };

@@ -156,18 +156,18 @@ void Physic::ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigi
 bool Physic::CollisionDetectionBoxBox(Collider* colliderRb0, Collider* colliderRb1)
 {	
 	//Compute Collision on first axis system so first can be seen as an AABB
-	Vector3 CentersDistance(colliderRb1->GetWorldPosition());
-	Vector3 SecondBoxCenterInFirstBoxSystem(CentersDistance);
-	CentersDistance -= colliderRb0->GetWorldPosition();
-	CentersDistance *= -1.0f;
+	Vector3 centersDistance(colliderRb1->GetWorldPosition());
+	Vector3 SecondBoxCenterInFirstBoxSystem(centersDistance);
+	centersDistance -= colliderRb0->GetWorldPosition();
+	centersDistance *= -1.0f;
 	MatrixOp::Rotate<MatrixOp::ToObjSpace>(((BoxCollider*)colliderRb0)->GetRotation().ToMatrix(), SecondBoxCenterInFirstBoxSystem, SecondBoxCenterInFirstBoxSystem);
 	Vector3 radiiSum(((BoxCollider*)colliderRb0)->GetHalfSize());
 	radiiSum += ((BoxCollider*)colliderRb1)->GetHalfSize();
 
 	//SphereTest for early fast reject
-	bool SphereConsideration = (CentersDistance.getX()*CentersDistance.getX()) < (radiiSum.getX()*radiiSum.getX()) &&
-		(CentersDistance.getY()*CentersDistance.getY()) < (radiiSum.getY()*radiiSum.getY()) &&
-		(CentersDistance.getZ()*CentersDistance.getZ()) < (radiiSum.getZ()*radiiSum.getZ()) && (CentersDistance.SqrMagnitude()) < (radiiSum.SqrMagnitude());
+	bool SphereConsideration = (centersDistance.getX()*centersDistance.getX()) < (radiiSum.getX()*radiiSum.getX()) &&
+		(centersDistance.getY()*centersDistance.getY()) < (radiiSum.getY()*radiiSum.getY()) &&
+		(centersDistance.getZ()*centersDistance.getZ()) < (radiiSum.getZ()*radiiSum.getZ()) && (centersDistance.SqrMagnitude()) < (radiiSum.SqrMagnitude());
 
 	if (SphereConsideration)
 	{
@@ -187,6 +187,7 @@ bool Physic::CollisionDetectionBoxBox(Collider* colliderRb0, Collider* colliderR
 	//0 1 3 7 6 4 5 2
 	if (bo(colliderRb0, SecondBoxCenterInFirstBoxSystem, SecondHalfSizeInFistSystem, Min, Max))			//Second vs first
 	{
+		m_vBoxCentersDistance = centersDistance;
 		return true;
 	}
 	else if (bo(colliderRb1, SecondBoxCenterInFirstBoxSystem, SecondHalfSizeInFistSystem, Min, Max))	//first vs Second
@@ -201,62 +202,56 @@ void Physic::ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1
 {
 	Vector3 force = rigidbody0.GetVelocity() + rigidbody1.GetVelocity();
 
-	Vector3 centersDistance = colliderRb0->GetWorldPosition() - colliderRb1->GetWorldPosition();
-	centersDistance.Normalize();
-	Vector3 poa = centersDistance * ((SphereCollider*)colliderRb0)->GetRadius();
-
-	//return new Collision(compenetration[0], Vertex[indexes[0]], CentersDistance);
-	m_Collision = new Collision(&rigidbody0, &rigidbody1, m_fCompenetration, poa, force, centersDistance);
-	m_Collision->ApplyCollision();
-
-	/*
-
-	m_fCompenetration = compenetration[0];
-	Vertex[indexes[0]][0] *= compenetration[0];
-	Vertex[indexes[0]][1] *= compenetration[0];
-	Vertex[indexes[0]][2] *= compenetration[0];
+	m_fCompenetration = m_aBoxCompenetration[0];
+	m_vBoxVertex[m_aBoxIndexes[0]][0] *= m_aBoxCompenetration[0];
+	m_vBoxVertex[m_aBoxIndexes[0]][1] *= m_aBoxCompenetration[0];
+	m_vBoxVertex[m_aBoxIndexes[0]][2] *= m_aBoxCompenetration[0];
 	//centroid of points which is the point of collision impact
-	for (unsigned int i = 1; i < pointsInside; ++i)
+	for (unsigned int i = 1; i < m_iPointsInside; ++i)
 	{
-		Vertex[indexes[0]][0] += Vertex[indexes[i]][0];
-		Vertex[indexes[0]][1] += Vertex[indexes[i]][1];
-		Vertex[indexes[0]][2] += Vertex[indexes[i]][2];
-		m_fCompenetration += compenetration[i];
-		compenetration[0] = std::fmaxf(compenetration[0], compenetration[i]);
+		m_vBoxVertex[m_aBoxIndexes[0]][0] += m_vBoxVertex[m_aBoxIndexes[i]][0];
+		m_vBoxVertex[m_aBoxIndexes[0]][1] += m_vBoxVertex[m_aBoxIndexes[i]][1];
+		m_vBoxVertex[m_aBoxIndexes[0]][2] += m_vBoxVertex[m_aBoxIndexes[i]][2];
+		m_fCompenetration += m_aBoxCompenetration[i];
+		m_aBoxCompenetration[0] = std::fmaxf(m_aBoxCompenetration[0], m_aBoxCompenetration[i]);
 	}
-	Vertex[indexes[0]][0] /= m_fCompenetration;
-	Vertex[indexes[0]][1] /= m_fCompenetration;
-	Vertex[indexes[0]][2] /= m_fCompenetration;
+	m_vBoxVertex[m_aBoxIndexes[0]][0] /= m_fCompenetration;
+	m_vBoxVertex[m_aBoxIndexes[0]][1] /= m_fCompenetration;
+	m_vBoxVertex[m_aBoxIndexes[0]][2] /= m_fCompenetration;
 
 	//Compute normal by clamping on max value
-	CentersDistance.Normalize();
+	m_vBoxCentersDistance.Normalize();
 	float x, y, z;
-	x = CentersDistance.getX();
-	y = CentersDistance.getY();
-	z = CentersDistance.getZ();
+	x = m_vBoxCentersDistance.getX();
+	y = m_vBoxCentersDistance.getY();
+	z = m_vBoxCentersDistance.getZ();
 	if (x > y)
 	{
 		if (x > z)
 		{
-			CentersDistance.Set(x, 0, 0);
+			m_vBoxCentersDistance.Set(x, 0, 0);
 		}
 		else
 		{
-			CentersDistance.Set(0, 0, z);
+			m_vBoxCentersDistance.Set(0, 0, z);
 		}
 	}
 	else
 	{
 		if (y > z)
 		{
-			CentersDistance.Set(0, y, 0);
+			m_vBoxCentersDistance.Set(0, y, 0);
 		}
 		else
 		{
-			CentersDistance.Set(0, 0, z);
+			m_vBoxCentersDistance.Set(0, 0, z);
 		}
 	}
-	CentersDistance.Normalize();*/
+	m_vBoxCentersDistance.Normalize();
+
+
+	m_Collision = new Collision(&rigidbody0, &rigidbody1, m_aBoxCompenetration[0], m_vBoxVertex[m_aBoxIndexes[0]], force, m_vBoxCentersDistance);
+	m_Collision->ApplyCollision();
 }
 
 //BOX-SPHERE
@@ -325,66 +320,63 @@ void Physic::ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbo
 
 bool Physic::bo(Collider* colliderRb, Vector3 SecondBoxCenterInFirstBoxSystem, Vector3 SecondHalfSizeInFistSystem, Vector3 Min, Vector3 Max)
 {
-	Vector3 Vertex[8];
-	Vertex[0] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[0][0] += SecondHalfSizeInFistSystem[0];
-	Vertex[0][1] += SecondHalfSizeInFistSystem[1];
-	Vertex[0][2] += SecondHalfSizeInFistSystem[2];
+	
+	m_vBoxVertex[0] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[0][0] += SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[0][1] += SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[0][2] += SecondHalfSizeInFistSystem[2];
 
-	Vertex[1] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[1][0] += SecondHalfSizeInFistSystem[0];
-	Vertex[1][1] += SecondHalfSizeInFistSystem[1];
-	Vertex[1][2] -= SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[1] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[1][0] += SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[1][1] += SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[1][2] -= SecondHalfSizeInFistSystem[2];
 
-	Vertex[2] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[2][0] += SecondHalfSizeInFistSystem[0];
-	Vertex[2][1] -= SecondHalfSizeInFistSystem[1];
-	Vertex[2][2] += SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[2] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[2][0] += SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[2][1] -= SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[2][2] += SecondHalfSizeInFistSystem[2];
 
-	Vertex[3] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[3][0] += SecondHalfSizeInFistSystem[0];
-	Vertex[3][1] -= SecondHalfSizeInFistSystem[1];
-	Vertex[3][2] -= SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[3] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[3][0] += SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[3][1] -= SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[3][2] -= SecondHalfSizeInFistSystem[2];
 
-	Vertex[4] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[4][0] -= SecondHalfSizeInFistSystem[0];
-	Vertex[4][1] += SecondHalfSizeInFistSystem[1];
-	Vertex[4][2] += SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[4] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[4][0] -= SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[4][1] += SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[4][2] += SecondHalfSizeInFistSystem[2];
 
-	Vertex[5] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[5][0] -= SecondHalfSizeInFistSystem[0];
-	Vertex[5][1] += SecondHalfSizeInFistSystem[1];
-	Vertex[5][2] -= SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[5] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[5][0] -= SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[5][1] += SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[5][2] -= SecondHalfSizeInFistSystem[2];
 
-	Vertex[6] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[6][0] -= SecondHalfSizeInFistSystem[0];
-	Vertex[6][1] -= SecondHalfSizeInFistSystem[1];
-	Vertex[6][2] += SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[6] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[6][0] -= SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[6][1] -= SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[6][2] += SecondHalfSizeInFistSystem[2];
 
-	Vertex[7] = (SecondBoxCenterInFirstBoxSystem);
-	Vertex[7][0] -= SecondHalfSizeInFistSystem[0];
-	Vertex[7][1] -= SecondHalfSizeInFistSystem[1];
-	Vertex[7][2] -= SecondHalfSizeInFistSystem[2];
+	m_vBoxVertex[7] = (SecondBoxCenterInFirstBoxSystem);
+	m_vBoxVertex[7][0] -= SecondHalfSizeInFistSystem[0];
+	m_vBoxVertex[7][1] -= SecondHalfSizeInFistSystem[1];
+	m_vBoxVertex[7][2] -= SecondHalfSizeInFistSystem[2];
 
 	//Compute points inside
-	int indexes[8];
-	float compenetration[8];
-	unsigned int pointsInside = 0;
+	m_iPointsInside = 0;
 	bool isInside = false;
 	for (unsigned int i = 0; i < 8; ++i)
 	{
-		isInside = Vertex[i][0] > Min[0] && Vertex[i][1] > Min[1] && Vertex[i][2] > Min[2] &&
-			Vertex[i][0] < Max[0] && Vertex[i][1] < Max[1] && Vertex[i][2] < Max[2];
+		isInside = m_vBoxVertex[i][0] > Min[0] && m_vBoxVertex[i][1] > Min[1] && m_vBoxVertex[i][2] > Min[2] &&
+			m_vBoxVertex[i][0] < Max[0] && m_vBoxVertex[i][1] < Max[1] && m_vBoxVertex[i][2] < Max[2];
 		if (isInside)
 		{
-			indexes[pointsInside] = i;
-			compenetration[pointsInside] = (Vertex[i] - colliderRb->GetWorldPosition()).SqrMagnitude();
-			++pointsInside;
+			m_aBoxIndexes[m_iPointsInside] = i;
+			m_aBoxCompenetration[m_iPointsInside] = (m_vBoxVertex[i] - colliderRb->GetWorldPosition()).SqrMagnitude();
+			++m_iPointsInside;
 		}
 	}
 
-	//Compute Collision Data if there is a collision
-	if (pointsInside)
+	if (m_iPointsInside)
 	{
 		return true;
 	}
