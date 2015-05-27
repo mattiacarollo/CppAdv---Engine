@@ -165,6 +165,17 @@ void RigidBody::DetachCollider()
 	delete m_cCollider;
 }
 
+void RigidBody::SetColliderType(int collidertype)
+{
+	m_iColliderType = collidertype;
+}
+
+int RigidBody::GetColliderType() const
+{
+	return m_iColliderType;
+}
+
+
 int RigidBody::GetID() const
 {
 	return m_iID;

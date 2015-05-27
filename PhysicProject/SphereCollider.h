@@ -2,7 +2,6 @@
 
 #include "Collider.h"
 
-//class RigidBody;
 class SphereCollider : public Collider
 {
 

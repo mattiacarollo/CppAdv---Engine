@@ -14,7 +14,6 @@ class RigidBody
 {
 
 public:
-
 	RigidBody(const Vector3& pos, int id, float mass, const Vector3& inertia);
 	RigidBody(const RigidBody& other);
 	~RigidBody();
@@ -26,8 +25,9 @@ public:
 	void SumMomentumToTotalMomentum(const Vector3&);
 	void AttachCollider(Collider*);
 	void DetachCollider();
-	void PrintStatus();
-
+	
+	void SetColliderType(int collidertype);
+	int GetColliderType() const;
 	int GetID() const;
 	float GetMass() const;
 	const Matrix<3, 3>& GetRotationMatrix() const;
@@ -39,8 +39,13 @@ public:
 	void SetPosition(const Vector3&);
 	void SetVelocity(const Vector3&);
 
-private:
 
+	enum ColliderTypeEnum : int {
+		SPHERE = 0,
+		BOX = 1
+	};
+
+private:
 	float m_fMass;
 	Vector3 m_vPosition;
 	Vector3 m_vVelocity;
@@ -53,5 +58,6 @@ private:
 	Quaternion m_qRotation;
 	Matrix<3,3> m_mRotationMatrix;
 	Collider* m_cCollider;
+	int m_iColliderType;
 	int m_iID;
 };
