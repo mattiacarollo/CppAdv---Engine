@@ -87,6 +87,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ModelList.cpp" />
+    <ClCompile Include="MyApplication.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="RenderToTexture.cpp" />
@@ -120,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepthShader.h" />
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ModelList.h" />
+    <ClInclude Include="MyApplication.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="RenderToTexture.h" />

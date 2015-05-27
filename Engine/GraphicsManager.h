@@ -11,12 +11,18 @@
 #include "RenderToTexture.h"
 #include "DepthShader.h"
 #include "ShaderManager.h"
+#include "GameObject.h"
+#include "Frustum.h"
+#include "ModelList.h"
+#include <vector>
 
 
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
 const float SHADOWMAP_DEPTH = 50.0f;
 const float SHADOWMAP_NEAR = 1.0f;
+
+
 
 
 class Camera;
@@ -33,6 +39,11 @@ public:
 	bool Frame(float);
 	void Shutdown();
 
+	virtual void start(){ };
+	virtual void update(){ };
+	
+	void addWindows(GameObject*);
+
 private:
 	bool RenderSceneToTexture();
 	bool Render(float);
@@ -46,5 +57,9 @@ private:
 	Model* m_SphereModel;	
 	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
+	
+	vector<GameObject*> m_ListGameObject;
+	Frustum* m_Frustum;
+	ModelListClass* m_ModelList;
 	
 };

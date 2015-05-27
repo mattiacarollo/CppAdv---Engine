@@ -37,5 +37,6 @@ private:
 	DepthShaderClass* m_DepthShader;
 	//LightShaderClass* m_LightShader;
 	//BumpMapShaderClass* m_BumpMapShader;
+	
 };
 

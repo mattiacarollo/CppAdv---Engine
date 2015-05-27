@@ -9,6 +9,8 @@ GraphicsManager::GraphicsManager()
 	m_RenderToTexture = 0;
 	m_ShaderManager = 0;
 	m_Light = 0;
+	//m_ListGameObject = 0;
+
 }
 
 
@@ -24,6 +26,8 @@ GraphicsManager::~GraphicsManager()
 
 bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 {
+	m_ListGameObject = vector<GameObject*>();
+
 	m_D3D = D3D;
 	m_Camera = camera;
 	bool result;
@@ -69,6 +73,9 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 		return false;
 	}
 	m_SphereModel->SetPosition(50.0f, 4.0f, 10.0f);
+
+
+	//start();
 
 	// Create and initialize the light object.
 	m_Light = new LightManager;
@@ -122,7 +129,6 @@ bool GraphicsManager::Frame(float frameTime)
 
 	static float rotation = 0.0f;
 
-
 	// Update the rotation variable each frame.
 	rotation += (float)DirectX::XM_PI * 0.005f;
 	if (rotation > 360.0f)
@@ -163,6 +169,8 @@ bool GraphicsManager::RenderSceneToTexture()
 	m_CubeModel->GetPosition(posX, posY, posZ);
 	worldMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
 
+	//start();
+
 	// Render the cube model with the depth shader.
 	m_CubeModel->Render(m_D3D->GetDeviceContext());
 	result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, lightViewMatrix, lightOrthoMatrix);
@@ -185,6 +193,31 @@ bool GraphicsManager::RenderSceneToTexture()
 	{
 		return false;
 	}
+
+	// Create the model list object.
+	m_ModelList = new ModelListClass;
+	if (!m_ModelList)
+	{
+		return false;
+	}
+
+	// Initialize the model list object.
+	result = m_ModelList->Initialize(25);
+	if (!result)
+	{
+		//MessageBox(hwnd, L"Could not initialize the model list object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the frustum object.
+	m_Frustum = new Frustum;
+	if (!m_Frustum)
+	{
+		return false;
+	}
+	
+
+
 	// Reset the world matrix.
 	worldMatrix = m_D3D->GetTransf()->world;
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
@@ -198,9 +231,18 @@ bool GraphicsManager::RenderSceneToTexture()
 
 bool GraphicsManager::Render(float rotation)
 {
+	//overraide method
+	//update();
+
 	bool result;
-	DirectX::XMMATRIX lightViewMatrix, lightOrthoMatrix, translateMatrix, worldMatrix, viewMatrix, projectionMatrix;
+	DirectX::XMMATRIX rotationMatrix, translateMatrix, worldMatrix, viewMatrix, projectionMatrix;
 	float posX, posY, posZ;
+	float scaleX, scaleY, scaleZ;
+
+	int modelCount, renderCount, index;
+	float positionX, positionY, positionZ, radius;
+	DirectX::XMFLOAT4 color;
+	bool renderModel;
 
 	// First render the scene to a texture.
 	result = RenderSceneToTexture();
@@ -211,7 +253,16 @@ bool GraphicsManager::Render(float rotation)
 	worldMatrix = m_D3D->GetTransf()->world;
 	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 	projectionMatrix = m_D3D->GetTransf()->projection;
+	    
 
+	// Construct the frustum.
+	m_Frustum->ConstructFrustum(1000.0f, projectionMatrix, viewMatrix);
+
+	// Get the number of models that will be rendered.
+	modelCount = m_ModelList->GetModelCount();
+
+	// Initialize the count of models that have been rendered.
+	renderCount = 0;
 
 	m_Terrain->Render(m_D3D->GetDeviceContext());
 	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
@@ -219,70 +270,199 @@ bool GraphicsManager::Render(float rotation)
 	{
 		return false;
 	}
+	
+	// Go through all the models and render them only if they can be seen by the camera view.
+	for (index = 0; index<modelCount; index++)
+	{
+		// Get the position and color of the sphere model at this index.
+		m_ModelList->GetData(index, positionX, positionY, positionZ, color);
 
-	worldMatrix = m_D3D->GetTransf()->world;
-	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	projectionMatrix = m_D3D->GetTransf()->projection;
+		// Set the radius of the sphere to 1.0 since this is already known.
+		radius = 1.0f;
 
+		// Check if the sphere model is in the view frustum.
+		renderModel = m_Frustum->CheckSphere(positionX, positionY, positionZ, radius);
 
-	//m_D3D->GetWorldMatrix(worldMatrix);
-	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	m_CubeModel->GetPosition(posX,posY,posZ);
-	translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
-	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-	//D3DXMatrixRotationY(&worldMatrix, rotation);
-	//D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
-	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
+		// If it can be seen then render it, if not skip this model and check the next sphere.
+		if (renderModel)
+		{
+			// Move the model to the location it should be rendered at.
+			//D3DXMatrixTranslation(&worldMatrix, positionX, positionY, positionZ);
 
-	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_CubeModel->Render(m_D3D->GetDeviceContext());
-	// Render the model using the shadow shader.
-	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		m_CubeModel->GetTexture());
-	if (!result)	{ return false; }
+			//// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+			//m_Model->Render(m_D3D->GetDeviceContext());
 
-	////////////////////////////
-	worldMatrix = m_D3D->GetTransf()->world;
-	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	projectionMatrix = m_D3D->GetTransf()->projection;
+			//// Render the model using the light shader.
+			//m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+			//	m_Model->GetTexture(), m_Light->GetDirection(), color);
 
+			//// Reset to the original world matrix.
+			//m_D3D->GetWorldMatrix(worldMatrix);
+			
+			//////////////////////
+			worldMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ); //translation
+			//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 
-	//m_D3D->GetWorldMatrix(worldMatrix);
-	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	m_CubeModel->GetPosition(posX, posY, posZ);
-	translateMatrix = DirectX::XMMatrixTranslation(posX+10, posY, posZ);
-	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
-	//D3DXMatrixRotationY(&worldMatrix, rotation);
-	//D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
-	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
+			//worldMatrix = m_D3D->GetTransf()->world;
+			//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+			//projectionMatrix = m_D3D->GetTransf()->projection;
 
-	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_CubeModel->Render(m_D3D->GetDeviceContext());
-	// Render the model using the shadow shader.
-	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		m_CubeModel->GetTexture());
-	if (!result)	{ return false; }
+			////IMPORTANT :order is SCALING *  ROTATION  * TRANSLATE
+			//worldMatrix = DirectX::XMMatrixScaling(2, 2, 2); //scaling
+			//rotationMatrix = DirectX::XMMatrixRotationY(rotation); //rotation
+			//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, rotationMatrix ); 
+			////m_CubeModel->GetPosition(posX,posY,posZ);
+			//translateMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ); //translation
+			//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
 
-	/////////////////////////////
+			m_SphereModel->Render(m_D3D->GetDeviceContext());
+			// Render the model using the shadow shader.
+			result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				m_SphereModel->GetTexture());
+			if (!result)	{ return false; }
 
-	worldMatrix = m_D3D->GetTransf()->world;
-	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	projectionMatrix = m_D3D->GetTransf()->projection;
+			worldMatrix = m_D3D->GetTransf()->world;
 
-	//m_D3D->GetWorldMatrix(worldMatrix);
-	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	m_SphereModel->GetPosition(posX, posY, posZ);
-	translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
-	worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+			/////////////////
 
+			// Since this model was rendered then increase the count for this frame.
+			renderCount++;
+		}
+	}
 
-	// Render the first model using the texture shader.
-	m_SphereModel->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	//// Set the number of models that was actually rendered this frame.
+	//result = m_Text->SetRenderCount(renderCount, m_D3D->GetDeviceContext());
+	//if (!result)
+	//{
+	//	return false;
+	//}
+
+	// Turn off the Z buffer to begin all 2D rendering.
+	//m_D3D->TurnZBufferOff();
+
+	// Turn on the alpha blending before rendering the text.
+	//m_D3D->TurnOnAlphaBlending();
+
+	// Render the text strings.
+	/*result = m_Text->Render(m_D3D->GetDeviceContext(), worldMatrix, projection);
 	if (!result)
 	{
 		return false;
-	}
+	}*/
+
+	// Turn off alpha blending after rendering the text.
+	//m_D3D->TurnOffAlphaBlending();
+
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	//m_D3D->TurnZBufferOn();
+
+	// Present the rendered scene to the screen.
+
+	///////////////////////
+	//for (int i = 0; i < m_ListGameObject.size(); i++){
+	//	Model *model = m_CubeModel;
+
+	//	switch (m_ListGameObject[i]->idModel)
+	//	{
+	//	case IdModel::cube:
+	//		model = m_CubeModel;
+
+	//		worldMatrix = m_D3D->GetTransf()->world;
+	//		m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	//		projectionMatrix = m_D3D->GetTransf()->projection;
+
+	//		m_ListGameObject[i]->getScale(scaleX, scaleY, scaleZ); //get scale object
+
+	//		//IMPORTANT :order is SCALING *  ROTATION  * TRANSLATE
+	//		worldMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, scaleZ); //scaling
+	//		rotationMatrix = DirectX::XMMatrixRotationY(rotation); //rotation
+	//		worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, rotationMatrix);
+
+	//		m_ListGameObject[i]->getPosition(posX, posY, posZ); //get position
+
+	//		translateMatrix = DirectX::XMMatrixTranslation(posX + 10, posY, posZ); //translation
+	//		worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+
+	//		m_CubeModel->Render(m_D3D->GetDeviceContext());
+
+	//		break;
+	//	default:
+	//		break;
+	//	}
+
+	//	switch (m_ListGameObject[i]->idShader)
+	//	{
+	//	case IdShader::textureShaderId:
+	//		result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, model->GetTexture());
+	//		if (!result)	{ return false; }
+	//	default:
+	//		break;
+	//	}
+
+	//}
+
+	//////////////////////////////////////////
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	//projectionMatrix = m_D3D->GetTransf()->projection;
+
+	////IMPORTANT :order is SCALING *  ROTATION  * TRANSLATE
+	//worldMatrix = DirectX::XMMatrixScaling(2, 2, 2); //scaling
+	//rotationMatrix = DirectX::XMMatrixRotationY(rotation); //rotation
+	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, rotationMatrix ); 
+	//m_CubeModel->GetPosition(posX,posY,posZ);
+	//translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ); //translation
+	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+	//
+	//// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	//m_CubeModel->Render(m_D3D->GetDeviceContext());
+	//// Render the model using the shadow shader.
+	//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//	m_CubeModel->GetTexture());
+	//if (!result)	{ return false; }
+
+	//////////////////////////////////////
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	//projectionMatrix = m_D3D->GetTransf()->projection;
+
+
+	////m_D3D->GetWorldMatrix(worldMatrix);
+	//worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	//m_CubeModel->GetPosition(posX, posY, posZ);
+	//translateMatrix = DirectX::XMMatrixTranslation(posX+10, posY, posZ);
+	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+	////D3DXMatrixRotationY(&worldMatrix, rotation);
+	////D3DXMatrixTranslation(&translateMatrix, 0.0f, 0.0f, 0.0f);
+	////D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
+
+	//// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	//m_CubeModel->Render(m_D3D->GetDeviceContext());
+	//// Render the model using the shadow shader.
+	//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//	m_CubeModel->GetTexture());
+	//if (!result)	{ return false; }
+
+	/////////////////////////////////
+
+	//worldMatrix = m_D3D->GetTransf()->world;
+	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	//projectionMatrix = m_D3D->GetTransf()->projection;
+
+	////m_D3D->GetWorldMatrix(worldMatrix);
+	//worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	//m_SphereModel->GetPosition(posX, posY, posZ);
+	//translateMatrix = DirectX::XMMatrixTranslation(posX, posY, posZ);
+	//worldMatrix = DirectX::XMMatrixMultiply(worldMatrix, translateMatrix);
+
+
+	//// Render the first model using the texture shader.
+	//m_SphereModel->Render(m_D3D->GetDeviceContext());
+	//result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	//if (!result)
+	//{
+	//	return false;
+	//}
 
 	return true;
 }
@@ -290,7 +470,7 @@ bool GraphicsManager::Render(float rotation)
 
 void GraphicsManager::Shutdown()
 {
-	
+
 	if (m_Terrain)
 	{
 		m_Terrain->Shutdown();
@@ -310,7 +490,7 @@ void GraphicsManager::Shutdown()
 		m_SphereModel = 0;
 	}
 	if (m_Light)
-	{		
+	{
 		delete m_Light;
 		m_Light = 0;
 	}
@@ -327,6 +507,13 @@ void GraphicsManager::Shutdown()
 		delete m_ShaderManager;
 		m_ShaderManager = 0;
 	}
-	
+
+
 	return;
+}
+
+void GraphicsManager::addWindows(GameObject* object){
+
+	m_ListGameObject.push_back(object);
+
 }

@@ -76,4 +76,5 @@ namespace utility
 		float nx, ny, nz;
 	};
 
+
 }
