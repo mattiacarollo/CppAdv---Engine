@@ -41,7 +41,7 @@ public:
 	void ResetViewport();
 
 
-private:
+public:
 	HRESULT initializeDevice(bool);
 	HRESULT setupMatrix();
 	HRESULT getVideoCardInfo();
