@@ -40,7 +40,7 @@ private:
 	PositionManager* m_Position;
 	DXManager* m_D3D;
 	Camera* m_Camera;
-	MyApplication* m_Graphic;
+	GraphicsManager* m_Graphic;
 	Timer* m_Timer;
 	FpsMonitor* m_Fps;
 	CpuMonitor* m_Cpu;
