@@ -99,7 +99,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create and Initialize the model list object.
 	m_ModelList = new ModelListClass;
 	if (!m_ModelList)	{	return false;	}
-	result = m_ModelList->Initialize(50);
+	result = m_ModelList->Initialize(20);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model list object.", L"Error", MB_OK);
@@ -245,7 +245,9 @@ bool GraphicsManager::Render(float rotation)
 
 	// Initialize the count of models that have been rendered.
 	renderCount = 0;
+
 	m_D3D->TurnZBufferOn();
+
 	m_Terrain->Render(m_D3D->GetDeviceContext());
 	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{	return false;	}
@@ -274,22 +276,21 @@ bool GraphicsManager::Render(float rotation)
 			result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTexture());
 			if (!result)	{ return false; }
 
-			
-			
+			worldMatrix = m_D3D->GetTransf()->world;
 			renderCount++;
 		}
-		else {
-			worldMatrix = m_D3D->GetTransf()->world;
-			m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-			projectionMatrix = m_D3D->GetTransf()->projection;
-			worldMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ);
-			m_SphereModel->Render(m_D3D->GetDeviceContext());
-			result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetVertexCount(), worldMatrix, viewMatrix, projectionMatrix);
-			if (!result)	{ return false; }
+		//else {
+		//	worldMatrix = m_D3D->GetTransf()->world;
+		//	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+		//	projectionMatrix = m_D3D->GetTransf()->projection;
+		//	worldMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ);
+		//	m_SphereModel->Render(m_D3D->GetDeviceContext());
+		//	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetVertexCount(), worldMatrix, viewMatrix, projectionMatrix);
+		//	if (!result)	{ return false; }
 
-			
-		}
-		worldMatrix = m_D3D->GetTransf()->world;
+		//	
+		//}
+		//worldMatrix = m_D3D->GetTransf()->world;
 	}
 
 	// Render the COUNT
