@@ -1,6 +1,5 @@
 #include "GraphicsManager.h"
 #include "GameObject.h"
-
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -12,7 +11,7 @@ private :
 	
 public :
 	void start();
-	void update();
+	void update(float);
 
 	GameObject *cube;
 	GameObject *cube2;

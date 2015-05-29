@@ -24,8 +24,6 @@ const float SHADOWMAP_DEPTH = 50.0f;
 const float SHADOWMAP_NEAR = 1.0f;
 
 
-
-
 class Camera;
 
 
@@ -39,11 +37,12 @@ public:
 	bool Initialize(DXManager*, HWND, Camera*);
 	bool Frame(float, int, int);
 	void Shutdown();
+	void addWindows(GameObject*);
+
 
 	virtual void start(){ };
-	virtual void update(){ };
-	
-	void addWindows(GameObject*);
+	virtual void update(float deltaTime){ };
+	GameObject* InstanceGameObject(IdModel, IdShader);
 
 private:
 	bool RenderSceneToTexture();
@@ -58,7 +57,7 @@ private:
 	Model* m_SphereModel;	
 	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
-	vector<GameObject*> m_ListGameObject;
+	vector<GameObject*> m_ListGameObject; //list gameObject
 	Frustum* m_Frustum;
 	ModelListClass* m_ModelList;
 	TextDrawer* m_TextDrawer;
