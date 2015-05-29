@@ -297,6 +297,7 @@ bool GraphicsManager::Render(float rotation)
 	m_TextDrawer->beginDraw();
 
 	std::wstring cpuText = L"COUNT : ";
+
 	cpuText += std::to_wstring(renderCount);
 	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 120.0f));

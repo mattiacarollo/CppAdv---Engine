@@ -5,7 +5,6 @@
 class RigidBody;
 class Collision
 {
-
 public:
 	Collision();
 	~Collision();

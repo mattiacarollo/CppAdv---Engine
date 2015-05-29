@@ -85,7 +85,7 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	m_Position->SetPosition(cameraX, cameraY, cameraZ);
 
 	//Create and Initialize the Graphic Manager Object.
-	m_Graphic = new MyApplication();
+	m_Graphic = new GraphicsManager();
 	if (!m_Graphic) { return false; }
 	result = m_Graphic->Initialize(m_D3D, hwnd, m_Camera);
 	if (!result)
