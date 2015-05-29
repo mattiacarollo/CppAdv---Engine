@@ -22,7 +22,6 @@ bool Terrain::Initialize(ID3D11Device* device)
 {
 	bool result;
 
-
 	// Manually set the width and height of the terrain.
 	m_terrainWidth = 100;
 	m_terrainHeight = 100;
@@ -71,7 +70,6 @@ bool Terrain::InitializeBuffers(ID3D11Device* device)
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
-
 
 	// Calculate the number of vertices in the terrain mesh.
 	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 8;

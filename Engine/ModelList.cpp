@@ -47,9 +47,9 @@ bool ModelListClass::Initialize(int numModels)
 		m_ModelInfoList[i].color = DirectX::XMFLOAT4(red, green, blue, 1.0f);
 
 		// Generate a random position in front of the viewer for the mode.
-		m_ModelInfoList[i].positionX = (((float)rand() - (float)rand()) / RAND_MAX) * 10.0f;
-		m_ModelInfoList[i].positionY = (((float)rand() - (float)rand()) / RAND_MAX) * 10.0f;
-		m_ModelInfoList[i].positionZ = ((((float)rand() - (float)rand()) / RAND_MAX) * 10.0f) + 5.0f;
+		m_ModelInfoList[i].positionX = rand()%100;//(((float)rand() - (float)rand()) / RAND_MAX) * 10.0f;
+		m_ModelInfoList[i].positionY = 1.0f;//(((float)rand() - (float)rand()) / RAND_MAX) * 10.0f;
+		m_ModelInfoList[i].positionZ = rand()%100; ((((float)rand() - (float)rand()) / RAND_MAX) * 10.0f) + 5.0f;
 	}
 
 	return true;

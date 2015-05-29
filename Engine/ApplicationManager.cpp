@@ -235,8 +235,6 @@ bool ApplicationManager::RenderGraphics()
 
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 0.0f);
 
-	// Generate the view matrix based on the camera's position.
-
 	m_Graphic->Frame(m_Timer->GetTime(), m_Fps->GetFps(), m_Cpu->GetCpuPercentage());
 
 	m_D3D->EndScene();

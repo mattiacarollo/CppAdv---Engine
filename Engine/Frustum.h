@@ -1,7 +1,13 @@
 #pragma once
+#define _XM_NO_INTRINSICS_
+
+
 #include <DirectXMath.h>
 
+
 using namespace DirectX;
+
+
 class Frustum
 {
 public:
@@ -17,5 +23,5 @@ public:
 	bool CheckRectangle(float, float, float, float, float, float);
 
 private:
-	DirectX::XMVECTOR m_planes[6];
+	DirectX::XMFLOAT4 m_planes[6];
 };
