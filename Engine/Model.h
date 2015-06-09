@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstdlib>
 #include "DataType.h"
-#include "textureclass.h"
+#include "TextureManager.h"
 
 
 using namespace std;
@@ -20,14 +20,14 @@ public:
 	Model(const Model&);
 	~Model();
 
-	bool Initialize(ID3D11Device*, char*, WCHAR*, unsigned int);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, unsigned int);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
 	void SetInstanceCount(int instanceCount) { m_instanceCount = instanceCount; };
 	int GetVertexCount();
 	int GetInstanceCount();
-	ID3D11ShaderResourceView* GetTexture();
+	ID3D11ShaderResourceView** GetTextureArray();
 
 	void SetPosition(float, float, float);
 	void GetPosition(float&, float&, float&);
@@ -37,7 +37,7 @@ private:
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 
-	bool LoadTexture(ID3D11Device*, WCHAR*);
+	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);
 	void ReleaseTexture();
 
 	bool LoadModel(char*);
@@ -50,7 +50,7 @@ private:
 	int m_vertexCount;
 	int m_instanceCount;
 
-	TextureClass* m_Texture;
+	TextureManager* m_TextureArray;
 	utility::ModelType* m_model;
 	float m_positionX, m_positionY, m_positionZ;
 };

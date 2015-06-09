@@ -1,22 +1,27 @@
 #pragma once
 
 
-#include "Terrain.h"
-#include "ColorShader.h"
-#include "ShadowShader.h"
+#include "LightManager.h"
 #include "DXManager.h"
+#include "ShaderManager.h"
+
 #include "Camera.h"
 #include "Model.h"
-#include "LightManager.h"
-#include "RenderToTexture.h"
-#include "DepthShader.h"
-#include "ShaderManager.h"
+#include "Terrain.h"
 #include "GameObject.h"
 #include "Frustum.h"
 #include "ModelList.h"
-#include <vector>
+
+#include "RenderToTexture.h"
+
+//#include "DepthShader.h"
+//#include "MultiTextureShader.h"
+//#include "ColorShader.h"
+//#include "ShadowShader.h"
+
 #include "textDrawer.h"
 
+#include <vector>
 
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;

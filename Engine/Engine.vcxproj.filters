@@ -55,6 +55,9 @@
     <Filter Include="Utility\ErrorBox">
       <UniqueIdentifier>{3f61a1b8-43bc-42d1-84da-ec4b0a991a7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Multitexture">
+      <UniqueIdentifier>{20cdc987-302c-4697-9003-10f34ba69577}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,9 +82,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PositionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColorShader.cpp">
@@ -122,7 +122,7 @@
     </ClCompile>
     <ClCompile Include="ModelList.cpp">
       <Filter>Source Files</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="FPS.cpp">
       <Filter>Utility\FPS-Monitor</Filter>
     </ClCompile>
@@ -140,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="ErrorBox.cpp">
       <Filter>Utility\ErrorBox</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiTextureShader.cpp">
+      <Filter>Shaders\Multitexture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +168,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PositionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorShader.h">
@@ -206,11 +209,14 @@
     <ClInclude Include="ModelList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MultiTextureShader.h">
+      <Filter>Shaders\Multitexture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utility.h">
-      <Filter>Utility</Filter>
-	</ClInclude>
     <ClInclude Include="FPS.h">
       <Filter>Utility\FPS-Monitor</Filter>
     </ClInclude>
@@ -265,6 +271,12 @@
     </FxCompile>
     <FxCompile Include="TextureVertexShader.hlsl">
       <Filter>Shaders\Texture</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiTexturePixelShader.hlsl">
+      <Filter>Shaders\Multitexture</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiTextureVertexShader.hlsl">
+      <Filter>Shaders\Multitexture</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

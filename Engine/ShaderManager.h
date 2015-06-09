@@ -6,6 +6,7 @@
 #include "ShadowShader.h"
 #include "DepthShader.h"
 #include "ColorShader.h"
+#include "MultiTextureShader.h"
 
 
 class ShaderManager
@@ -23,6 +24,7 @@ public:
 	bool RenderShadowShader(ID3D11DeviceContext*, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView*, ID3D11ShaderResourceView*,
 		DirectX::XMFLOAT3, DirectX::XMFLOAT4, DirectX::XMFLOAT4);
 	bool RenderDepthShader(ID3D11DeviceContext*, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&);
+	bool RenderMultiTextureShader(ID3D11DeviceContext*, int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView**);
 
 	/*bool RenderLightShader(ID3D11DeviceContext*, int, DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX, ID3D11ShaderResourceView*,
 		DirectX::XMFLOAT3, DirectX::XMFLOAT4, DirectX::XMFLOAT4, DirectX::XMFLOAT3, DirectX::XMFLOAT4, float);
@@ -35,6 +37,7 @@ private:
 	ColorShaderClass* m_ColorShader;
 	ShadowShaderClass* m_ShadowShader;
 	DepthShaderClass* m_DepthShader;
+	MultiTextureShader* m_MultiTextureShader;
 	//LightShaderClass* m_LightShader;
 	//BumpMapShaderClass* m_BumpMapShader;
 	

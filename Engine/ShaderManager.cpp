@@ -7,6 +7,7 @@ ShaderManager::ShaderManager()
 	m_ColorShader = 0;
 	m_DepthShader = 0;
 	m_ShadowShader = 0;
+	m_MultiTextureShader = 0;
 	/*m_LightShader = 0;
 	m_BumpMapShader = 0;*/
 }
@@ -72,6 +73,15 @@ bool ShaderManager::Initialize(ID3D11Device* device, HWND hwnd)
 		return false;
 	}
 
+	// Create and Initialize the multitexture shader object.
+	m_MultiTextureShader = new MultiTextureShader;
+	if (!m_MultiTextureShader)	{	return false;	}
+	result = m_MultiTextureShader->Initialize(device, hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the multitexture shader object.", L"Error", MB_OK);
+		return false;
+	}
 
 	// Create the light shader object.
 	//m_LightShader = new LightShaderClass;
@@ -142,14 +152,18 @@ void ShaderManager::Shutdown()
 		delete m_ShadowShader;
 		m_ShadowShader = 0;
 	}
-	// Release the texture shader object.
 	if (m_TextureShader)
 	{
 		m_TextureShader->Shutdown();
 		delete m_TextureShader;
 		m_TextureShader = 0;
 	}
-
+	if (m_MultiTextureShader)
+	{
+		m_MultiTextureShader->Shutdown();
+		delete m_MultiTextureShader;
+		m_MultiTextureShader = 0;
+	}
 	return;
 }
 
@@ -193,6 +207,17 @@ bool ShaderManager::RenderDepthShader(ID3D11DeviceContext* device, int indexCoun
 
 	// Render the model using the texture shader.
 	result = m_DepthShader->Render(device, indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)	{ return false; }
+
+	return true;
+}
+
+bool ShaderManager::RenderMultiTextureShader(ID3D11DeviceContext* device, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView** texture)
+{
+	bool result;
+
+	// Render the model using the texture shader.
+	result = m_MultiTextureShader->Render(device, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)	{ return false; }
 
 	return true;

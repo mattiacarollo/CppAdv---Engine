@@ -91,6 +91,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ModelList.cpp" />
+    <ClCompile Include="MultiTextureShader.cpp" />
     <ClCompile Include="MyApplication.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -110,7 +111,7 @@
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="textDrawer.cpp" />
-    <ClCompile Include="TextureClass.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="ErrorBox.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ModelList.h" />
+    <ClInclude Include="MultiTextureShader.h" />
     <ClInclude Include="MyApplication.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="ShaderManager.h" />
@@ -150,7 +152,7 @@
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="textDrawer.h" />
-    <ClInclude Include="TextureClass.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Errorbox.h" />
@@ -167,6 +169,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DepthVertexShader</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DepthVertexShader</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="MultiTexturePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MultiTexturePixelShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiTexturePixelShader</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="MultiTextureVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MultiTextureVertexShader</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiTextureVertexShader</EntryPointName>
     </FxCompile>
     <FxCompile Include="Shaders\ColorPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ColorPixelShader</EntryPointName>
