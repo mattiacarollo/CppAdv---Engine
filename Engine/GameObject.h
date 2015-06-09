@@ -25,6 +25,7 @@ public:
 	GameObject(IdModel, IdShader);
 	~GameObject();
 
+	void addPosition(float x, float y, float z);
 	void setPosition(float x, float y, float z);
 	void setScale(float x, float y, float z);
 	void getPosition(float& x, float& y, float& z);

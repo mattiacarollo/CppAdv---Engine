@@ -49,3 +49,10 @@ void GameObject::getScale(float& x, float& y, float& z){
 	y = this->scaleY;
 	z = this->scaleZ;
 }
+
+
+void GameObject::addPosition(float x, float y, float z){
+	this->x += x;
+	this->y += y;
+	this->z += z;
+}

@@ -75,9 +75,6 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	}
 	m_SphereModel->SetPosition(50.0f, 4.0f, 10.0f);
 
-
-	//start();
-
 	// Create and initialize the light object.
 	m_Light = new LightManager;
 	if (!m_Light)	{ return false; }
@@ -114,11 +111,15 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_TextDrawer = new utility::TextDrawer(D3D->GetDeviceContext());
 	m_ArialFont = new utility::TextFont(D3D->GetDevice(), L"../Engine/Data/arial16.spritefont");
 
+	start();
+
 	return true;
 }
 
 bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 {
+	//update();
+
 	bool result;
 	static float lightAngle = 270.0f;
 	float radians;
@@ -180,8 +181,10 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 	m_TextDrawer->endDraw();
 
 	
+	//overraide method
+	update( frameTime );
 
-	// Render the graphics scene.
+		// Render the graphics scene.
 	result = Render(rotation);
 	if (!result)	{ return false; }
 
@@ -218,9 +221,7 @@ bool GraphicsManager::RenderSceneToTexture()
 
 bool GraphicsManager::Render(float rotation)
 {
-	//overraide method
-	//update();
-
+	
 	bool result;
 	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	float posX, posY, posZ;
@@ -252,6 +253,12 @@ bool GraphicsManager::Render(float rotation)
 	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{	return false;	}
 	
+	//render object
+	/*for (int i = 0; i < m_ListGameObject.size(); i++){
+		m_ListGameObject[i]->getPosition(positionX, positionY, positionZ);
+	}*/
+
+
 	// Go through all the models and render them only if they can be seen by the camera view.
 	for (index = 0; index<modelCount; index++)
 	{
@@ -277,20 +284,10 @@ bool GraphicsManager::Render(float rotation)
 			if (!result)	{ return false; }
 
 			worldMatrix = m_D3D->GetTransf()->world;
+
 			renderCount++;
 		}
-		//else {
-		//	worldMatrix = m_D3D->GetTransf()->world;
-		//	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-		//	projectionMatrix = m_D3D->GetTransf()->projection;
-		//	worldMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ);
-		//	m_SphereModel->Render(m_D3D->GetDeviceContext());
-		//	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_SphereModel->GetVertexCount(), worldMatrix, viewMatrix, projectionMatrix);
-		//	if (!result)	{ return false; }
-
-		//	
-		//}
-		//worldMatrix = m_D3D->GetTransf()->world;
+	
 	}
 
 	// Render the COUNT
@@ -362,6 +359,18 @@ void GraphicsManager::Shutdown()
 
 void GraphicsManager::addWindows(GameObject* object){
 
-	m_ListGameObject.push_back(object);
+	m_ModelList->AddObject( object );
+	//m_ListGameObject.push_back(object);
+
+}
+
+
+GameObject* GraphicsManager::InstanceGameObject(IdModel idModel, IdShader idShader){
+	
+	GameObject *gameObj = new GameObject(idModel, idShader);
+
+	addWindows(gameObj);
+
+	return gameObj;
 
 }

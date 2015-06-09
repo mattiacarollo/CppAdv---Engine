@@ -1,6 +1,7 @@
 #pragma once
 
-
+const int SCREEN_WIDTH = 1024;
+const int  SCREEN_HEIGHT = 768;
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
@@ -40,7 +41,7 @@ private:
 	PositionManager* m_Position;
 	DXManager* m_D3D;
 	Camera* m_Camera;
-	GraphicsManager* m_Graphic;
+	MyApplication* m_Graphic;
 	Timer* m_Timer;
 	FpsMonitor* m_Fps;
 	CpuMonitor* m_Cpu;
