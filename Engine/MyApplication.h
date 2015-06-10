@@ -8,14 +8,11 @@ using namespace std;
 
 
 class MyApplication : public GraphicsManager {
-private :
-	
-	
-	
+
 public :
 	void start();
-	void update(float);
+	void update();
 
-	GameObject *cube;
-	GameObject *cube2;
+	GameObject* cube;
+	GameObject* cube2;
 };

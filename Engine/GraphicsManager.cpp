@@ -56,24 +56,22 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
-	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/cube.txt", L"../Engine/data/Textures/dirt01.dds", L"../Engine/data/Textures/stone01.dds", 0);
+	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/cube.txt", L"../Engine/data/Textures/wall01.dds", L"../Engine/data/Textures/ice.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cube model object.", L"Error", MB_OK);
 		return false;
 	}
-	m_CubeModel->SetPosition(50.0f, 2.0f, 10.0f);
 
 	// Create, initialize and set position of the SPHERE model object.
 	m_SphereModel = new Model;
 	if (!m_SphereModel)	{ return false; }
-	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/sphere.txt", L"../Engine/data/Textures/ice.dds", L"../Engine/data/Textures/stone01.dds", 0);
+	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/sphere.txt", L"../Engine/data/Textures/ice.dds", L"../Engine/data/Textures/metal.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the sphere model object.", L"Error", MB_OK);
 		return false;
 	}
-	m_SphereModel->SetPosition(50.0f, 4.0f, 10.0f);
 
 	// Create and initialize the light object.
 	m_Light = new LightManager;
@@ -94,14 +92,9 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	}
 
 	// Create and Initialize the model list object.
-	m_ModelList = new ModelListClass;
-	if (!m_ModelList)	{	return false;	}
-	result = m_ModelList->Initialize(20);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model list object.", L"Error", MB_OK);
-		return false;
-	}
+	m_SceneModelsList = new SceneModelsList;
+	if (!m_SceneModelsList)	{ return false; }
+
 
 	// Create the frustum object.
 	m_Frustum = new Frustum;
@@ -111,15 +104,13 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_TextDrawer = new utility::TextDrawer(D3D->GetDeviceContext());
 	m_ArialFont = new utility::TextFont(D3D->GetDevice(), L"../Engine/Data/arial16.spritefont");
 
-	start();
+	start(); // Start di MyApplication
 
 	return true;
 }
 
 bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 {
-	//update();
-
 	bool result;
 	static float lightAngle = 270.0f;
 	float radians;
@@ -182,7 +173,7 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 
 	
 	//overraide method
-	update( frameTime );
+	update( ); //Update di MyApplication
 
 		// Render the graphics scene.
 	result = Render(rotation);
@@ -224,11 +215,10 @@ bool GraphicsManager::Render(float rotation)
 	
 	bool result;
 	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
-	float posX, posY, posZ;
-	float scaleX, scaleY, scaleZ;
-
-	int modelCount, renderCount, index;
-	float positionX, positionY, positionZ, radius;
+	//float posX, posY, posZ;
+	//float scaleX, scaleY, scaleZ;
+	int modelCount, renderCount, index, radius;
+	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT4 color;
 	bool renderModel;
 
@@ -242,7 +232,7 @@ bool GraphicsManager::Render(float rotation)
 	m_Frustum->ConstructFrustum(100.0f, m_D3D->GetTransf()->projection, viewMatrix);
 
 	// Get the number of models that will be rendered.
-	modelCount = m_ModelList->GetModelCount();
+	modelCount = m_SceneModelsList->GetModelsCount();
 
 	// Initialize the count of models that have been rendered.
 	renderCount = 0;
@@ -263,13 +253,13 @@ bool GraphicsManager::Render(float rotation)
 	for (index = 0; index<modelCount; index++)
 	{
 		// Get the position and color of the sphere model at this index.
-		m_ModelList->GetData(index, positionX, positionY, positionZ, color);
+		position = m_SceneModelsList->getGameObject(index)->getPosition(); //(index, positionX, positionY, positionZ, color); m_ModelList->getSceneModelVector->getPosition
 
 		// Set the radius of the sphere to 1.0 since this is already known.
 		radius = 1.0f;
 
 		// Check if the sphere model is in the view frustum.
-		renderModel = m_Frustum->CheckCube(positionX, positionY, positionZ, radius);
+		renderModel = m_Frustum->CheckCube(position.x, position.y, position.z, radius);
 
 		// If it can be seen then render it, if not skip this model and check the next sphere.
 		if (renderModel)
@@ -277,7 +267,7 @@ bool GraphicsManager::Render(float rotation)
 			worldMatrix = m_D3D->GetTransf()->world;
 			m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 			projectionMatrix = m_D3D->GetTransf()->projection;
-			worldMatrix = DirectX::XMMatrixTranslation(positionX, positionY, positionZ);
+			worldMatrix = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 
 			m_CubeModel->Render(m_D3D->GetDeviceContext());
 			result = m_ShaderManager->RenderMultiTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTextureArray());
@@ -357,20 +347,19 @@ void GraphicsManager::Shutdown()
 	return;
 }
 
-void GraphicsManager::addWindows(GameObject* object){
 
-	m_ModelList->AddObject( object );
-	//m_ListGameObject.push_back(object);
-
-}
-
-
-GameObject* GraphicsManager::InstanceGameObject(IdModel idModel, IdShader idShader){
+GameObject* GraphicsManager::InstanceGameObject(){
 	
-	GameObject *gameObj = new GameObject(idModel, idShader);
+	GameObject* gameObj = new GameObject();
 
 	addWindows(gameObj);
 
 	return gameObj;
+}
+
+
+void GraphicsManager::addWindows(GameObject* object){
+
+	m_SceneModelsList->AddObject(object);
 
 }

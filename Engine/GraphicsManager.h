@@ -10,7 +10,7 @@
 #include "Terrain.h"
 #include "GameObject.h"
 #include "Frustum.h"
-#include "ModelList.h"
+#include "SceneModelsList.h"
 
 #include "RenderToTexture.h"
 
@@ -38,16 +38,16 @@ public:
 	bool Initialize(DXManager*, HWND, Camera*);
 	bool Frame(float, int, int);
 	void Shutdown();
-	void addWindows(GameObject*);
 
-
-	virtual void start(){ };
-	virtual void update(float deltaTime){ };
-	GameObject* InstanceGameObject(IdModel, IdShader);
+protected:
+	virtual void start() = 0;
+	virtual void update() = 0;
+	GameObject* InstanceGameObject();
 
 private:
 	bool RenderSceneToTexture();
 	bool Render(float);
+	void addWindows(GameObject*);
 
 private:
 	DXManager* m_D3D;
@@ -60,7 +60,7 @@ private:
 	RenderToTexture* m_RenderToTexture;
 	vector<GameObject*> m_ListGameObject; //list gameObject
 	Frustum* m_Frustum;
-	ModelListClass* m_ModelList;
+	SceneModelsList* m_SceneModelsList;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
 };

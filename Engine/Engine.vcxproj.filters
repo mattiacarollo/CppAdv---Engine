@@ -120,9 +120,6 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FPS.cpp">
       <Filter>Utility\FPS-Monitor</Filter>
     </ClCompile>
@@ -145,6 +142,9 @@
       <Filter>Shaders\Multitexture</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneModelsList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -206,13 +206,13 @@
     <ClInclude Include="Frustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MultiTextureShader.h">
       <Filter>Shaders\Multitexture</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneModelsList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

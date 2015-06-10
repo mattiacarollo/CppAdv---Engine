@@ -90,7 +90,7 @@
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="ModelList.cpp" />
+    <ClCompile Include="SceneModelsList.cpp" />
     <ClCompile Include="MultiTextureShader.cpp" />
     <ClCompile Include="MyApplication.cpp" />
     <ClCompile Include="FPS.cpp" />
@@ -131,7 +131,7 @@
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="ModelList.h" />
+    <ClInclude Include="SceneModelsList.h" />
     <ClInclude Include="MultiTextureShader.h" />
     <ClInclude Include="MyApplication.h" />
     <ClInclude Include="FPS.h" />
