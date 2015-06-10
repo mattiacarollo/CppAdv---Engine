@@ -56,7 +56,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
-	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/cube.txt", L"../Engine/data/dirt01.dds", L"../Engine/data/stone01.dds", 0);
+	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/cube.txt", L"../Engine/data/Textures/dirt01.dds", L"../Engine/data/Textures/stone01.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cube model object.", L"Error", MB_OK);
@@ -67,7 +67,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the SPHERE model object.
 	m_SphereModel = new Model;
 	if (!m_SphereModel)	{ return false; }
-	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/sphere.txt", L"../Engine/data/ice.dds", L"../Engine/data/stone01.dds", 0);
+	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/sphere.txt", L"../Engine/data/Textures/ice.dds", L"../Engine/data/Textures/stone01.dds", 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the sphere model object.", L"Error", MB_OK);

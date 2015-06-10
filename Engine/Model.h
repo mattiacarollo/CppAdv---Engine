@@ -50,8 +50,8 @@ private:
 	int m_vertexCount;
 	int m_instanceCount;
 
-	TextureManager* m_TextureArray;
+	TextureManager* m_TextureArray; //deve essere in GameObject
 	utility::ModelType* m_model;
-	float m_positionX, m_positionY, m_positionZ;
+	float m_positionX, m_positionY, m_positionZ; //deve essere in GameObject
 };
 

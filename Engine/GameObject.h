@@ -1,19 +1,16 @@
 #pragma once
+
+
 #include <DirectXMath.h>
+
 
 using namespace DirectX;
 
-enum IdModel
-{
-	cube,
-	sphere
-};
+enum IdModel {	cube, sphere, empty };
 
-enum IdShader
-{
-	coloreShaderId,
-	textureShaderId
-};
+enum IdShader {	color, depth, texture, shadow, simple, empty };
+
+enum IdTexture {};
 
 class GameObject{
 private:

@@ -14,14 +14,10 @@
 
 #include "RenderToTexture.h"
 
-//#include "DepthShader.h"
-//#include "MultiTextureShader.h"
-//#include "ColorShader.h"
-//#include "ShadowShader.h"
-
 #include "textDrawer.h"
 
 #include <vector>
+
 
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
