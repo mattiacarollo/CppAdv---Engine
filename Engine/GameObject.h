@@ -3,10 +3,13 @@
 
 #include <DirectXMath.h>
 #include <vector>
+#include "Vector3.h"
+#include "RigidBody.h"
+#include "SphereCollider.h"
 
 using namespace DirectX;
 
-enum IdModel {	cube, sphere };
+enum IdModel { cube, sphere };
 enum IdShader {	color, depth, texture, shadow, simple };
 enum IdTexture { wall01, wall02, ice, metal, terrain, marble };
 
@@ -26,6 +29,11 @@ public:
 	XMFLOAT3 getPosition() const { return m_position; };
 	XMFLOAT3 getScale() const { return m_scale; };
 
+
+	Vector3 SphereInertia(float mass, float radius);
+	void AddRigidBody();
+	RigidBody& GetRigidbody() const;
+
 private :
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_scale;
@@ -33,4 +41,6 @@ private :
 	IdModel m_idModel;
 	IdShader m_idShader;
 	std::vector<IdTexture> m_idTextures;
+
+	RigidBody* m_pRigidbody;
 };

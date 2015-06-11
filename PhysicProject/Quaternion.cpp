@@ -58,6 +58,7 @@ Quaternion& Quaternion::operator+=(const Quaternion& other)
 	q[3] += other.GetValue(3);
 	return *this;
 };
+
 Quaternion& Quaternion::operator-=(const Quaternion& other)
 {
 	q[0] -= other.GetValue(0);

@@ -1,9 +1,9 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(const Vector3& pos, int id, float mass,const Vector3& inertia) 
+RigidBody::RigidBody(const Vector3& pos, int id, float mass, const Vector3& inertia)
 	: m_vPosition(pos), m_iID(id), m_fMass(mass)
 {
-	m_vVelocity=VectorOp::Zero;
+	m_vVelocity = VectorOp::Zero;
 	m_vInertia = inertia;
 	m_vAngularVelocity = VectorOp::Zero;
 	m_vQuantityOfMotion = VectorOp::Zero;
@@ -34,7 +34,7 @@ void RigidBody::DoPhysicJump(float DeltaTime)
 	tmp = m_vVelocity * DeltaTime;
 	m_vPosition += tmp;
 	
-	MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
+	//MatriceOp::Rotate<MatriceOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
 
 	m_vAngularVelocity.SetX(m_vAngularVelocity.getX() / m_vInertia.getX());
 	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
@@ -50,7 +50,7 @@ void RigidBody::DoPhysicJump(float DeltaTime)
 	Rot.Normalize();
 	m_qRotation = m_qRotation * Rot;
 	m_qRotation.Normalize();
-	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
+	//MatriceOp::Rotate<MatriceOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 	
 	m_mRotationMatrix = m_qRotation.ToMatrix();
 
@@ -94,7 +94,7 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	tmp = m_vVelocity * DeltaTime;
 	m_vPosition += tmp;
 
-	MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
+	//MatriceOp::Rotate<MatriceOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
 
 	m_vAngularVelocity.SetX(m_vAngularVelocity.getX() / m_vInertia.getX());
 	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
@@ -105,7 +105,7 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	Rot.Normalize();
 	m_qRotation = m_qRotation * Rot;
 	m_qRotation.Normalize();
-	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
+	//MatriceOp::Rotate<MatriceOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 
 	m_mRotationMatrix = m_qRotation.ToMatrix();
 
@@ -139,21 +139,21 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {
-	SumForceToTotalForce(force);
-	Vector3 ForceOnPoint(pointOfApplication-m_vPosition);
-	VectorOp::VectorialProduct(ForceOnPoint, force, ForceOnPoint);
-	SumMomentumToTotalMomentum(ForceOnPoint);
+	//SumForceToTotalForce(force);
+	//Vector3 ForceOnPoint(pointOfApplication-m_vPosition);
+	//VectorialProduct(ForceOnPoint, force, ForceOnPoint);
+	//SumMomentumToTotalMomentum(ForceOnPoint);
 }
 
 void RigidBody::SumForceToTotalForce(const Vector3& force)
 {
 	m_vForceSum += force;
-};
+}
 
 void RigidBody::SumMomentumToTotalMomentum(const Vector3& momentum)
 {
 	m_vMomentumSum += momentum;
-};
+}
 
 void RigidBody::AttachCollider(Collider* Collider)
 {
@@ -189,12 +189,12 @@ float RigidBody::GetMass() const
 const Matrix<3, 3>& RigidBody::GetRotationMatrix() const
 {
 	return m_mRotationMatrix;
-};
+}
 
 const Quaternion& RigidBody::GetRotationQuaternion() const
 {
 	return m_qRotation;
-};
+}
 
 const Vector3& RigidBody::GetPosition() const
 {
@@ -204,19 +204,19 @@ const Vector3& RigidBody::GetPosition() const
 Vector3 RigidBody::GetVelocity() const
 {
 	return m_vVelocity;
-};
+}
 
 Collider* RigidBody::GetCollider() const
 {
 	return m_cCollider;
-};
+}
 
 void RigidBody::SetVelocity(const Vector3& NewVelocity)
 {
 	m_vVelocity = NewVelocity;
-};
+}
 
 void RigidBody::SetPosition(const Vector3& NewPosition)
 {
 	m_vPosition = NewPosition;
-};
+}

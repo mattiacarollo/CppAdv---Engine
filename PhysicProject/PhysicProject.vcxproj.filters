@@ -63,9 +63,6 @@
     <ClInclude Include="Quaternion.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
     <ClInclude Include="RigidBody.h">
       <Filter>Header Files\Rigidbody</Filter>
     </ClInclude>
@@ -75,11 +72,11 @@
     <ClInclude Include="CollisionType.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Vector3.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
@@ -98,9 +95,6 @@
     <ClCompile Include="Quaternion.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Source Files\Rigidbody</Filter>
     </ClCompile>
@@ -109,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="CollisionType.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,6 +11,9 @@ void MyApplication::start(){
 	cube->addTexture(IdTexture::ice);
 	cube->setPosition(40, 5, 50); 
 	cube->setScale(1, 1, 1);
+	cube->AddRigidBody();
+
+	p.AddRigidBody(cube->GetRigidbody(), (cube->GetRigidbody()).GetID());
 
 	cube2 = InstanceGameObject(); // Secondo oggetto con posizione e scala
 	cube->addModel(IdModel::cube);
@@ -23,5 +26,9 @@ void MyApplication::start(){
 
 
 void MyApplication::update(){
-
+	p.ComputePhysic();
+	cube->setPosition(
+		(cube->GetRigidbody()).GetPosition().getX(),
+		(cube->GetRigidbody()).GetPosition().getY(),
+		(cube->GetRigidbody()).GetPosition().getZ() );
 }

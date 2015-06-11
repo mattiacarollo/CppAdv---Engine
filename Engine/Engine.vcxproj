@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
-    <LibraryPath>$(OutDir);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)PhysicProject;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Mattia\Master\SourceTree\CppAdv-Engine\Debug\;$(OutDir);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
@@ -56,7 +56,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;D3DCompiler.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;D3DCompiler.lib;dxgi.lib;PhysicProject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <FxCompile>
@@ -115,16 +115,6 @@
     <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="ErrorBox.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DirectXTK\DirectXTK_Desktop_2013.vcxproj">
-      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
-      <Private>false</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU.h" />
@@ -249,6 +239,14 @@
     <Text Include="Data\cube.txt" />
     <Text Include="Data\plane01.txt" />
     <Text Include="Data\sphere.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectXTK\DirectXTK_Desktop_2013.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\PhysicProject\PhysicProject.vcxproj">
+      <Project>{6ff73f33-4753-43da-a52c-b8bf4cacfefd}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
