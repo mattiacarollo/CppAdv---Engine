@@ -3,42 +3,50 @@
 #include <math.h>
 #include "Vector3.h"
 
+
 template<int Row, int Col>
 class Matrix
 {
 	template<int, int>
 	friend class Matrix;
+
 public:
+
 	float GetElementAt(int i, int j) const
 	{
-		return _matrix[i*Col + j];
+		return m_matrix[i*Col + j];
 	};
+
 	float GetElementAt(int i) const
 	{
-		return _matrix[i];
+		return m_matrix[i];
 	};
+
 	void SetElementAt(int i, float val)
 	{
-		_matrix[i] = val;
+		m_matrix[i] = val;
 	};
 
 	void SetElementAt(int i, int j, float val)
 	{
-		_matrix[i*Col + j] = val;
+		m_matrix[i*Col + j] = val;
 	};
+
 	void SetRow(int Nrow, float* value)
 	{
 		for (int i = 0; i < Col; ++i)
 		{
-			_matrix[Nrow*Col + i] = value[i];
+			m_matrix[Nrow*Col + i] = value[i];
 		}
 	};
+
 	Matrix(){
 		for (int i = 0; i < Row*Col; ++i)
 		{
-			_matrix[i] = 0;
+			m_matrix[i] = 0;
 		}
 	}
+
 	template<int OtherDim>
 	float MultiplyRowCol(int Nrow, int Ncol, const Matrix<Col, OtherDim>& secondMatrix) const
 	{
@@ -57,18 +65,20 @@ public:
 		for (int i = 0; i < Row*Col; ++i)
 		{
 
-			_matrix[i] = other.GetElementAt(i);
+			m_matrix[i] = other.GetElementAt(i);
 		}
 	}
+
 	Matrix<Row, Col>& operator=(const Matrix<Row, Col> other)
 	{
 		if (this != &other)
 		{
 			for (int i = 0; i < Row*Col; i++)
-				_matrix[i] = other.GetElementAt(i);
+				m_matrix[i] = other.GetElementAt(i);
 		}
 		return *this;
 	}
+
 	Matrix<Col, Row>& Transpose()
 	{
 		Matrix<Col, Row> result;
@@ -81,20 +91,28 @@ public:
 		}
 		return result
 	}
+
 private:
+
 	const float* GetRow(int i) const
 	{
-		return  &_matrix[i*Col];
+		return  &m_matrix[i*Col];
 	};
+
 	const float* GetCol(int i)  const
 	{
-		return &_matrix[i];
+		return &m_matrix[i];
 	};
 
-	float _matrix[Row*Col];
+	float m_matrix[Row*Col];
+
 };
 
+
+
+
 namespace MatrixOp{
+
 	template<int Row, int Col, int secondMatrixCol>
 	void MultiplyMatrix(const Matrix<Row, Col>& first, const Matrix<Col, secondMatrixCol>& second, Matrix<Row, secondMatrixCol>& result)
 	{
@@ -108,6 +126,8 @@ namespace MatrixOp{
 			result.SetRow(i, rowR);
 		}
 	}
+
+
 	template<int Row, int Col>
 	void Rotate(const Matrix<Row, Col>& Matrix, const float* vector, float * result);
 
@@ -116,10 +136,14 @@ namespace MatrixOp{
 		ToWorldSpace = false,
 		ToObjSpace = true
 	};
+
 	template<RotateTo To>
 	void Rotate(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+
 	template<>
 	void Rotate<ToWorldSpace>(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+
 	template<>
 	void Rotate<ToObjSpace>(const Matrix<3, 3>& Matrix, const Vector3& vector, Vector3& result);
+
 }

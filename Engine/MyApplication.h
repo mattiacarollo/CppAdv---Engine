@@ -3,6 +3,7 @@
 
 #include "GraphicsManager.h"
 #include "GameObject.h"
+#include "Physic.h"
 #include <iostream>
 #include <vector>
 
@@ -19,4 +20,6 @@ public :
 	GameObject* cube;
 	GameObject* cube2;
 	GameObject* cube3;
+
+	Physic p;
 };

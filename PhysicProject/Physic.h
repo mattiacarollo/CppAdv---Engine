@@ -6,6 +6,7 @@
 #include "CollisionType.h"
 
 class CollisionType;
+class RigidBody;
 
 typedef std::vector<RigidBody*> RigidBodyList;
 typedef std::vector<int> RigidBodyID;

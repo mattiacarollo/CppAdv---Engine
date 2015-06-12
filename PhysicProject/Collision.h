@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vector3.h"
+#include "RigidBody.h"
+#include "Physic.h"
 
 class RigidBody;
 class Collision

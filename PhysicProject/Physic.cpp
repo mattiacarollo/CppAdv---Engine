@@ -29,9 +29,9 @@ void Physic::ComputePhysic()
 		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
 	}*/
 	
-	m_RigidBodyList[0]->DoPhysicMove(Physic::mk_fDeltaTime, 1.0f);
-	m_RigidBodyList[1]->DoPhysicMove(Physic::mk_fDeltaTime, -1.0f);
-	//m_RigidBodyList[1]->DoPhysicJump(Physic::mk_fDeltaTime);
+	//m_RigidBodyList[0]->DoPhysicMove(Physic::mk_fDeltaTime, 1.0f);
+//	m_RigidBodyList[1]->DoPhysicMove(Physic::mk_fDeltaTime, -1.0f);
+	m_RigidBodyList[0]->DoPhysicJump(Physic::mk_fDeltaTime);
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{

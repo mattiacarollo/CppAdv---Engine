@@ -26,7 +26,6 @@ private:
 	float q[4];
 };
 
-
 Quaternion operator*(const Quaternion& first, const Quaternion& second);
 Quaternion operator+(const Quaternion& first, const Quaternion& second);
 Quaternion operator-(const Quaternion& first, const Quaternion& second);

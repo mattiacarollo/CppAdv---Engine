@@ -8,6 +8,8 @@
 #include "Matrix.h"
 #include "Vector3.h"
 
+class Rigidbody;
+class Collision;
 class CollisionType
 {
 public:

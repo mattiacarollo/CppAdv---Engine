@@ -7,11 +7,16 @@
 
 #include <DirectXMath.h>
 #include <vector>
+#include "Vector3.h"
+#include "RigidBody.h"
+#include "SphereCollider.h"
 
 
 using namespace DirectX;
 
+
 enum IdShader { color, depth, texture, shadow, simple };
+
 
 class GameObject{
 
@@ -31,10 +36,15 @@ public:
 
 	bool render(XMMATRIX&, XMMATRIX&, XMMATRIX&);
 
+	Vector3 SphereInertia(float mass, float radius);
+	void AddRigidBody();
+	RigidBody& GetRigidbody() const;
+
 private :
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_scale;
 	unsigned int m_Id;
+
 	Model* m_idModel;
 	IdShader m_idShader; // serie di if nel render
 
@@ -43,4 +53,5 @@ private :
 	TextureManager* m_TextureManager;
 	ShaderManager* m_ShaderManager;
 
+	RigidBody* m_pRigidbody;
 };

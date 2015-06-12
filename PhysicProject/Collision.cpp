@@ -1,8 +1,4 @@
-#include <iostream>
 #include "Collision.h"
-#include "RigidBody.h"
-#include "Physic.h"
-
 
 Collision::Collision(){
 }

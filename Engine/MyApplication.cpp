@@ -11,6 +11,9 @@ void MyApplication::start(){
 	cube->addTexture(ICE);
 	cube->setPosition(40, 5, 50); 
 	cube->setScale(1, 1, 1);
+	cube->AddRigidBody();
+
+	p.AddRigidBody(cube->GetRigidbody(), (cube->GetRigidbody()).GetID());
 
 	cube2 = InstanceGameObject(); // Secondo oggetto con posizione e scala
 	cube2->addModel(m_SphereModel);  // è un casino farlo con enum
@@ -31,4 +34,9 @@ void MyApplication::start(){
 
 void MyApplication::update(int index, XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& projectionMatrix){
 	m_SceneModelsList->getGameObject(index)->render(worldMatrix, viewMatrix, projectionMatrix);
+	p.ComputePhysic();
+	cube->setPosition(
+		(cube->GetRigidbody()).GetPosition().getX(),
+		(cube->GetRigidbody()).GetPosition().getY(),
+		(cube->GetRigidbody()).GetPosition().getZ() );
 }

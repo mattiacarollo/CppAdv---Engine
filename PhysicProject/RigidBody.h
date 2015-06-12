@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Matrix.h"
+#include "Physic.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "Physic.h"
-
+#include "Matrix.h"
+#include "Collider.h"
 
 template<int row, int col>
 class Matrix;
@@ -25,7 +25,7 @@ public:
 	void SumMomentumToTotalMomentum(const Vector3&);
 	void AttachCollider(Collider*);
 	void DetachCollider();
-	
+
 	void SetColliderType(int collidertype);
 	int GetColliderType() const;
 	int GetID() const;
@@ -56,7 +56,7 @@ private:
 	Vector3 m_vForceSum;
 	Vector3 m_vMomentumSum;
 	Quaternion m_qRotation;
-	Matrix<3,3> m_mRotationMatrix;
+	Matrix<3, 3> m_mRotationMatrix;
 	Collider* m_cCollider;
 	int m_iColliderType;
 	int m_iID;

@@ -3,8 +3,8 @@
 #include "Collider.h"
 
 class Quaternion;
-//class RigidBody;
-class BoxCollider: public Collider
+class RigidBody;
+class BoxCollider : public Collider
 {
 public:
 	//BoxCollider(const Vector3& pos, const Vector3& displ, const Quaternion& Rot);
