@@ -36,7 +36,7 @@ public:
 	bool Initialize(ID3D11Device*, HWND);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*
-		, int
+		, int, int
 		, DirectX::XMMATRIX&
 		, DirectX::XMMATRIX&
 		, DirectX::XMMATRIX&
@@ -66,7 +66,7 @@ private:
 		, DirectX::XMFLOAT4
 		, DirectX::XMFLOAT4
 		);	
-	void RenderShader(ID3D11DeviceContext*, int);
+	void RenderShader(ID3D11DeviceContext*, int, int);
 
 private:
 	ID3D11VertexShader* m_vertexShader;

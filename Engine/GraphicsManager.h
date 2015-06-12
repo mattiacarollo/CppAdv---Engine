@@ -4,6 +4,7 @@
 #include "LightManager.h"
 #include "DXManager.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 
 #include "Camera.h"
 #include "Model.h"
@@ -15,6 +16,7 @@
 #include "RenderToTexture.h"
 
 #include "textDrawer.h"
+#include "Path.h"
 
 #include <vector>
 
@@ -41,7 +43,7 @@ public:
 
 protected:
 	virtual void start() = 0;
-	virtual void update() = 0;
+	virtual void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&) = 0;
 	GameObject* InstanceGameObject();
 
 private:
@@ -49,18 +51,21 @@ private:
 	bool Render(float);
 	void addWindows(GameObject*);
 
+protected:
+	Model* m_CubeModel;
+	Model* m_SphereModel;
+	ShaderManager* m_ShaderManager;
+	TextureManager* m_TextureManager;
+
+	SceneModelsList* m_SceneModelsList;
+
 private:
 	DXManager* m_D3D;
 	LightManager* m_Light;
-	ShaderManager* m_ShaderManager;
-	Terrain* m_Terrain;
-	Model* m_CubeModel;
-	Model* m_SphereModel;	
+	Terrain* m_Terrain;	
 	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
-	vector<GameObject*> m_ListGameObject; //list gameObject
 	Frustum* m_Frustum;
-	SceneModelsList* m_SceneModelsList;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
 };

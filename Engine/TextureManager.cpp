@@ -3,8 +3,6 @@
 
 TextureManager::TextureManager()
 {
-	m_textures[0] = 0;
-	m_textures[1] = 0;
 }
 
 
@@ -17,47 +15,38 @@ TextureManager::~TextureManager()
 {
 }
 
+bool TextureManager::Initialize(ID3D11Device* device)
+{
+	m_device = device;
+	return true;
+}
 
-bool TextureManager::Initialize(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
+ID3D11ShaderResourceView* TextureManager::GetTexture(const WCHAR* filename1)
 {
 	HRESULT result;
 	// Load the first texture in.
-	result = DirectX::CreateDDSTextureFromFile(device, filename1, nullptr, &m_textures[0]);
+	result = DirectX::CreateDDSTextureFromFile(m_device, filename1, nullptr, &m_texture);
 	if (FAILED(result))
 	{
 		return false;
 	}
-
-	// Load the second texture in.
-	result = DirectX::CreateDDSTextureFromFile(device, filename2, nullptr, &m_textures[1]);
-	if (FAILED(result))
+	for (std::vector<ID3D11ShaderResourceView*>::iterator it = m_textures.begin(); it != m_textures.end(); it++)
 	{
-		return false;
+		if (m_texture == *it) { return *it; }
 	}
+	m_textures.push_back(m_texture);
 
-	return true;
+	return m_texture;
 }
 
 
 void TextureManager::Shutdown()
 {
-	if (m_textures[0])
-	{
-		m_textures[0]->Release();
-		m_textures[0] = 0;
-	}
-
-	if (m_textures[1])
-	{
-		m_textures[1]->Release();
-		m_textures[1] = 0;
-	}
-
 	return;
 }
 
 
-ID3D11ShaderResourceView** TextureManager::GetTextureArray()
+std::vector<ID3D11ShaderResourceView*> TextureManager::GetTextureArray()
 {
 	return m_textures;
 }

@@ -131,6 +131,7 @@
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="SceneModelsList.h" />
     <ClInclude Include="MultiTextureShader.h" />
     <ClInclude Include="MyApplication.h" />

@@ -1,3 +1,6 @@
+#pragma once
+
+
 #include "GraphicsManager.h"
 #include "GameObject.h"
 #include <iostream>
@@ -11,8 +14,9 @@ class MyApplication : public GraphicsManager {
 
 public :
 	void start();
-	void update();
+	void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&);
 
 	GameObject* cube;
 	GameObject* cube2;
+	GameObject* cube3;
 };

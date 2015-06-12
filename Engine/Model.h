@@ -5,7 +5,6 @@
 #include <fstream>
 #include <cstdlib>
 #include "DataType.h"
-#include "TextureManager.h"
 
 
 using namespace std;
@@ -20,38 +19,34 @@ public:
 	Model(const Model&);
 	~Model();
 
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, unsigned int);
+	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, char*, unsigned int);
 	void Shutdown();
-	void Render(ID3D11DeviceContext*);
+	void Render();
 
 	void SetInstanceCount(int instanceCount) { m_instanceCount = instanceCount; };
 	int GetVertexCount();
 	int GetInstanceCount();
-	ID3D11ShaderResourceView** GetTextureArray();
-
-	void SetPosition(float, float, float);
-	void GetPosition(float&, float&, float&);
+	//ID3D11ShaderResourceView** GetTextureArray();
 
 private:
 	bool InitializeBuffers(ID3D11Device*, unsigned int);
 	void ShutdownBuffers();
-	void RenderBuffers(ID3D11DeviceContext*);
+	void RenderBuffers();
 
-	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);
-	void ReleaseTexture();
+	//bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);
+	//void ReleaseTexture();
 
 	bool LoadModel(char*);
 	void ReleaseModel();
 
 private:
+	ID3D11DeviceContext* m_deviceContext;
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_instanceBuffer;
 
 	int m_vertexCount;
 	int m_instanceCount;
 
-	TextureManager* m_TextureArray; //deve essere in GameObject
 	utility::ModelType* m_model;
-	float m_positionX, m_positionY, m_positionZ; //deve essere in GameObject
 };
 

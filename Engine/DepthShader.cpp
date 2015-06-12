@@ -47,7 +47,7 @@ void DepthShaderClass::Shutdown()
 
 bool DepthShaderClass::Render(
 	ID3D11DeviceContext* deviceContext,
-	int indexCount,
+	int vertexCount, int instanceCount,
 	DirectX::XMMATRIX& worldMatrix,
 	DirectX::XMMATRIX& viewMatrix,
 	DirectX::XMMATRIX& projectionMatrix)
@@ -63,7 +63,7 @@ bool DepthShaderClass::Render(
 	}
 
 	// Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(deviceContext, vertexCount, instanceCount);
 
 	return true;
 }
@@ -281,7 +281,7 @@ bool DepthShaderClass::SetShaderParameters(
 }
 
 
-void DepthShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void DepthShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int vertexCount, int instanceCount)
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout(m_layout);
@@ -291,7 +291,8 @@ void DepthShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int inde
 	deviceContext->PSSetShader(m_pixelShader, NULL, 0);
 
 	// Render the triangle.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	//deviceContext->DrawIndexed(indexCount, 0, 0);
+	deviceContext->DrawInstanced(vertexCount, instanceCount, 0, 0);
 
 	return;
 }

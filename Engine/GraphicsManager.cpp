@@ -9,7 +9,6 @@ GraphicsManager::GraphicsManager()
 	m_RenderToTexture = 0;
 	m_ShaderManager = 0;
 	m_Light = 0;
-	//m_ListGameObject = 0;
 	m_TextDrawer = 0;
 	m_ArialFont = 0;
 }
@@ -27,8 +26,6 @@ GraphicsManager::~GraphicsManager()
 
 bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 {
-	m_ListGameObject = vector<GameObject*>();
-
 	m_D3D = D3D;
 	m_Camera = camera;
 	bool result;
@@ -36,7 +33,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create and Initialize the shader manager object.
 	m_ShaderManager = new ShaderManager;
 	if (!m_ShaderManager){ return false; }
-	result = m_ShaderManager->Initialize(m_D3D->GetDevice(), hwnd);
+	result = m_ShaderManager->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), hwnd);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the shader manager object.", L"Error", MB_OK);
@@ -56,7 +53,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
-	result = m_CubeModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/cube.txt", L"../Engine/data/Textures/wall01.dds", L"../Engine/data/Textures/ice.dds", 0);
+	result = m_CubeModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), CUBE, 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cube model object.", L"Error", MB_OK);
@@ -66,7 +63,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	// Create, initialize and set position of the SPHERE model object.
 	m_SphereModel = new Model;
 	if (!m_SphereModel)	{ return false; }
-	result = m_SphereModel->Initialize(m_D3D->GetDevice(), "../Engine/data/Models/sphere.txt", L"../Engine/data/Textures/ice.dds", L"../Engine/data/Textures/metal.dds", 0);
+	result = m_SphereModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), SPHERE, 0);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the sphere model object.", L"Error", MB_OK);
@@ -104,8 +101,17 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 	m_TextDrawer = new utility::TextDrawer(D3D->GetDeviceContext());
 	m_ArialFont = new utility::TextFont(D3D->GetDevice(), L"../Engine/Data/arial16.spritefont");
 
-	start(); // Start di MyApplication
 
+	// Create and initialize the TEXTURE Manager object.
+	m_TextureManager = new TextureManager;
+	if (!m_TextureManager)	{ return false; }
+	result = m_TextureManager->Initialize(m_D3D->GetDevice());
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the TEXTURE Manager.", L"Error", MB_OK);
+		return false;
+	}
+	start(); // Start di MyApplication
 	return true;
 }
 
@@ -173,7 +179,7 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 
 	
 	//overraide method
-	update( ); //Update di MyApplication
+	//update( ); //Update di MyApplication
 
 		// Render the graphics scene.
 	result = Render(rotation);
@@ -240,15 +246,9 @@ bool GraphicsManager::Render(float rotation)
 	m_D3D->TurnZBufferOn();
 
 	m_Terrain->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderColorShader(m_D3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	result = m_ShaderManager->RenderDepthShader(m_Terrain->GetVertexCount(), m_Terrain->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{	return false;	}
 	
-	//render object
-	/*for (int i = 0; i < m_ListGameObject.size(); i++){
-		m_ListGameObject[i]->getPosition(positionX, positionY, positionZ);
-	}*/
-
-
 	// Go through all the models and render them only if they can be seen by the camera view.
 	for (index = 0; index<modelCount; index++)
 	{
@@ -269,9 +269,10 @@ bool GraphicsManager::Render(float rotation)
 			projectionMatrix = m_D3D->GetTransf()->projection;
 			worldMatrix = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 
-			m_CubeModel->Render(m_D3D->GetDeviceContext());
+			/*m_CubeModel->Render(m_D3D->GetDeviceContext());
 			result = m_ShaderManager->RenderMultiTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTextureArray());
-			if (!result)	{ return false; }
+			if (!result)	{ return false; }*/
+			update(index, worldMatrix, viewMatrix, projectionMatrix);
 
 			worldMatrix = m_D3D->GetTransf()->world;
 
@@ -350,7 +351,7 @@ void GraphicsManager::Shutdown()
 
 GameObject* GraphicsManager::InstanceGameObject(){
 	
-	GameObject* gameObj = new GameObject();
+	GameObject* gameObj = new GameObject(m_TextureManager, m_ShaderManager);
 
 	addWindows(gameObj);
 

@@ -215,6 +215,9 @@
     <ClInclude Include="SceneModelsList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FPS.h">

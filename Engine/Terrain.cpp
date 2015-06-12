@@ -4,7 +4,7 @@
 Terrain::Terrain()
 {
 	m_vertexBuffer = 0;
-	m_indexBuffer = 0;
+	m_instanceBuffer = 0;
 }
 
 
@@ -55,9 +55,9 @@ void Terrain::Render(ID3D11DeviceContext* deviceContext)
 }
 
 
-int Terrain::GetIndexCount()
+int Terrain::GetVertexCount()
 {
-	return m_indexCount;
+	return m_vertexCount;
 }
 
 
@@ -67,9 +67,10 @@ bool Terrain::InitializeBuffers(ID3D11Device* device)
 	unsigned long* indices;
 	int index, i, j;
 	float positionX, positionZ;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	D3D11_BUFFER_DESC vertexBufferDesc, instanceBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 	HRESULT result;
+	utility::InstanceType* instances;
 
 	// Calculate the number of vertices in the terrain mesh.
 	m_vertexCount = (m_terrainWidth - 1) * (m_terrainHeight - 1) * 8;
@@ -197,32 +198,46 @@ bool Terrain::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
+	delete[] vertices;
+	vertices = 0;
+
+	instances = new utility::InstanceType[1];
+	if (!instances)
+	{
+		return false;
+	}
+
+	// Set up the description of the instance buffer.
+	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	instanceBufferDesc.ByteWidth = sizeof(utility::InstanceType) * 1;
+	instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	instanceBufferDesc.CPUAccessFlags = 0;
+	instanceBufferDesc.MiscFlags = 0;
+	instanceBufferDesc.StructureByteStride = 0;
+
 	// Set up the description of the static index buffer.
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
+	//indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	//indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
+	//indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//indexBufferDesc.CPUAccessFlags = 0;
+	//indexBufferDesc.MiscFlags = 0;
+	//indexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the index data.
-	indexData.pSysMem = indices;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
+	instanceData.pSysMem = instances;
+	instanceData.SysMemPitch = 0;
+	instanceData.SysMemSlicePitch = 0;
 
 	// Create the index buffer.
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+	result = device->CreateBuffer(&instanceBufferDesc, &instanceData, &m_instanceBuffer);
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	// Release the arrays now that the buffers have been created and loaded.
-	delete[] vertices;
-	vertices = 0;
 
-	delete[] indices;
-	indices = 0;
+	delete[] instances;
+	instances = 0;
 
 	return true;
 }
@@ -231,10 +246,10 @@ bool Terrain::InitializeBuffers(ID3D11Device* device)
 void Terrain::ShutdownBuffers()
 {
 	// Release the index buffer.
-	if (m_indexBuffer)
+	if (m_instanceBuffer)
 	{
-		m_indexBuffer->Release();
-		m_indexBuffer = 0;
+		m_instanceBuffer->Release();
+		m_instanceBuffer = 0;
 	}
 
 	// Release the vertex buffer.
@@ -250,19 +265,24 @@ void Terrain::ShutdownBuffers()
 
 void Terrain::RenderBuffers(ID3D11DeviceContext* deviceContext)
 {
-	unsigned int stride;
-	unsigned int offset;
-
+	unsigned int strides[2];
+	unsigned int offsets[2];
+	ID3D11Buffer* bufferPointers[2];
 
 	// Set vertex buffer stride and offset.
-	stride = sizeof(VertexType);
-	offset = 0;
+	strides[0] = sizeof(VertexType);
+	strides[1] = sizeof(utility::InstanceType);
+	offsets[0] = 0;
+	offsets[1] = 0;
+
+	bufferPointers[0] = m_vertexBuffer;
+	bufferPointers[1] = m_instanceBuffer;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	deviceContext->IASetVertexBuffers(0, 2, bufferPointers, strides, offsets);
 
 	// Set the index buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case a line list.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);

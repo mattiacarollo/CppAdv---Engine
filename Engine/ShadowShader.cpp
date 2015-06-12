@@ -48,7 +48,7 @@ void ShadowShaderClass::Shutdown()
 }
 
 
-bool ShadowShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix,
+bool ShadowShaderClass::Render(ID3D11DeviceContext* deviceContext, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix,
 	DirectX::XMMATRIX& projectionMatrix, DirectX::XMMATRIX& lightViewMatrix, DirectX::XMMATRIX& lightProjectionMatrix,
 	ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView* depthMapTexture, DirectX::XMFLOAT3 lightDirection,
 	DirectX::XMFLOAT4 ambientColor, DirectX::XMFLOAT4 diffuseColor)
@@ -65,7 +65,7 @@ bool ShadowShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCoun
 	}
 
 	// Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(deviceContext, vertexCount, instanceCount );
 
 	return true;
 }
@@ -404,7 +404,7 @@ bool ShadowShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 }
 
 
-void ShadowShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void ShadowShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int vertexCount, int instanceCount)
 {
 	// Set the vertex input layout.
 	deviceContext->IASetInputLayout(m_layout);
@@ -418,7 +418,8 @@ void ShadowShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int ind
 	deviceContext->PSSetSamplers(1, 1, &m_sampleStateWrap);
 
 	// Render the geometry.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	//deviceContext->DrawIndexed(indexCount, 0, 0);
+	deviceContext->DrawInstanced(vertexCount, instanceCount, 0, 0);
 
 	return;
 }

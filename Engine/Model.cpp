@@ -4,7 +4,6 @@
 Model::Model()
 {
 	m_instanceBuffer = 0;
-	m_TextureArray = 0;
 	m_model = 0;
 	m_instanceCount = 1;
 }
@@ -20,10 +19,10 @@ Model::~Model()
 }
 
 
-bool Model::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, unsigned int moreInstances)
+bool Model::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char* modelFilename, unsigned int moreInstances)
 {
 	bool result;
-
+	m_deviceContext = deviceContext;
 	// Load in the model data,
 	result = LoadModel(modelFilename);
 	if (!result)	{	return false;	}
@@ -33,8 +32,8 @@ bool Model::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* texture
 	if (!result)	{	return false;	}
 
 	// Load the texture for this model.
-	result = LoadTextures(device, textureFilename1, textureFilename2);
-	if (!result)	{	return false;	}
+	/*result = LoadTextures(device, textureFilename1, textureFilename2);
+	if (!result)	{	return false;	}*/
 
 	return true;
 }
@@ -43,7 +42,7 @@ bool Model::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* texture
 void Model::Shutdown()
 {
 	// Release the model texture.
-	ReleaseTexture();
+	//ReleaseTexture();
 
 	// Shutdown the vertex and index buffers.
 	ShutdownBuffers();
@@ -55,10 +54,10 @@ void Model::Shutdown()
 }
 
 
-void Model::Render(ID3D11DeviceContext* deviceContext)
+void Model::Render()
 {
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	RenderBuffers(deviceContext);
+	RenderBuffers();
 
 	return;
 }
@@ -74,11 +73,11 @@ int Model::GetInstanceCount()
 	return m_instanceCount;
 }
 
-
-ID3D11ShaderResourceView** Model::GetTextureArray()
-{
-	return m_TextureArray->GetTextureArray();
-}
+//
+//ID3D11ShaderResourceView** Model::GetTextureArray()
+//{
+//	return m_TextureArray->GetTextureArray();
+//}
 
 
 bool Model::InitializeBuffers(ID3D11Device* device, unsigned int moreInstances)
@@ -189,7 +188,7 @@ void Model::ShutdownBuffers()
 }
 
 
-void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
+void Model::RenderBuffers()
 {
 	unsigned int strides[2];
 	unsigned int offsets[2];
@@ -208,49 +207,49 @@ void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	bufferPointers[1] = m_instanceBuffer;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
-	deviceContext->IASetVertexBuffers(0, 2, bufferPointers, strides, offsets);
+	m_deviceContext->IASetVertexBuffers(0, 2, bufferPointers, strides, offsets);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return;
 }
 
 
-bool Model::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
-{
-	bool result;
-
-
-	// Create the texture object.
-	m_TextureArray = new TextureManager;
-	if (!m_TextureArray)
-	{
-		return false;
-	}
-
-	// Initialize the texture object.
-	result = m_TextureArray->Initialize(device, filename1, filename2);
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-
-void Model::ReleaseTexture()
-{
-	// Release the texture object.
-	if (m_TextureArray)
-	{
-		m_TextureArray->Shutdown();
-		delete m_TextureArray;
-		m_TextureArray = 0;
-	}
-
-	return;
-}
+//bool Model::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
+//{
+//	bool result;
+//
+//
+//	// Create the texture object.
+//	m_TextureArray = new TextureManager;
+//	if (!m_TextureArray)
+//	{
+//		return false;
+//	}
+//
+//	// Initialize the texture object.
+//	result = m_TextureArray->Initialize(device, filename1, filename2);
+//	if (!result)
+//	{
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//
+//void Model::ReleaseTexture()
+//{
+//	// Release the texture object.
+//	if (m_TextureArray)
+//	{
+//		m_TextureArray->Shutdown();
+//		delete m_TextureArray;
+//		m_TextureArray = 0;
+//	}
+//
+//	return;
+//}
 
 
 bool Model::LoadModel(char* filename)
@@ -318,23 +317,5 @@ void Model::ReleaseModel()
 		m_model = 0;
 	}
 
-	return;
-}
-
-
-void Model::SetPosition(float x, float y, float z)
-{
-	m_positionX = x;
-	m_positionY = y;
-	m_positionZ = z;
-	return;
-}
-
-
-void Model::GetPosition(float& x, float& y, float& z)
-{
-	x = m_positionX;
-	y = m_positionY;
-	z = m_positionZ;
 	return;
 }

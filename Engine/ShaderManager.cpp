@@ -23,10 +23,10 @@ ShaderManager::~ShaderManager()
 }
 
 
-bool ShaderManager::Initialize(ID3D11Device* device, HWND hwnd)
+bool ShaderManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, HWND hwnd)
 {
 	bool result;
-
+	m_deviceContext = deviceContext;
 
 	// Create the texture shader object.
 	m_TextureShader = new TextureShader;
@@ -168,56 +168,56 @@ void ShaderManager::Shutdown()
 }
 
 
-bool ShaderManager::RenderTextureShader(ID3D11DeviceContext* device, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix,
+bool ShaderManager::RenderTextureShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix,
 	ID3D11ShaderResourceView* texture)
 {
 	bool result;
 	
 	// Render the model using the texture shader.
-	result = m_TextureShader->Render(device, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_TextureShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)	{	return false;	}
 
 	return true;
 }
 
-bool ShaderManager::RenderColorShader(ID3D11DeviceContext* device, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix){
+bool ShaderManager::RenderColorShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix){
 	bool result;
 
 	// Render the model using the texture shader.
-	result = m_ColorShader->Render(device, indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_ColorShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{ return false; }
 
 	return true;
 }
 
-bool ShaderManager::RenderShadowShader(ID3D11DeviceContext* device, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, DirectX::XMMATRIX& lightViewMatrix, DirectX::XMMATRIX& lightProjectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView* depthMapTexture,
+bool ShaderManager::RenderShadowShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, DirectX::XMMATRIX& lightViewMatrix, DirectX::XMMATRIX& lightProjectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView* depthMapTexture,
 	DirectX::XMFLOAT3 lightDirection, DirectX::XMFLOAT4 ambientColor, DirectX::XMFLOAT4 diffuseColor)
 {
 	bool result;
 
 	// Render the model using the texture shader.
-	result = m_ShadowShader->Render(device, indexCount, worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, lightProjectionMatrix, texture, depthMapTexture, lightDirection, ambientColor, diffuseColor );
+	result = m_ShadowShader->Render(m_deviceContext, vertexCount, instanceCount , worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, lightProjectionMatrix, texture, depthMapTexture, lightDirection, ambientColor, diffuseColor);
 	if (!result)	{ return false; }
 
 	return true;
 }
 
-bool ShaderManager::RenderDepthShader(ID3D11DeviceContext* device, int indexCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix){
+bool ShaderManager::RenderDepthShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix){
 	bool result;
 
 	// Render the model using the texture shader.
-	result = m_DepthShader->Render(device, indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_DepthShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{ return false; }
 
 	return true;
 }
 
-bool ShaderManager::RenderMultiTextureShader(ID3D11DeviceContext* device, int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView** texture)
+bool ShaderManager::RenderMultiTextureShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView** texture)
 {
 	bool result;
 
 	// Render the model using the texture shader.
-	result = m_MultiTextureShader->Render(device, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_MultiTextureShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)	{ return false; }
 
 	return true;
