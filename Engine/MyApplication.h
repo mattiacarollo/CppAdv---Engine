@@ -20,6 +20,7 @@ public :
 	GameObject* cube;
 	GameObject* cube2;
 	GameObject* cube3;
+	GameObject* cube4;
 
 	Physic p;
 };
