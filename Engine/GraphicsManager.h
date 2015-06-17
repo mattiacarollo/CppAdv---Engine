@@ -17,6 +17,7 @@
 
 #include "textDrawer.h"
 #include "Path.h"
+#include "Physic.h"
 
 #include <vector>
 
@@ -37,19 +38,21 @@ public:
 	GraphicsManager(const GraphicsManager&);
 	~GraphicsManager();
 
-	bool Initialize(DXManager*, HWND, Camera*);
+	bool Initialize(DXManager*, HWND, Camera*, Physic*);
 	bool Frame(float, int, int);
-	void Shutdown();
+	void Shutdown();	
 
 protected:
 	virtual void start() = 0;
-	virtual void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&) = 0;
+	//virtual void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&) = 0;	
+	virtual void update() = 0;
 	GameObject* InstanceGameObject();
+	void AddRigidBody(GameObject *);
 
 private:
 	bool RenderSceneToTexture();
 	bool Render(float);
-	void addWindows(GameObject*);
+	void addWindows(GameObject*);	
 
 protected:
 	Model* m_CubeModel;
@@ -68,4 +71,5 @@ private:
 	Frustum* m_Frustum;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
+	Physic * m_Phisic;
 };

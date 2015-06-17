@@ -29,20 +29,26 @@ public:
 	void addTexture(const WCHAR* textureId);
 
 	void setPosition(float x, float y, float z) { m_position = { x, y, z}; };
+	//void setPosition(Vector3& position) { m_position = position; };
 	void setScale(float x, float y, float z) { m_scale = { x, y, z }; };
 
-	XMFLOAT3 getPosition() const { return m_position; };
-	XMFLOAT3 getScale() const { return m_scale; };
+	XMFLOAT3 getPosition() const { return m_position.convertToXMFloat3(); };
+	XMFLOAT3 getScale() const { return m_scale.convertToXMFloat3(); };
 
 	bool render(XMMATRIX&, XMMATRIX&, XMMATRIX&);
 
 	Vector3 SphereInertia(float mass, float radius);
 	void AddRigidBody();
 	RigidBody& GetRigidbody() const;
+	bool isRigidBody() const;
 
 private :
-	XMFLOAT3 m_position;
-	XMFLOAT3 m_scale;
+	/*XMFLOAT3 m_position;
+	XMFLOAT3 m_scale;*/
+
+	Vector3 m_position;
+	Vector3 m_scale;
+
 	unsigned int m_Id;
 
 	Model* m_idModel;

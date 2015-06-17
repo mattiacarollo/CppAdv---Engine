@@ -2,64 +2,64 @@
 
 Vector3::Vector3()
 {
-	v[0] = 0.f;
-	v[1] = 0.f;
-	v[2] = 0.f;
+	v.x = 0.f;
+	v.y = 0.f;
+	v.z = 0.f;
 }
 
 Vector3::Vector3(float x, float y, float z)
 {
-	v[0] = x;
-	v[1] = y;
-	v[2] = z;
+	v.x = x;
+	v.y = y;
+	v.z = z;
 }
 
 Vector3::Vector3(const Vector3& other)
 {
-	v[0] = other.getX();
-	v[1] = other.getY();
-	v[2] = other.getZ();
+	v.x = other.getX();
+	v.y = other.getY();
+	v.z = other.getZ();
 }
 
 Vector3& Vector3::operator=(const Vector3& other)
 {
 	if (this != &other)
 	{
-		v[0] = other.getX();
-		v[1] = other.getY();
-		v[2] = other.getZ();
+		v.x = other.getX();
+		v.y = other.getY();
+		v.z = other.getZ();
 	}
 	return *this;
 }
 Vector3& Vector3::operator+=(const Vector3& other)
 {
-	v[0] += other.getX();
-	v[1] += other.getY();
-	v[2] += other.getZ();
+	v.x += other.getX();
+	v.y += other.getY();
+	v.z += other.getZ();
 	return *this;
 }
 
 Vector3& Vector3::operator-=(const Vector3& other)
 {
-	v[0] -= other.getX();
-	v[1] -= other.getY();
-	v[2] -= other.getZ();
+	v.x -= other.getX();
+	v.y -= other.getY();
+	v.z -= other.getZ();
 	return *this;
 }
 
 Vector3& Vector3::operator*=(float scalar)
 {
-	v[0] *= scalar;
-	v[1] *= scalar;
-	v[2] *= scalar;
+	v.x *= scalar;
+	v.y *= scalar;
+	v.z *= scalar;
 	return *this;
 }
 
 Vector3& Vector3::operator/=(float scalar)
 {
-	v[0] /= scalar;
-	v[1] /= scalar;
-	v[2] /= scalar;
+	v.x /= scalar;
+	v.y /= scalar;
+	v.z /= scalar;
 	return *this;
 }
 
@@ -87,9 +87,9 @@ Vector3 operator-(const Vector3& first, const Vector3& second)
 
 void Vector3::Set(float x, float y, float z)
 {
-	v[0] = x;
-	v[1] = y;
-	v[2] = z;
+	v.x = x;
+	v.y = y;
+	v.z = z;
 }
 
 void Vector3::Normalize()
@@ -102,12 +102,12 @@ void Vector3::Normalize()
 
 float Vector3::Modulus() const
 {
-	return(sqrt((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2])));
+	return(sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z)));
 };
 
 float Vector3::SqrMagnitude() const
 {
-	return (v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]);
+	return (v.x * v.x) + (v.y * v.y) + (v.z * v.z);
 };
 
 void VectorOp::VectorialProduct(const Vector3& first, const Vector3& second, Vector3& result)

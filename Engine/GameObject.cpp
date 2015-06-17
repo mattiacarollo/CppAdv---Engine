@@ -1,7 +1,7 @@
 #include "GameObject.h"
 
 GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderManager)
-{
+{	
 	m_TextureManager = textureManager;
 	m_ShaderManager = shaderManager;
 };
@@ -29,6 +29,8 @@ void GameObject::AddRigidBody()
 	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 5.0);
 	m_pRigidbody->AttachCollider(sC0);
 	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
+
+	m_position = m_pRigidbody->GetPosition();
 	
 	//rBSphere0->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 }
@@ -36,6 +38,16 @@ void GameObject::AddRigidBody()
 RigidBody& GameObject::GetRigidbody() const
 {
 	return *m_pRigidbody;
+}
+
+bool GameObject::isRigidBody() const
+{
+	if (m_pRigidbody == nullptr){
+		return false;
+	}
+	else{
+		return true;
+	}
 }
 
 bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& projectionMatrix)
@@ -58,9 +70,15 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 		break;
 	case texture :
 	{
-		/*m_idModel->Render();
-		result = m_ShaderManager->RenderMultiTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, this->m_textures);
-		if (!result)	{ return false; }*/
+		m_idModel->Render();
+		if (m_textures.size() == 1){
+			result = m_ShaderManager->RenderTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.at(0));
+		}
+		else{
+			result = m_ShaderManager->RenderMultiTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.data());
+		}
+		
+		if (!result)	{ return false; }
 	}
 		break;
 	case shadow :

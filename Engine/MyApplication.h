@@ -14,13 +14,10 @@ using namespace std;
 class MyApplication : public GraphicsManager {
 
 public :
-	void start();
-	void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&);
+	void start() override;
+	void update() override;
 
 	GameObject* cube;
 	GameObject* cube2;
 	GameObject* cube3;
-	GameObject* cube4;
-
-	Physic p;
 };
