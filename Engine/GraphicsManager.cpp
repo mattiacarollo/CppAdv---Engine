@@ -24,7 +24,7 @@ GraphicsManager::~GraphicsManager()
 }
 
 
-bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
+bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Physic * physic)
 {
 	m_D3D = D3D;
 	m_Camera = camera;
@@ -111,6 +111,9 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera)
 		MessageBox(hwnd, L"Could not initialize the TEXTURE Manager.", L"Error", MB_OK);
 		return false;
 	}
+
+	m_Phisic = new Physic;
+
 	start(); // Start di MyApplication
 	return true;
 }
@@ -176,10 +179,12 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 	m_TextDrawer->drawText(*m_ArialFont, cpuText);
 
 	m_TextDrawer->endDraw();
-
+	
+	
+	m_Phisic->ComputePhysic();
 	
 	//overraide method
-	//update( ); //Update di MyApplication
+	update( ); //Update di MyApplication
 
 		// Render the graphics scene.
 	result = Render(rotation);
@@ -272,7 +277,8 @@ bool GraphicsManager::Render(float rotation)
 			/*m_CubeModel->Render(m_D3D->GetDeviceContext());
 			result = m_ShaderManager->RenderMultiTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTextureArray());
 			if (!result)	{ return false; }*/
-			update(index, worldMatrix, viewMatrix, projectionMatrix);
+			//update(index, worldMatrix, viewMatrix, projectionMatrix);
+			m_SceneModelsList->getGameObject(index)->render(worldMatrix, viewMatrix, projectionMatrix);
 
 			worldMatrix = m_D3D->GetTransf()->world;
 
@@ -363,4 +369,11 @@ void GraphicsManager::addWindows(GameObject* object){
 
 	m_SceneModelsList->AddObject(object);
 
+}
+
+void GraphicsManager::AddRigidBody(GameObject* object)
+{
+	object->AddRigidBody();
+
+	m_Phisic->AddRigidBody(object->GetRigidbody(), (object->GetRigidbody()).GetID());
 }

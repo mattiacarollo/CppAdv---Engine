@@ -84,10 +84,15 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	if (!m_Position)	{	return false;	}
 	m_Position->SetPosition(cameraX, cameraY, cameraZ);
 
+	//create phisics
+	m_phisic = new Physic();
+	if (!m_phisic) { return false; }
+
+
 	//Create and Initialize the Graphic Manager Object.
 	m_Graphic = new MyApplication();
 	if (!m_Graphic) { return false; }
-	result = m_Graphic->Initialize(m_D3D, hwnd, m_Camera);
+	result = m_Graphic->Initialize(m_D3D, hwnd, m_Camera, m_phisic);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize Graphic Manager Object", L"Error", MB_OK);

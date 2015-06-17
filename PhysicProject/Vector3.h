@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include <DirectXMath.h>
 
 class Vector3
 {
@@ -9,12 +10,12 @@ public:
 	Vector3(float x, float y, float z);
 	Vector3(const Vector3& other);
 
-	inline float getX() const { return v[0]; }
-	inline float getY() const { return v[1]; }
-	inline float getZ() const { return v[2]; }
-	inline void SetX(float x) { v[0] = x; }
-	inline void SetY(float y) { v[1] = y; }
-	inline void SetZ(float z) { v[2] = z; }
+	inline float getX() const { return v.x; }
+	inline float getY() const { return v.y; }
+	inline float getZ() const { return v.z; }
+	inline void SetX(float x) { v.x = x; }
+	inline void SetY(float y) { v.y = y; }
+	inline void SetZ(float z) { v.z = z; }
 
 	void Set(float, float, float);
 
@@ -24,15 +25,46 @@ public:
 	Vector3& operator*=(float scalar);
 	Vector3& operator/=(float scalar);
 
-	const float& operator[](int i)const { return v[i]; };
-	float& operator[](int i){ return v[i]; };
+	//const float& operator[](int i)const { return v[i]; };
+	const float& operator[](int i)const { 
+		//assert(i>2);		
+		switch (i){
+		case 0:
+			return v.x;
+			break;
+		case 1:
+			return v.y;
+			break;
+		case 2:
+			return v.z;
+			break;
+		}
+	};
+	float& operator[](int i){ 
+		//assert(i > 2);
+		switch (i){
+		case 0:
+			return v.x;
+			break;
+		case 1:
+			return v.y;
+			break;
+		case 2:
+			return v.z;
+			break;
+		}
+	};
 
 	float Modulus() const;
 	float SqrMagnitude() const;
 	void Normalize();
+	DirectX::XMFLOAT3 convertToXMFloat3() const {	
+		return v;
+	};
 
 private:
-	float v[3];
+	//float v[3];
+	DirectX::XMFLOAT3 v;
 };
 
 Vector3 operator+(const Vector3&, const Vector3&);

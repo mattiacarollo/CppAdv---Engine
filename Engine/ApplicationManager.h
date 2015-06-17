@@ -17,6 +17,7 @@ const float SCREEN_NEAR = 1.0f;
 #include "MyApplication.h"
 #include "CPU.h"
 #include "FPS.h"
+#include "Physic.h"
 
 class GraphicsManager;
 
@@ -45,4 +46,6 @@ private:
 	Timer* m_Timer;
 	FpsMonitor* m_Fps;
 	CpuMonitor* m_Cpu;
+	Physic* m_phisic;
+	
 };
