@@ -29,7 +29,6 @@ float4 MultiTexturePixelShader(PixelInputType input) : SV_TARGET
 	float4 color2;
 	float4 blendColor;
 
-
 	// Get the pixel color from the first texture.
 	color1 = shaderTextures[0].Sample(SampleType, input.tex);
 
