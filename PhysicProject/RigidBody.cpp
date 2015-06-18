@@ -58,8 +58,8 @@ void RigidBody::DoPhysicJump(float DeltaTime)
 
 	//movimento laterale sul terreno
 	//5 è il raggio
-	if (m_vPosition[1] + 5 < 1) {
-		float d = 1 - (m_vPosition[1] + 5);
+	if (m_vPosition[1] - 1 < 0) {
+		float d = 1 - (m_vPosition[1] - 1);
 		d *= 4000;
 		d -= m_vVelocity[1] * 100;
 		if (d > 0) m_vForceSum[1] += d;
