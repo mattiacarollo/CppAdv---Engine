@@ -8,8 +8,6 @@ ShaderManager::ShaderManager()
 	m_DepthShader = 0;
 	m_ShadowShader = 0;
 	m_MultiTextureShader = 0;
-	/*m_LightShader = 0;
-	m_BumpMapShader = 0;*/
 }
 
 
@@ -28,14 +26,9 @@ bool ShaderManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* device
 	bool result;
 	m_deviceContext = deviceContext;
 
-	// Create the texture shader object.
+	// Create and initialize the texture shader object.
 	m_TextureShader = new TextureShader;
-	if (!m_TextureShader)
-	{
-		return false;
-	}
-
-	// Initialize the texture shader object.
+	if (!m_TextureShader)	{	return false;	}
 	result = m_TextureShader->Initialize(device, hwnd);
 	if (!result)
 	{
@@ -83,57 +76,12 @@ bool ShaderManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* device
 		return false;
 	}
 
-	// Create the light shader object.
-	//m_LightShader = new LightShaderClass;
-	//if (!m_LightShader)
-	//{
-	//	return false;
-	//}
-
-	//// Initialize the light shader object.
-	//result = m_LightShader->Initialize(device, hwnd);
-	//if (!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
-	//	return false;
-	//}
-
-	//// Create the bump map shader object.
-	//m_BumpMapShader = new BumpMapShaderClass;
-	//if (!m_BumpMapShader)
-	//{
-	//	return false;
-	//}
-
-	//// Initialize the bump map shader object.
-	//result = m_BumpMapShader->Initialize(device, hwnd);
-	//if (!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the bump map shader object.", L"Error", MB_OK);
-	//	return false;
-	//}
-
 	return true;
 }
 
 
 void ShaderManager::Shutdown()
 {
-	// Release the bump map shader object.
-	//if (m_BumpMapShader)
-	//{
-	//	m_BumpMapShader->Shutdown();
-	//	delete m_BumpMapShader;
-	//	m_BumpMapShader = 0;
-	//}
-
-	//// Release the light shader object.
-	//if (m_LightShader)
-	//{
-	//	m_LightShader->Shutdown();
-	//	delete m_LightShader;
-	//	m_LightShader = 0;
-	//}
 	if (m_DepthShader)
 	{
 		m_DepthShader->Shutdown();
@@ -222,39 +170,3 @@ bool ShaderManager::RenderMultiTextureShader(int vertexCount, int instanceCount,
 
 	return true;
 }
-
-//bool ShaderManagerClass::RenderLightShader(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,
-//	ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection, D3DXVECTOR4 ambient, D3DXVECTOR4 diffuse,
-//	D3DXVECTOR3 cameraPosition, D3DXVECTOR4 specular, float specularPower)
-//{
-//	bool result;
-//
-//
-//	// Render the model using the light shader.
-//	result = m_LightShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambient, diffuse, cameraPosition,
-//		specular, specularPower);
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
-//
-//bool ShaderManagerClass::RenderBumpMapShader(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,
-//	ID3D11ShaderResourceView* colorTexture, ID3D11ShaderResourceView* normalTexture, D3DXVECTOR3 lightDirection,
-//	D3DXVECTOR4 diffuse)
-//{
-//	bool result;
-//
-//
-//	// Render the model using the bump map shader.
-//	result = m_BumpMapShader->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, colorTexture, normalTexture, lightDirection, diffuse);
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	return true;
-//}

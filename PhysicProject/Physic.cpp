@@ -24,17 +24,18 @@ void Physic::ComputePhysic()
 	unsigned int i, j;
 	m_CollisionType = new CollisionType();
 
-	/*for (i = 0; i < m_RigidBodyList.size(); ++i)
+	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
-		m_RigidBodyList[i]->DoPhysic(Physic::mk_fDeltaTime);
-	}*/
+		m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
+	}
 	
 	//m_RigidBodyList[0]->DoPhysicMove(Physic::mk_fDeltaTime, 1.0f);
 //	m_RigidBodyList[1]->DoPhysicMove(Physic::mk_fDeltaTime, -1.0f);
-	m_RigidBodyList[0]->DoPhysicJump(Physic::mk_fDeltaTime);
-	m_RigidBodyList[1]->DoPhysicJump(Physic::mk_fDeltaTime);
-	m_RigidBodyList[2]->DoPhysicJump(Physic::mk_fDeltaTime);
-	m_RigidBodyList[3]->DoPhysicJump(Physic::mk_fDeltaTime);
+	//m_RigidBodyList[0]->DoPhysicJump(Physic::mk_fDeltaTime);
+	//m_RigidBodyList[1]->DoPhysicJump(Physic::mk_fDeltaTime);
+	//m_RigidBodyList[2]->DoPhysicJump(Physic::mk_fDeltaTime);
+	//m_RigidBodyList[3]->DoPhysicJump(Physic::mk_fDeltaTime);
+
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
