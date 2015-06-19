@@ -278,6 +278,7 @@ bool GraphicsManager::Render(float rotation)
 			m_TextDrawer->drawText(*m_ArialFont, cpuText);
 			m_TextDrawer->endDraw();
 			m_D3D->TurnZBufferOn();
+
 			m_SceneModelsList->getGameObject(index)->setPosition(
 				m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getX(),
 				m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getY(),
