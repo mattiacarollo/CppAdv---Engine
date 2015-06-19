@@ -79,5 +79,5 @@ namespace VectorOp
 	void VectorialProduct(const Vector3& first, const Vector3& second, Vector3& result);
 	float DotProduct(const Vector3& first, const Vector3& second);
 
-	static const Vector3 Zero;
+	static Vector3 Zero;
 }

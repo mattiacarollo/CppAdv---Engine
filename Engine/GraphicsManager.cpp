@@ -112,7 +112,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 		return false;
 	}
 
-	m_Phisic = new Physic;
+	m_Phisic = physic;
 
 	start(); // Start di MyApplication
 	return true;
