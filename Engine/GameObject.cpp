@@ -33,7 +33,7 @@ void GameObject::AddRigidBody()
 
 	m_position = m_pRigidbody->GetPosition();
 	
-	//rBSphere0->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	m_pRigidbody->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 }
 
 RigidBody& GameObject::GetRigidbody() const

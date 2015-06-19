@@ -44,12 +44,12 @@ void MyApplication::start(){
 
 void MyApplication::update(){
 	
-	cube->setPosition( (cube->GetRigidbody()).GetPosition().getX(),
-		(cube->GetRigidbody()).GetPosition().getY(),
-		(cube->GetRigidbody()).GetPosition().getZ() );
-	cube2->setPosition((cube2->GetRigidbody()).GetPosition().getX(),
-		(cube2->GetRigidbody()).GetPosition().getY(),
-		(cube2->GetRigidbody()).GetPosition().getZ());
+	//cube->setPosition( (cube->GetRigidbody()).GetPosition().getX(),
+	//	(cube->GetRigidbody()).GetPosition().getY(),
+	//	(cube->GetRigidbody()).GetPosition().getZ() );
+	//cube2->setPosition((cube2->GetRigidbody()).GetPosition().getX(),
+	//	(cube2->GetRigidbody()).GetPosition().getY(),
+	//	(cube2->GetRigidbody()).GetPosition().getZ());
 
 
 }
