@@ -139,10 +139,10 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {
-	//SumForceToTotalForce(force);
-	//Vector3 ForceOnPoint(pointOfApplication-m_vPosition);
+	SumForceToTotalForce(force);
+	Vector3 ForceOnPoint(pointOfApplication-m_vPosition);
 	//VectorialProduct(ForceOnPoint, force, ForceOnPoint);
-	//SumMomentumToTotalMomentum(ForceOnPoint);
+	SumMomentumToTotalMomentum(ForceOnPoint);
 }
 
 void RigidBody::SumForceToTotalForce(const Vector3& force)
