@@ -26,21 +26,12 @@ public:
 	bool RenderDepthShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&);
 	bool RenderMultiTextureShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView**);
 
-	/*bool RenderLightShader(ID3D11DeviceContext*, int, DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX, ID3D11ShaderResourceView*,
-		DirectX::XMFLOAT3, DirectX::XMFLOAT4, DirectX::XMFLOAT4, DirectX::XMFLOAT3, DirectX::XMFLOAT4, float);
-		*/
-	/*bool RenderBumpMapShader(ID3D11DeviceContext*, int, DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX, ID3D11ShaderResourceView*,
-		ID3D11ShaderResourceView*, DirectX::XMFLOAT3, DirectX::XMFLOAT4);
-		*/
-
 private:
 	TextureShader* m_TextureShader;
 	ColorShaderClass* m_ColorShader;
 	ShadowShaderClass* m_ShadowShader;
 	DepthShaderClass* m_DepthShader;
 	MultiTextureShader* m_MultiTextureShader;
-	//LightShaderClass* m_LightShader;
-	//BumpMapShaderClass* m_BumpMapShader;
 
 	ID3D11DeviceContext* m_deviceContext;
 	

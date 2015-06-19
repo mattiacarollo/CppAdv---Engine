@@ -268,16 +268,27 @@ bool GraphicsManager::Render(float rotation)
 
 		// If it can be seen then render it, if not skip this model and check the next sphere.
 		if (renderModel)
-		{		
+		{	
+
+			m_TextDrawer->beginDraw();
+			std::wstring cpuText = L"POSITION Y : ";
+			cpuText += std::to_wstring(m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getY());
+			m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+			m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 180.0f));
+			m_TextDrawer->drawText(*m_ArialFont, cpuText);
+			m_TextDrawer->endDraw();
+			m_D3D->TurnZBufferOn();
+			m_SceneModelsList->getGameObject(index)->setPosition(
+				m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getX(),
+				m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getY(),
+				m_SceneModelsList->getGameObject(index)->GetRigidbody().GetPosition().getZ()
+				);
+
 			worldMatrix = m_D3D->GetTransf()->world;
 			m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 			projectionMatrix = m_D3D->GetTransf()->projection;
 			worldMatrix = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 
-			/*m_CubeModel->Render(m_D3D->GetDeviceContext());
-			result = m_ShaderManager->RenderMultiTextureShader(m_D3D->GetDeviceContext(), m_CubeModel->GetVertexCount(), m_CubeModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_CubeModel->GetTextureArray());
-			if (!result)	{ return false; }*/
-			//update(index, worldMatrix, viewMatrix, projectionMatrix);
 			m_SceneModelsList->getGameObject(index)->render(worldMatrix, viewMatrix, projectionMatrix);
 
 			worldMatrix = m_D3D->GetTransf()->world;

@@ -4,6 +4,7 @@ GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderMana
 {	
 	m_TextureManager = textureManager;
 	m_ShaderManager = shaderManager;
+	m_position = {0.0f , 0.0f, 0.0f};
 };
 
 GameObject::~GameObject()
@@ -24,7 +25,7 @@ Vector3 GameObject::SphereInertia(float mass, float radius)
 
 void GameObject::AddRigidBody()
 {
-	m_pRigidbody = new RigidBody(Vector3(40.f, 5.f, 50.f), 0, 100.0f, SphereInertia(100.0f, 5.0f));
+	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
 	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 5.0);
 	m_pRigidbody->AttachCollider(sC0);
@@ -80,15 +81,6 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 		
 		if (!result)	{ return false; }
 	}
-		break;
-	case shadow :
-	{
-		/*m_idModel->Render();
-		result = m_ShaderManager->RenderShadowShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
-		if (!result)	{ return false; }*/
-	}
-		break;
-	case simple :
 		break;
 	default:
 		break;

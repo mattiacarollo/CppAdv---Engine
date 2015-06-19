@@ -15,7 +15,7 @@
 using namespace DirectX;
 
 
-enum IdShader { color, depth, texture, shadow, simple };
+enum IdShader { color, depth, texture};
 
 
 class GameObject{
