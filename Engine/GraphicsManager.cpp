@@ -244,14 +244,11 @@ bool GraphicsManager::RenderSceneToTexture()
 bool GraphicsManager::Render(float rotation)
 {
 	
-	bool result;
-	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
-	//float posX, posY, posZ;
-	//float scaleX, scaleY, scaleZ;
+	bool result, renderModel;
 	int modelCount, renderCount, index, radius;
+	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;	
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT4 color;
-	bool renderModel;
 
 	m_Camera->Render(); //Render camera
 
@@ -363,11 +360,24 @@ bool GraphicsManager::Render(float rotation)
 	m_TextDrawer->endDraw();
 	m_D3D->TurnZBufferOn();
 
-	worldMatrix = m_D3D->GetTransf()->world;
+
+	DirectX::XMFLOAT3 cameraPosition, particlePosition;
+	DirectX::XMMATRIX translateMatrix;
+	double angle;
+	float rotation;
+	// Get the position of the camera.
+	cameraPosition = m_Camera->GetPosition();
+	// Set the position of the billboard model.
+	particlePosition.x = 70.0f;
+	particlePosition.y = 8.0f;
+	particlePosition.z = 50.0f;
+	angle = atan2(particlePosition.x - cameraPosition.x, particlePosition.z - cameraPosition.z) * (180.0 / DirectX::XM_PI);
+	rotation = (float)angle * 0.0174532925f;
+	worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	translateMatrix = DirectX::XMMatrixTranslation(particlePosition.x, particlePosition.y, particlePosition.z);
+	worldMatrix = XMMatrixMultiply(worldMatrix, translateMatrix);
 	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 	projectionMatrix = m_D3D->GetTransf()->projection;
-	worldMatrix = DirectX::XMMatrixTranslation(70.0f,5.0f,50.0f);
-
 	// Turn on alpha blending.
 	m_D3D->TurnOnAlphaBlending();
 	m_ParticleSystem->Render(m_D3D->GetDeviceContext());
