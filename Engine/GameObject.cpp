@@ -11,10 +11,14 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::addTexture(const WCHAR* textureId)
+void GameObject::setPosition(float x, float y, float z)
 {
-	m_textures.push_back(m_TextureManager->GetTexture(textureId));
+	m_position = { x, y, z };
+	if (isRigidBody() == true){
+		m_pRigidbody->SetPosition(m_position);
+	}
 }
+
 
 Vector3 GameObject::SphereInertia(float mass, float radius)
 {
@@ -23,7 +27,7 @@ Vector3 GameObject::SphereInertia(float mass, float radius)
 	return Vector3(inertia, inertia, inertia);
 }
 
-void GameObject::AddRigidBody()
+void GameObject::addRigidBody()
 {
 	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
@@ -36,10 +40,6 @@ void GameObject::AddRigidBody()
 	m_pRigidbody->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 }
 
-RigidBody& GameObject::GetRigidbody() const
-{
-	return *m_pRigidbody;
-}
 
 bool GameObject::isRigidBody() const
 {
@@ -75,10 +75,12 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 		if (m_textures.size() == 1){
 			result = m_ShaderManager->RenderTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.at(0));
 		}
-		else{
+		else if (m_textures.size() == 0){
+			result = m_ShaderManager->RenderColorShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
+		}
+		else {
 			result = m_ShaderManager->RenderMultiTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.data());
 		}
-		
 		if (!result)	{ return false; }
 	}
 		break;
@@ -86,3 +88,4 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 		break;
 	}
 }
+

@@ -8,6 +8,7 @@
 
 #include "Camera.h"
 #include "Model.h"
+#include "ParticleModel.h"
 #include "Terrain.h"
 #include "GameObject.h"
 #include "Frustum.h"
@@ -38,7 +39,6 @@ public:
 
 protected:
 	virtual void start() = 0;
-	//virtual void update(int, XMMATRIX&, XMMATRIX&, XMMATRIX&) = 0;	
 	virtual void update() = 0;
 	GameObject* InstanceGameObject();
 	void AddRigidBody(GameObject *);
@@ -51,13 +51,14 @@ private:
 protected:
 	Model* m_CubeModel;
 	Model* m_SphereModel;
+	ParticleModel* m_ParticleSystem;
+
 	ShaderManager* m_ShaderManager;
 	TextureManager* m_TextureManager;
 
 	SceneModelsList* m_SceneModelsListDinamic;
 	SceneModelsList* m_SceneModelsListStatic;
 	
-
 private:
 	DXManager* m_D3D;
 	LightManager* m_Light;
@@ -67,5 +68,5 @@ private:
 	Frustum* m_Frustum;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
-	Physic * m_Phisic;
+	Physic* m_Phisic;
 };

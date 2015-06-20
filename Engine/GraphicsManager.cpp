@@ -28,6 +28,8 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 {
 	m_D3D = D3D;
 	m_Camera = camera;
+	m_Phisic = physic;
+
 	bool result;
 
 	// Create and Initialize the shader manager object.
@@ -114,9 +116,17 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 		return false;
 	}
 
-	m_Phisic = physic;
+	// Create and Initialize the particle system object.
+	m_ParticleSystem = new ParticleModel(m_TextureManager);
+	if (!m_ParticleSystem)	{	return false;	}
+	result = m_ParticleSystem->Initialize(m_D3D->GetDevice()); 
+	if (!result)
+	{
+		return false;
+	}
 
-	start(); // Start di MyApplication
+	//------------------------- Start di MyApplication --------------------------
+	start(); 
 		
 	for (int i = m_SceneModelsListStatic->GetModelsCount() - 1; i >= 0; i--){
 		GameObject*tmp = m_SceneModelsListStatic->getGameObject(i);;
@@ -167,13 +177,11 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 
 	// Render the FPS and CPU
 	m_TextDrawer->beginDraw();
-
 	std::wstring fpsText = L"FPS : ";
 	fpsText += std::to_wstring(fps);
 	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 10.0f));
 	m_TextDrawer->drawText(*m_ArialFont, fpsText);
-
 	/*int k = 0;
 	std::wstring testText = L"FPS : ";
 	for (int i = 0; i < 1200; i++)
@@ -184,21 +192,21 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 	m_TextDrawer->setColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 	m_TextDrawer->setPosition(DirectX::XMFLOAT2(100.0f, 100.0f));
 	m_TextDrawer->drawText(*m_ArialFont, testText);*/
-
 	std::wstring cpuText = L"CPU : ";
 	cpuText += std::to_wstring(cpu);
 	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 60.0f));
 	m_TextDrawer->drawText(*m_ArialFont, cpuText);
-
 	m_TextDrawer->endDraw();
-		
-	m_Phisic->ComputePhysic();
-	
-	//overraide method
-	update( ); //Update di MyApplication
+	m_D3D->TurnZBufferOn();
 
-		// Render the graphics scene.
+	m_Phisic->ComputePhysic();
+	m_ParticleSystem->Frame(frameTime, m_D3D->GetDeviceContext());
+
+	//------------------------- Update di MyApplication --------------------------
+	update(); 
+
+	// Render the graphics scene.
 	result = Render(rotation);
 	if (!result)	{ return false; }
 
@@ -260,7 +268,7 @@ bool GraphicsManager::Render(float rotation)
 	// Initialize the count of models that have been rendered.
 	renderCount = 0;
 
-	m_D3D->TurnZBufferOn();
+	
 
 	m_Terrain->Render(m_D3D->GetDeviceContext());
 	result = m_ShaderManager->RenderDepthShader(m_Terrain->GetVertexCount(), m_Terrain->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
@@ -284,7 +292,7 @@ bool GraphicsManager::Render(float rotation)
 
 			m_TextDrawer->beginDraw();
 			std::wstring cpuText = L"POSITION Y : ";
-			cpuText += std::to_wstring(m_SceneModelsListDinamic->getGameObject(index)->GetRigidbody().GetPosition().getY());
+			cpuText += std::to_wstring(m_SceneModelsListDinamic->getGameObject(index)->getRigidbody().GetPosition().getY());
 			m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 			m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 180.0f));
 			m_TextDrawer->drawText(*m_ArialFont, cpuText);
@@ -292,9 +300,9 @@ bool GraphicsManager::Render(float rotation)
 			m_D3D->TurnZBufferOn();
 
 			m_SceneModelsListDinamic->getGameObject(index)->setPosition(
-				m_SceneModelsListDinamic->getGameObject(index)->GetRigidbody().GetPosition().getX(),
-				m_SceneModelsListDinamic->getGameObject(index)->GetRigidbody().GetPosition().getY(),
-				m_SceneModelsListDinamic->getGameObject(index)->GetRigidbody().GetPosition().getZ()
+				m_SceneModelsListDinamic->getGameObject(index)->getRigidbody().GetPosition().getX(),
+				m_SceneModelsListDinamic->getGameObject(index)->getRigidbody().GetPosition().getY(),
+				m_SceneModelsListDinamic->getGameObject(index)->getRigidbody().GetPosition().getZ()
 				);
 
 			worldMatrix = m_D3D->GetTransf()->world;
@@ -308,14 +316,14 @@ bool GraphicsManager::Render(float rotation)
 
 			renderCount++;
 		}
-	
+
 	}
-	
+
 	//-------------draw model list static ----------
 
 	// Get the number of models that will be rendered.
 	modelCount = m_SceneModelsListStatic->GetModelsCount();
-	
+
 	for (index = 0; index < modelCount; index++)
 	{
 		// Get the position and color of the sphere model at this index.
@@ -330,7 +338,7 @@ bool GraphicsManager::Render(float rotation)
 		// If it can be seen then render it, if not skip this model and check the next sphere.
 		if (renderModel)
 		{
-			
+
 			worldMatrix = m_D3D->GetTransf()->world;
 			m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
 			projectionMatrix = m_D3D->GetTransf()->projection;
@@ -347,15 +355,26 @@ bool GraphicsManager::Render(float rotation)
 
 	// Render the COUNT
 	m_TextDrawer->beginDraw();
-
 	std::wstring cpuText = L"COUNT : ";
-
 	cpuText += std::to_wstring(renderCount);
 	m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 120.0f));
 	m_TextDrawer->drawText(*m_ArialFont, cpuText);
-
 	m_TextDrawer->endDraw();
+	m_D3D->TurnZBufferOn();
+
+	worldMatrix = m_D3D->GetTransf()->world;
+	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	projectionMatrix = m_D3D->GetTransf()->projection;
+	worldMatrix = DirectX::XMMatrixTranslation(70.0f,5.0f,50.0f);
+
+	// Turn on alpha blending.
+	m_D3D->TurnOnAlphaBlending();
+	m_ParticleSystem->Render(m_D3D->GetDeviceContext());
+	result = m_ShaderManager->RenderParticleShader(m_ParticleSystem->GetIndexCount(), 1, worldMatrix, viewMatrix, projectionMatrix, m_ParticleSystem->GetTexture());
+	if (!result)	{	return false;	}
+	// Turn off alpha blending.
+	m_D3D->TurnOffAlphaBlending();
 
 	return true;
 }
@@ -408,6 +427,12 @@ void GraphicsManager::Shutdown()
 		delete m_ArialFont;
 		m_ArialFont = 0;
 	}
+	if (m_ParticleSystem)
+	{
+		m_ParticleSystem->Shutdown();
+		delete m_ParticleSystem;
+		m_ParticleSystem = 0;
+	}
 	return;
 }
 
@@ -430,7 +455,7 @@ void GraphicsManager::addWindows(GameObject* object){
 
 void GraphicsManager::AddRigidBody(GameObject* object)
 {
-	object->AddRigidBody();
+	object->addRigidBody();
 
-	m_Phisic->AddRigidBody(object->GetRigidbody(), (object->GetRigidbody()).GetID());
+	m_Phisic->AddRigidBody(object->getRigidbody(), (object->getRigidbody()).GetID());
 }

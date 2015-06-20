@@ -7,6 +7,7 @@
 #include "DepthShader.h"
 #include "ColorShader.h"
 #include "MultiTextureShader.h"
+#include "ParticleShader.h"
 #include "DataType.h"
 
 
@@ -25,6 +26,7 @@ public:
 	bool RenderShadowShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView*, ID3D11ShaderResourceView*, DirectX::XMFLOAT3, DirectX::XMFLOAT4, DirectX::XMFLOAT4);
 	bool RenderDepthShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&);
 	bool RenderMultiTextureShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView**);
+	bool RenderParticleShader(int, int, DirectX::XMMATRIX&, DirectX::XMMATRIX&, DirectX::XMMATRIX&, ID3D11ShaderResourceView*);
 
 private:
 	TextureShader* m_TextureShader;
@@ -32,6 +34,7 @@ private:
 	ShadowShaderClass* m_ShadowShader;
 	DepthShaderClass* m_DepthShader;
 	MultiTextureShader* m_MultiTextureShader;
+	ParticleShader* m_ParticleShader;
 
 	ID3D11DeviceContext* m_deviceContext;
 	

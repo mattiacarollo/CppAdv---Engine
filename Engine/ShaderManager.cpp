@@ -76,6 +76,16 @@ bool ShaderManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* device
 		return false;
 	}
 
+	// Create and initialize the Particle shader object.
+	m_ParticleShader = new ParticleShader;
+	if (!m_ParticleShader)	{ return false; }
+	result = m_ParticleShader->Initialize(device, hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
+		return false;
+	}
+
 	return true;
 }
 
@@ -111,6 +121,12 @@ void ShaderManager::Shutdown()
 		m_MultiTextureShader->Shutdown();
 		delete m_MultiTextureShader;
 		m_MultiTextureShader = 0;
+	}
+	if (m_ParticleShader)
+	{
+		m_ParticleShader->Shutdown();
+		delete m_ParticleShader;
+		m_ParticleShader = 0;
 	}
 	return;
 }
@@ -166,6 +182,17 @@ bool ShaderManager::RenderMultiTextureShader(int vertexCount, int instanceCount,
 
 	// Render the model using the texture shader.
 	result = m_MultiTextureShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	if (!result)	{ return false; }
+
+	return true;
+}
+
+bool ShaderManager::RenderParticleShader(int vertexCount, int instanceCount, DirectX::XMMATRIX& worldMatrix, DirectX::XMMATRIX& viewMatrix, DirectX::XMMATRIX& projectionMatrix, ID3D11ShaderResourceView* texture)
+{
+	bool result;
+
+	// Render the model using the Particle shader.
+	result = m_ParticleShader->Render(m_deviceContext, vertexCount, instanceCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)	{ return false; }
 
 	return true;
