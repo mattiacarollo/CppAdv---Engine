@@ -28,7 +28,12 @@ public:
 	void addShader(IdShader shaderId) { m_idShader = shaderId; };
 	void addTexture(const WCHAR* textureId);
 
-	void setPosition(float x, float y, float z) { m_position = { x, y, z}; };
+	void setPosition(float x, float y, float z) { 
+		m_position = { x, y, z}; 
+		if (isRigidBody() == true){
+			m_pRigidbody->SetPosition(m_position);
+		}
+	};
 	//void setPosition(Vector3& position) { m_position = position; };
 	void setScale(float x, float y, float z) { m_scale = { x, y, z }; };
 

@@ -2,22 +2,21 @@
 #include <math.h>    
 #include <time.h>
 
-
 void MyApplication::start(){
 
-	cube = InstanceGameObject(); // Primo oggetto con posizione e scala
-	cube->addModel(m_CubeModel);
-	cube->addShader(IdShader::color);
-	cube->addTexture(ICE);
-	cube->setPosition(30, 10, 50);
-	cube->setScale(1, 1, 1);
-	AddRigidBody(cube);
+	cube1 = InstanceGameObject(); // Primo oggetto con posizione e scala
+	cube1->addModel(m_CubeModel);
+	cube1->addShader(IdShader::color);
+	cube1->addTexture(Constants::ICE);
+	cube1->setPosition(30, 10, 50);
+	cube1->setScale(1, 1, 1);
+	AddRigidBody(cube1);
 
 	cube2 = InstanceGameObject(); 
 	cube2->addModel(m_SphereModel);  
 	cube2->addShader(IdShader::texture);
-	cube2->addTexture(METAL);
-	cube2->addTexture(WALL01);
+	cube2->addTexture(Constants::METAL);
+	cube2->addTexture(Constants::WALL01);
 	cube2->setPosition(40, 10, 50);
 	cube2->setScale(1, 1, 1);
 	AddRigidBody(cube2);
@@ -25,20 +24,29 @@ void MyApplication::start(){
 	cube3 = InstanceGameObject();
 	cube3->addModel(m_SphereModel);  
 	cube3->addShader(IdShader::texture);
-	cube3->addTexture(METAL);
-	cube3->addTexture(ICE);
+	cube3->addTexture(Constants::METAL);
+	cube3->addTexture(Constants::ICE);
 	cube3->setPosition(50, 10, 50 );
 	cube3->setScale(1, 1, 1);
 	AddRigidBody(cube3);
 
 	cube4 = InstanceGameObject(); 
 	cube4->addModel(m_CubeModel);  
-	cube4->addShader(IdShader::depth);
-	cube4->addTexture(METAL);
-	cube4->addTexture(ICE);
+	cube4->addShader(IdShader::texture);
+	cube4->addTexture(Constants::METAL);
+	//cube4->addTexture(Const::ICE);
 	cube4->setPosition(60, 10, 50);
 	cube4->setScale(1, 1, 1);
 	AddRigidBody(cube4);
+
+	cube5 = InstanceGameObject();
+	cube5->addModel(m_CubeModel);
+	cube5->addShader(IdShader::texture);
+	cube5->addTexture(Constants::METAL);
+	//cube4->addTexture(ICE);
+	cube5->setPosition(70, 10, 50);
+	cube5->setScale(1, 1, 1);
+	
 }
 
 

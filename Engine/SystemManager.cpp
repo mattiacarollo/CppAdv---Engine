@@ -112,7 +112,7 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-	if (FULL_SCREEN)
+	if (Constants::FULL_SCREEN)
 	{
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
@@ -127,8 +127,8 @@ void SystemManager::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		screenWidth = SCREEN_WIDTH;
-		screenHeight = SCREEN_HEIGHT;
+		screenWidth = Constants::SCREEN_WIDTH;
+		screenHeight = Constants::SCREEN_HEIGHT;
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
 		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 	}
@@ -147,7 +147,7 @@ void SystemManager::ShutdownWindows()
 {
 	ShowCursor(true);
 
-	if (FULL_SCREEN)
+	if (Constants::FULL_SCREEN)
 	{
 		ChangeDisplaySettings(NULL, 0);
 	}

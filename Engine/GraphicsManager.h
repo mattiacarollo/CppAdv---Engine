@@ -22,12 +22,6 @@
 #include <vector>
 
 
-const int SHADOWMAP_WIDTH = 1024;
-const int SHADOWMAP_HEIGHT = 1024;
-const float SHADOWMAP_DEPTH = 50.0f;
-const float SHADOWMAP_NEAR = 1.0f;
-
-
 class Camera;
 
 
@@ -52,15 +46,17 @@ protected:
 private:
 	bool RenderSceneToTexture();
 	bool Render(float);
-	void addWindows(GameObject*);	
-
+	void addWindows(GameObject*);
+	
 protected:
 	Model* m_CubeModel;
 	Model* m_SphereModel;
 	ShaderManager* m_ShaderManager;
 	TextureManager* m_TextureManager;
 
-	SceneModelsList* m_SceneModelsList;
+	SceneModelsList* m_SceneModelsListDinamic;
+	SceneModelsList* m_SceneModelsListStatic;
+	
 
 private:
 	DXManager* m_D3D;

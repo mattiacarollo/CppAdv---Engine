@@ -19,7 +19,7 @@ public:
 	Model(const Model&);
 	~Model();
 
-	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, char*, unsigned int);
+	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, const char*, unsigned int);
 	void Shutdown();
 	void Render();
 
@@ -36,7 +36,7 @@ private:
 	//bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);
 	//void ReleaseTexture();
 
-	bool LoadModel(char*);
+	bool LoadModel(const char*);
 	void ReleaseModel();
 
 private:
