@@ -6,7 +6,7 @@
 void MyApplication::start(){
 
 	cube = InstanceGameObject(); // Primo oggetto con posizione e scala
-	cube->addModel(m_CubeModel);
+	cube->addModel(m_SphereModel);
 	cube->addShader(IdShader::color);
 	cube->addTexture(ICE);
 	cube->setPosition(30, 10, 50);
@@ -23,7 +23,7 @@ void MyApplication::start(){
 	AddRigidBody(cube2);
 
 	cube3 = InstanceGameObject();
-	cube3->addModel(m_SphereModel);  
+	cube3->addModel(m_CubeModel);
 	cube3->addShader(IdShader::texture);
 	cube3->addTexture(METAL);
 	cube3->addTexture(ICE);
