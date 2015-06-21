@@ -125,7 +125,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ParticleModel.h" />
     <ClInclude Include="ParticleShader.h" />
-    <ClInclude Include="Path.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="SceneModelsList.h" />
     <ClInclude Include="MultiTextureShader.h" />
     <ClInclude Include="MyApplication.h" />

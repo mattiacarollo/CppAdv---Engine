@@ -99,15 +99,6 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 		return false;
 	}
 
-	/*m_Graphic = new GraphicsManager;
-	if (!m_Graphic) { return false; }
-	result = m_Graphic->Initialize(m_D3D, hwnd, m_Camera);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize Graphic Manager Object", L"Error", MB_OK);
-		return false;
-	}*/
-
 	return true;
 }
 

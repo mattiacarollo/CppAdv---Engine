@@ -5,7 +5,7 @@
 #include <DirectXMath.h>
 
 #include "DataType.h"
-#include "Path.h"
+#include "Constants.h"
 #include "TextureManager.h"
 
 

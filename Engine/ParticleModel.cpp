@@ -103,22 +103,22 @@ bool ParticleModel::InitializeParticleSystem()
 
 
 	// Set the random deviation of where the particles can be located when emitted.
-	m_particleDeviationX = 0.5f;
-	m_particleDeviationY = 0.1f;
-	m_particleDeviationZ = 2.0f;
+	m_particleDeviationX = Constants::PARTICLE_DEVIATIONX;
+	m_particleDeviationY = Constants::PARTICLE_DEVIATIONY;
+	m_particleDeviationZ = Constants::PARTICLE_DEVIATIONZ;
 
 	// Set the speed and speed variation of particles.
-	m_particleVelocity = 1.0f;
-	m_particleVelocityVariation = 0.2f;
+	m_particleVelocity = Constants::PARTICLE_VELOCITY;
+	m_particleVelocityVariation = Constants::PARTICLE_VELOCITY_VARIATION;
 
 	// Set the physical size of the particles.
-	m_particleSize = 0.2f;
+	m_particleSize = Constants::PARTICLE_SIZE;
 
 	// Set the number of particles to emit per second.
-	m_particlesPerSecond = 250.0f;
+	m_particlesPerSecond = Constants::PARTICLE_PER_SECOND;
 
 	// Set the maximum number of particles allowed in the particle system.
-	m_maxParticles = 5000;
+	m_maxParticles = Constants::PARTICLE_MAX_NUMBERS;
 
 	// Create the particle list.
 	m_particleList = new ParticleType[m_maxParticles];

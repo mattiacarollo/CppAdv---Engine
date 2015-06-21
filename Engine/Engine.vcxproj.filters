@@ -221,14 +221,14 @@
     <ClInclude Include="SceneModelsList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleShader.h">
       <Filter>Shaders\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

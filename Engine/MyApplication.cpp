@@ -2,7 +2,20 @@
 #include <math.h>    
 #include <time.h>
 
+
 void MyApplication::start(){
+
+	for (int i = 0; i < Constants::MAX_MODELS; ++i)
+	{
+		GameObject* temp;
+		temp = InstanceGameObject();
+		temp->addModel(m_CubeModel);
+		temp->setID(i);
+		temp->setPosition(rand() % 100, rand() % 10, rand() % 100);
+		temp->addShader(IdShader::color);
+		temp->setScale(1, 1, 1);
+		m_GameObjectPool.push_back(temp);
+	}
 
 	cube1 = InstanceGameObject(); // Primo oggetto con posizione e scala
 	cube1->addModel(m_CubeModel);
@@ -39,7 +52,7 @@ void MyApplication::start(){
 
 	cube5 = InstanceGameObject();
 	cube5->addModel(m_CubeModel);
-	cube5->addShader(IdShader::texture);
+	cube5->addShader(IdShader::depth);
 	cube5->setPosition(70, 10, 50);
 	cube5->setScale(1, 1, 1);
 	
