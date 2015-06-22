@@ -22,7 +22,7 @@ void MyApplication::start(){
 	cube1->addShader(IdShader::color);
 	cube1->setPosition(30, 10, 50);
 	cube1->setScale(1, 1, 1);
-	AddRigidBody(cube1);
+	AddRigidBody(cube1, 1);
 
 	cube2 = InstanceGameObject(); 
 	cube2->addModel(m_SphereModel);  
@@ -31,7 +31,7 @@ void MyApplication::start(){
 	cube2->addTexture(Constants::WALL01);
 	cube2->setPosition(40, 10, 50);
 	cube2->setScale(1, 1, 1);
-	AddRigidBody(cube2);
+	AddRigidBody(cube2, 0);
 
 	cube3 = InstanceGameObject();
 	cube3->addModel(m_CubeModel);
@@ -40,7 +40,7 @@ void MyApplication::start(){
 	cube3->addTexture(Constants::ICE);
 	cube3->setPosition(50, 10, 50 );
 	cube3->setScale(1, 1, 1);
-	AddRigidBody(cube3);
+	AddRigidBody(cube3, 1);
 
 	cube4 = InstanceGameObject(); 
 	cube4->addModel(m_CubeModel);  
@@ -48,7 +48,7 @@ void MyApplication::start(){
 	cube4->addTexture(Constants::METAL);
 	cube4->setPosition(60, 10, 50);
 	cube4->setScale(1, 1, 1);
-	AddRigidBody(cube4);
+	AddRigidBody(cube4, 1);
 
 	cube5 = InstanceGameObject();
 	cube5->addModel(m_CubeModel);

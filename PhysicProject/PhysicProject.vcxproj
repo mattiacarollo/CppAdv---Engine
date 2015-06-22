@@ -69,6 +69,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionType.h" />
+    <ClInclude Include="Forces.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Physic.h" />
     <ClInclude Include="Quaternion.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionType.cpp" />
+    <ClCompile Include="Forces.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Physic.cpp" />
     <ClCompile Include="Quaternion.cpp" />

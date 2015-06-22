@@ -8,6 +8,7 @@
 #include "Vector3.h"
 #include "RigidBody.h"
 #include "SphereCollider.h"
+#include "Forces.h"
 
 #include <DirectXMath.h>
 #include <vector>
@@ -28,7 +29,7 @@ public:
 	void addModel(Model* modelId) { m_Model = modelId; };
 	void addShader(IdShader shaderId) { m_idShader = shaderId; };
 	void addTexture(const WCHAR* textureId) {	m_textures.push_back(m_TextureManager->GetTexture(textureId));	};
-	void addRigidBody();
+	void addRigidBody(int type);
 
 	void setPosition(float, float, float);
 	void setScale(float x, float y, float z) { m_scale = { x, y, z }; };
@@ -38,8 +39,6 @@ public:
 	RigidBody& getRigidbody() const { return *m_pRigidbody; };
 
 	bool render(XMMATRIX&, XMMATRIX&, XMMATRIX&);
-
-	Vector3 SphereInertia(float mass, float radius);
 	
 	bool isRigidBody() const;
 

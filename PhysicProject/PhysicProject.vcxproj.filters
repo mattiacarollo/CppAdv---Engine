@@ -75,6 +75,9 @@
     <ClInclude Include="Matrix.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="Forces.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Forces.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>

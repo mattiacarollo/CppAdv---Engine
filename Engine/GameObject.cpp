@@ -19,17 +19,18 @@ void GameObject::setPosition(float x, float y, float z)
 	}
 }
 
-
-Vector3 GameObject::SphereInertia(float mass, float radius)
+void GameObject::addRigidBody(int type)
 {
-	//inertia moment of full sphere (I = 2/5 * (m*r^2))
-	float inertia = 2 * mass*radius*radius / 5;
-	return Vector3(inertia, inertia, inertia);
-}
-
-void GameObject::addRigidBody()
-{
-	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, SphereInertia(100.0f, 5.0f));
+	Vector3 inertia;
+	if (type == 0)
+	{
+		inertia = Pns::Forces::SphereInertia(100.0f, 5.0f);
+	}
+	else
+	{
+		inertia = Pns::Forces::CubeInertia(100.f, 10.f, 10.f, 10.f);
+	}
+	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, inertia);
 
 	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 1.0);
 	m_pRigidbody->AttachCollider(sC0);

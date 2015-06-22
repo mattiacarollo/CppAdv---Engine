@@ -463,9 +463,9 @@ void GraphicsManager::addWindows(GameObject* object){
 
 }
 
-void GraphicsManager::AddRigidBody(GameObject* object)
+void GraphicsManager::AddRigidBody(GameObject* object, int type)
 {
-	object->addRigidBody();
+	object->addRigidBody(type);
 
 	m_Phisic->AddRigidBody(object->getRigidbody(), (object->getRigidbody()).GetID());
 }
