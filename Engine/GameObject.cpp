@@ -27,7 +27,7 @@ void GameObject::setPosition(float x, float y, float z)
 
 
 
-void GameObject::addRigidBody( int type, float mass)
+void GameObject::addRigidBody(int type, float mass)
 {
 	Vector3 inertia;
 	if (type == 0)
@@ -38,16 +38,15 @@ void GameObject::addRigidBody( int type, float mass)
 	{
 		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
 	}
-
 	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
 	
 	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), m_radius);
 	m_pRigidbody->AttachCollider(sC0);
 	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
 
-	m_position = m_pRigidbody->GetPosition();
-	
-	m_pRigidbody->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	//m_position = m_pRigidbody->GetPosition();
+	//
+	//m_pRigidbody->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
 }
 
 

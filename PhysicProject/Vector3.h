@@ -64,7 +64,6 @@ public:
 	};
 
 private:
-	//float v[3];
 	DirectX::XMFLOAT3 v;
 };
 

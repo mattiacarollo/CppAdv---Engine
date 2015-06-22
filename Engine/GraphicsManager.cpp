@@ -24,7 +24,7 @@ GraphicsManager::~GraphicsManager()
 }
 
 
-bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Physic * physic)
+bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Physic* physic)
 {
 	m_D3D = D3D;
 	m_Camera = camera;
