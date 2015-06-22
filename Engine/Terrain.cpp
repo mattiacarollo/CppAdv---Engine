@@ -206,7 +206,7 @@ bool Terrain::InitializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
-
+	instances[0].position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	// Set up the description of the instance buffer.
 	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	instanceBufferDesc.ByteWidth = sizeof(utility::InstanceType) * 1;

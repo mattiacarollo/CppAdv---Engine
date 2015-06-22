@@ -57,29 +57,29 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 	switch (m_idShader){
 	case color:
 	{
-		m_idModel->Render();
-		result = m_ShaderManager->RenderColorShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
+		m_Model->Render();
+		result = m_ShaderManager->RenderColorShader(m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
 		if (!result)	{ return false; }
 	}
 		break;
 	case depth :
 	{
-		m_idModel->Render();
-		result = m_ShaderManager->RenderDepthShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
+		m_Model->Render();
+		result = m_ShaderManager->RenderDepthShader(m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
 		if (!result)	{ return false; }
 	}
 		break;
 	case texture :
 	{
-		m_idModel->Render();
+		m_Model->Render();
 		if (m_textures.size() == 1){
-			result = m_ShaderManager->RenderTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.at(0));
+			result = m_ShaderManager->RenderTextureShader(m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.at(0));
 		}
 		else if (m_textures.size() == 0){
-			result = m_ShaderManager->RenderColorShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
+			result = m_ShaderManager->RenderColorShader(m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
 		}
 		else {
-			result = m_ShaderManager->RenderMultiTextureShader(m_idModel->GetVertexCount(), m_idModel->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.data());
+			result = m_ShaderManager->RenderMultiTextureShader(m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_textures.data());
 		}
 		if (!result)	{ return false; }
 	}

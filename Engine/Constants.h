@@ -2,8 +2,12 @@
 
 namespace Constants
 {
+	const int MAX_MODELS = 300;
+
 	const char* const CUBE = "../Engine/data/Models/cube.txt";
+	const int CUBE_MORE_INSTANCES = 0;
 	const char* const SPHERE = "../Engine/data/Models/sphere.txt";
+	const int SPHERE_MORE_INSTANCES = 0;
 
 	const WCHAR* const WALL01 = L"../Engine/data/Textures/wall01.dds";
 	const WCHAR* const WALL02 = L"../Engine/data/Textures/wall02.dds";
@@ -24,4 +28,13 @@ namespace Constants
 	const bool VSYNC_ENABLED = true;
 	const float SCREEN_DEPTH = 100.0f;
 	const float SCREEN_NEAR = 1.0f;
+
+	const float PARTICLE_DEVIATIONX = 0.5f;
+	const float PARTICLE_DEVIATIONY = 0.1f;
+	const float PARTICLE_DEVIATIONZ= 2.0f;
+	const float PARTICLE_VELOCITY = 1.0f;
+	const float PARTICLE_VELOCITY_VARIATION = 0.2f;
+	const float PARTICLE_SIZE = 0.2f;
+	const float PARTICLE_PER_SECOND = 250.0f;
+	const float PARTICLE_MAX_NUMBERS = 5000;
 }

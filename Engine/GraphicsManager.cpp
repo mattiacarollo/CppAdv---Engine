@@ -55,7 +55,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 	// Create, initialize and set position of the CUBE model object.
 	m_CubeModel = new Model;
 	if (!m_CubeModel)	{ return false; }
-	result = m_CubeModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), Constants::CUBE, 0);
+	result = m_CubeModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), Constants::CUBE, Constants::CUBE_MORE_INSTANCES);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cube model object.", L"Error", MB_OK);
@@ -65,7 +65,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 	// Create, initialize and set position of the SPHERE model object.
 	m_SphereModel = new Model;
 	if (!m_SphereModel)	{ return false; }
-	result = m_SphereModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), Constants::SPHERE, 0);
+	result = m_SphereModel->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), Constants::SPHERE, Constants::SPHERE_MORE_INSTANCES);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the sphere model object.", L"Error", MB_OK);

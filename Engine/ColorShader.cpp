@@ -67,7 +67,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
 	ID3D10Blob* errorMessage;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[2]; //Deve matchare VertexType in modelClass
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[3]; //Deve matchare VertexType in modelClass
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 
@@ -131,6 +131,14 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT; // Color è storato dopo POSITION (16Byte)
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
+
+	polygonLayout[2].SemanticName = "TEXCOORD";
+	polygonLayout[2].SemanticIndex = 1;
+	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[2].InputSlot = 1;
+	polygonLayout[2].AlignedByteOffset = 0;
+	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	polygonLayout[2].InstanceDataStepRate = 1;
 
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);

@@ -75,7 +75,7 @@ bool DepthShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[1];
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 
@@ -132,6 +132,14 @@ bool DepthShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	polygonLayout[0].AlignedByteOffset = 0;
 	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[0].InstanceDataStepRate = 0;
+
+	polygonLayout[1].SemanticName = "TEXCOORD";
+	polygonLayout[1].SemanticIndex = 1;
+	polygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[1].InputSlot = 1;
+	polygonLayout[1].AlignedByteOffset = 0;
+	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	polygonLayout[1].InstanceDataStepRate = 1;
 
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);

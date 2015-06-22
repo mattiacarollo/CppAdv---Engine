@@ -4,6 +4,7 @@
 #include "GraphicsManager.h"
 #include "GameObject.h"
 #include "Physic.h"
+#include "Constants.h"
 #include <iostream>
 #include <vector>
 
@@ -16,6 +17,8 @@ class MyApplication : public GraphicsManager {
 public :
 	void start() override;
 	void update() override;
+
+	std::vector<GameObject*> m_GameObjectPool;
 
 	GameObject* cube1;
 	GameObject* cube2;

@@ -137,7 +137,7 @@ bool Model::InitializeBuffers(ID3D11Device* device, unsigned int moreInstances)
 	instances[0].position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	for (int i = 0; i < m_instanceCount-1; i++)
 	{// Load the instance array with data.
-		instances[i + 1].position = DirectX::XMFLOAT3(rand() % 50, 0, rand() % 30); //crea le copie del modello in posizione random su x ed z
+		instances[i + 1].position = DirectX::XMFLOAT3(rand() % 60 + (-30), 0, rand() % 60 + (-30)); //crea le copie del modello in posizione random su x ed z
 	}
 
 	// Set up the description of the instance buffer.
