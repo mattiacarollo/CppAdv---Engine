@@ -68,5 +68,5 @@ private:
 	Frustum* m_Frustum;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
-	Physic* m_Phisic;
+	Physic* m_Physic;
 };
