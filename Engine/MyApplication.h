@@ -17,8 +17,9 @@ public :
 	void start() override;
 	void update() override;
 
-	GameObject* cube;
+	GameObject* cube1;
 	GameObject* cube2;
 	GameObject* cube3;
 	GameObject* cube4;
+	GameObject* cube5;
 };

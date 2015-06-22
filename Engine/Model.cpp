@@ -19,7 +19,7 @@ Model::~Model()
 }
 
 
-bool Model::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char* modelFilename, unsigned int moreInstances)
+bool Model::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const char* modelFilename, unsigned int moreInstances)
 {
 	bool result;
 	m_deviceContext = deviceContext;
@@ -252,7 +252,7 @@ void Model::RenderBuffers()
 //}
 
 
-bool Model::LoadModel(char* filename)
+bool Model::LoadModel(const char* filename)
 {
 	ifstream fin;
 	char input;

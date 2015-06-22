@@ -17,6 +17,7 @@ public:
 	int GetModelsCount() { return m_SceneModelVector.size(); };
 	GameObject* getGameObject(int index) { return m_SceneModelVector[index]; };
 	void AddObject(GameObject* gameObject);
+	void Remove(int index);
 
 private:
 	std::vector<GameObject*> m_SceneModelVector;

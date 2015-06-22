@@ -38,7 +38,7 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	// Create and Initialize the DirectX object.
 	m_D3D = new DXManager;
 	if (!m_D3D) { return false; }
-	result = m_D3D->Initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
+	result = m_D3D->Initialize(screenWidth, screenHeight, Constants::VSYNC_ENABLED, hwnd, Constants::FULL_SCREEN, Constants::SCREEN_DEPTH, Constants::SCREEN_NEAR);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize Direct3D", L"Error", MB_OK);
