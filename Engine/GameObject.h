@@ -48,8 +48,7 @@ private :
 	Vector3 m_position;
 	Vector3 m_scale;
 	unsigned int m_Id;
-	float m_mass;
-	float m_radius;
+	float m_radius; // Frustum Culling
 	Model* m_Model;
 	IdShader m_idShader; // serie di if nel render
 	RigidBody* m_pRigidbody;
