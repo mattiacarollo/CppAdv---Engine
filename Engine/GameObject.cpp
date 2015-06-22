@@ -7,7 +7,7 @@ GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderMana
 	
 	m_Id = m_IdCount; 
 	GameObject::m_IdCount++;
-
+	m_radius = 1.f;
 	m_TextureManager = textureManager;
 	m_ShaderManager = shaderManager;
 	m_position = {0.0f , 0.0f, 0.0f};
@@ -32,11 +32,11 @@ void GameObject::addRigidBody( int type, float mass)
 	Vector3 inertia;
 	if (type == 0)
 	{
-		inertia = Pns::Forces::SphereInertia(100.0f, 5.0f);
+		inertia = Pns::Forces::SphereInertia(mass, m_radius);
 	}
 	else
 	{
-		inertia = Pns::Forces::CubeInertia(100.f, 10.f, 10.f, 10.f);
+		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
 	}
 
 	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);

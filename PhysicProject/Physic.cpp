@@ -27,9 +27,9 @@ void Physic::ComputePhysic()
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
-		m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
-		/*m_RigidBodyList[i]->DoPhysicMove(Physic::mk_fDeltaTime, direction);
-		direction *= -1;*/
+		//m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
+		m_RigidBodyList[i]->DoPhysicMove(Physic::mk_fDeltaTime, direction);
+		direction *= -1;
 	}
 
 

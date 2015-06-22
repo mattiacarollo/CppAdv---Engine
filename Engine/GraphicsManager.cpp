@@ -28,7 +28,7 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 {
 	m_D3D = D3D;
 	m_Camera = camera;
-	m_Phisic = physic;
+	m_Physic = physic;
 
 	bool result;
 
@@ -200,7 +200,7 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 	m_TextDrawer->endDraw();
 	m_D3D->TurnZBufferOn();
 
-	m_Phisic->ComputePhysic();
+	m_Physic->ComputePhysic();
 	m_ParticleSystem->Frame(frameTime, m_D3D->GetDeviceContext());
 
 	//------------------------- Update di MyApplication --------------------------
@@ -467,5 +467,5 @@ void GraphicsManager::AddRigidBody(GameObject* object, int type, float mass)
 {
 	object->addRigidBody(type, mass);
 
-	m_Phisic->AddRigidBody(object->getRigidbody(), (object->getRigidbody()).GetID());
+	m_Physic->AddRigidBody(object->getRigidbody(), (object->getRigidbody()).GetID());
 }
