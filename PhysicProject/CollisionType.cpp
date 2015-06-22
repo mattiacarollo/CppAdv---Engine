@@ -30,8 +30,10 @@ bool CollisionType::CollisionDetectionSphereSphere(Collider* colliderRb0, Collid
 
 void CollisionType::ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, Collider* colliderRb0, Collider* colliderRb1)
 {
-	//Vector3 force = rigidbody0.GetVelocity() - rigidbody1.GetVelocity();
-	Vector3 force = rigidbody0.GetVelocity() + rigidbody1.GetVelocity();
+	Vector3 force = rigidbody0.GetVelocity() - rigidbody1.GetVelocity();
+	//Vector3 force = rigidbody0.GetVelocity() + rigidbody1.GetVelocity();
+	
+	//force *= -1;
 
 	Vector3 centersDistance = colliderRb0->GetWorldPosition() - colliderRb1->GetWorldPosition();
 	centersDistance.Normalize();

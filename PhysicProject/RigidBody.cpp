@@ -93,7 +93,7 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	tmp = m_vVelocity * DeltaTime;
 	m_vPosition += tmp;
 
-	//MatriceOp::Rotate<MatriceOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
+	MatrixOp::Rotate<MatrixOp::ToObjSpace>(m_mRotationMatrix, m_vAngularMomentum, m_vAngularVelocity);
 
 	m_vAngularVelocity.SetX(m_vAngularVelocity.getX() / m_vInertia.getX());
 	m_vAngularVelocity.SetY(m_vAngularVelocity.getY() / m_vInertia.getY());
@@ -104,7 +104,7 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	Rot.Normalize();
 	m_qRotation = m_qRotation * Rot;
 	m_qRotation.Normalize();
-	//MatriceOp::Rotate<MatriceOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
+	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(m_mRotationMatrix, m_vAngularVelocity, m_vAngularVelocity);
 
 	m_mRotationMatrix = m_qRotation.ToMatrix();
 
@@ -120,27 +120,27 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	//	if (d > 0) m_vForceSum[1] += d;
 	//}
 
-	/*if (5 - m_vPosition[0] < 1) {
-	float d = 1 - (5 - m_vPosition[0]);
-	d *= 4000;
-	d -= m_vVelocity[1] * 50;
-	if (d > 0) m_vForceSum[0] -= d;
-	}
+	//if (5 - m_vPosition[0] < 1) {
+	//	float d = 1 - (5 - m_vPosition[0]);
+	//	d *= 4000;
+	//	d -= m_vVelocity[1] * 50;
+	//	if (d > 0) m_vForceSum[0] -= d;
+	//}
 
-	if (m_vPosition[0] + 5 < 1)
-	{
-	float d = 1 - (m_vPosition[0] + 5);
-	d *= 4000;
-	d += m_vVelocity[1] * 50;
-	if (d > 0) m_vForceSum[0] += d;
-	}*/
+	//if (m_vPosition[0] + 5 < 1)
+	//{
+	//	float d = 1 - (m_vPosition[0] + 5);
+	//	d *= 4000;
+	//	d += m_vVelocity[1] * 50;
+	//	if (d > 0) m_vForceSum[0] += d;
+	//}
 }
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
 {
 	SumForceToTotalForce(force);
 	Vector3 ForceOnPoint(pointOfApplication-m_vPosition);
-	//VectorialProduct(ForceOnPoint, force, ForceOnPoint);
+	VectorOp::VectorialProduct(ForceOnPoint, force, ForceOnPoint);
 	SumMomentumToTotalMomentum(ForceOnPoint);
 }
 
