@@ -58,6 +58,7 @@ public:
 	float Modulus() const;
 	float SqrMagnitude() const;
 	void Normalize();
+
 	DirectX::XMFLOAT3 convertToXMFloat3() const {	
 		return v;
 	};
