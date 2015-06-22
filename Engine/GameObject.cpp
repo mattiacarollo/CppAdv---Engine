@@ -31,7 +31,7 @@ void GameObject::addRigidBody()
 {
 	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
-	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 5.0);
+	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 1.0);
 	m_pRigidbody->AttachCollider(sC0);
 	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
 

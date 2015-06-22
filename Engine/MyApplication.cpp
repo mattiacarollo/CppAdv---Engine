@@ -52,7 +52,7 @@ void MyApplication::start(){
 
 	cube5 = InstanceGameObject();
 	cube5->addModel(m_CubeModel);
-	cube5->addShader(IdShader::depth);
+	cube5->addShader(IdShader::color);
 	cube5->setPosition(70, 10, 50);
 	cube5->setScale(1, 1, 1);
 	

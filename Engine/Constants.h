@@ -2,7 +2,7 @@
 
 namespace Constants
 {
-	const int MAX_MODELS = 300;
+	const int MAX_MODELS = 0;
 
 	const char* const CUBE = "../Engine/data/Models/cube.txt";
 	const int CUBE_MORE_INSTANCES = 0;
