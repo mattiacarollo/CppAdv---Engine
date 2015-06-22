@@ -28,7 +28,7 @@ public:
 	void addModel(Model* modelId) { m_Model = modelId; };
 	void addShader(IdShader shaderId) { m_idShader = shaderId; };
 	void addTexture(const WCHAR* textureId) {	m_textures.push_back(m_TextureManager->GetTexture(textureId));	};
-	void addRigidBody();
+	void addRigidBody(float mass=10);
 
 	void setPosition(float, float, float);
 	void setScale(float x, float y, float z) { m_scale = { x, y, z }; };
@@ -42,7 +42,7 @@ public:
 	Vector3 SphereInertia(float mass, float radius);
 	
 	bool isRigidBody() const;
-
+	static unsigned int m_IdCount;
 private :
 
 	Vector3 m_position;
@@ -56,4 +56,5 @@ private :
 
 	TextureManager* m_TextureManager;
 	ShaderManager* m_ShaderManager;	
+	
 };

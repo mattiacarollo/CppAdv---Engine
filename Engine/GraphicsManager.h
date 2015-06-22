@@ -41,7 +41,7 @@ protected:
 	virtual void start() = 0;
 	virtual void update() = 0;
 	GameObject* InstanceGameObject();
-	void AddRigidBody(GameObject *);
+	void AddRigidBody(GameObject *, float mass = 100);
 
 private:
 	bool RenderSceneToTexture();

@@ -1,7 +1,13 @@
 #include "GameObject.h"
 
+unsigned int GameObject::m_IdCount = 0;
+
 GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderManager)
 {	
+	
+	m_Id = m_IdCount; 
+	GameObject::m_IdCount++;
+
 	m_TextureManager = textureManager;
 	m_ShaderManager = shaderManager;
 	m_position = {0.0f , 0.0f, 0.0f};
@@ -27,11 +33,12 @@ Vector3 GameObject::SphereInertia(float mass, float radius)
 	return Vector3(inertia, inertia, inertia);
 }
 
-void GameObject::addRigidBody()
+void GameObject::addRigidBody(float mass )
 {
-	m_pRigidbody = new RigidBody(Vector3(this->getPosition().x, this->getPosition().y, this->getPosition().z), 0, 100.0f, SphereInertia(100.0f, 5.0f));
 
-	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), 1.0);
+	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, SphereInertia(100.0f, 5.0f));
+	
+	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), m_radius);
 	m_pRigidbody->AttachCollider(sC0);
 	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
 

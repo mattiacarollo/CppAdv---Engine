@@ -10,7 +10,7 @@ void MyApplication::start(){
 		GameObject* temp;
 		temp = InstanceGameObject();
 		temp->addModel(m_CubeModel);
-		temp->setID(i);
+		//temp->setID(i);
 		temp->setPosition(rand() % 100, rand() % 10, rand() % 100);
 		temp->addShader(IdShader::color);
 		temp->setScale(1, 1, 1);
@@ -29,9 +29,9 @@ void MyApplication::start(){
 	cube2->addShader(IdShader::texture);
 	cube2->addTexture(Constants::METAL);
 	cube2->addTexture(Constants::WALL01);
-	cube2->setPosition(40, 10, 50);
+	cube2->setPosition(30, 20, 50);
 	cube2->setScale(1, 1, 1);
-	AddRigidBody(cube2);
+	AddRigidBody(cube2, 200);
 
 	cube3 = InstanceGameObject();
 	cube3->addModel(m_SphereModel);  
@@ -40,7 +40,7 @@ void MyApplication::start(){
 	cube3->addTexture(Constants::ICE);
 	cube3->setPosition(50, 10, 50 );
 	cube3->setScale(1, 1, 1);
-	AddRigidBody(cube3);
+	AddRigidBody(cube3, 300);
 
 	cube4 = InstanceGameObject(); 
 	cube4->addModel(m_CubeModel);  
@@ -48,7 +48,7 @@ void MyApplication::start(){
 	cube4->addTexture(Constants::METAL);
 	cube4->setPosition(60, 10, 50);
 	cube4->setScale(1, 1, 1);
-	AddRigidBody(cube4);
+	AddRigidBody(cube4, 600);
 
 	cube5 = InstanceGameObject();
 	cube5->addModel(m_CubeModel);
@@ -60,6 +60,9 @@ void MyApplication::start(){
 
 
 void MyApplication::update(){
+	static float i = 0;
+	i+= 0.1f;
 	
+	cube5->setPosition(i, cube5->getPosition().y, cube5->getPosition().z);
 
 }
