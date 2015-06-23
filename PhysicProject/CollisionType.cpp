@@ -14,7 +14,7 @@ bool CollisionType::CollisionDetectionSphereSphere(Collider* colliderRb0, Collid
 	// Calculate squared distance between centers
 	Vector3 centersDistance = colliderRb0->GetWorldPosition() - colliderRb1->GetWorldPosition();
 	float distance = VectorOp::DotProduct(centersDistance, centersDistance);
-	SphereCollider* mssss = ((SphereCollider*)colliderRb1);
+
 	// Spheres intersect if squared distance is less than squared sum of radii
 	float radiusSum = ((SphereCollider*)colliderRb0)->GetRadius() + ((SphereCollider*)colliderRb1)->GetRadius();
 
@@ -31,7 +31,6 @@ bool CollisionType::CollisionDetectionSphereSphere(Collider* colliderRb0, Collid
 void CollisionType::ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, Collider* colliderRb0, Collider* colliderRb1)
 {
 	Vector3 force = rigidbody0.GetVelocity() - rigidbody1.GetVelocity();
-	//Vector3 force = rigidbody0.GetVelocity() + rigidbody1.GetVelocity();
 
 	Vector3 centersDistance = colliderRb0->GetWorldPosition() - colliderRb1->GetWorldPosition();
 	centersDistance.Normalize();

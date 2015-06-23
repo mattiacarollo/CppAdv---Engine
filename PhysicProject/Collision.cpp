@@ -51,6 +51,50 @@ void Collision::ApplyCollision()
 	m_firstObj->ApplyForce(m_vnormal, m_vpointOfApplication);
 	m_secondObj->ApplyForce(m_vnormal*-1.0f, m_vpointOfApplication);
 
+	///-----------------MARABESE
+	//float f;
+	//float vn;
+	//float modVtang;
+	//Vector3 Vtang, Ftang, Fnorm;
+
+	//vn = VectorOp::DotProduct(m_vforce, m_vnormal);
+	//Vtang = m_vnormal;
+	//Vtang *= vn;
+	//Vtang -= m_vforce;
+
+	//f = (600.f * m_fDeformation) + (100.f * vn); //600.f=K , 100.f=L
+	//if (f < 0) f = 0;
+	//Fnorm = m_vnormal;
+	//Fnorm *= f;
+
+	//f *= 5; //5=m		// forza attrito (modulo)
+	//modVtang = Vtang.Modulus();
+	//Ftang = Vtang;
+	//Ftang *= f;
+
+	//if (modVtang > 9.8f * 0.025f)	//0.025 --> DT
+	//{
+	//	Ftang /= modVtang;
+	//}
+	//else
+	//{
+	//	Ftang /= (9.8f * 0.025f);//0.025 --> DT
+	//}
+
+	//Fnorm += Ftang;	// ora Fnorm e' la F totale
+
+	//if (m_firstObj != NULL) 
+	//	m_firstObj->ApplyForce(Fnorm, m_vpointOfApplication);
+	//Fnorm[0] = -Fnorm[0];
+	//Fnorm[1] = -Fnorm[1];
+	//Fnorm[2] = -Fnorm[2];
+	//if (m_secondObj != NULL)
+	//	m_secondObj->ApplyForce(Fnorm, m_vpointOfApplication);
+
+
+
+
+
 	/*float m1, m2, x1, x2;
 	Vector3 v1, v2, v1x, v2x, v1y, v2y;
 

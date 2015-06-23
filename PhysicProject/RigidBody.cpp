@@ -120,20 +120,20 @@ void RigidBody::DoPhysicMove(float DeltaTime, float direction)
 	//	if (d > 0) m_vForceSum[1] += d;
 	//}
 
-	/*if (5 - m_vPosition[0] < 1) {
-	float d = 1 - (5 - m_vPosition[0]);
-	d *= 4000;
-	d -= m_vVelocity[1] * 50;
-	if (d > 0) m_vForceSum[0] -= d;
-	}
+	//if (5 - m_vPosition[0] < 1) {
+	//	float d = 1 - (5 - m_vPosition[0]);
+	//	d *= 4000;
+	//	d -= m_vVelocity[1] * 50;
+	//	if (d > 0) m_vForceSum[0] -= d;
+	//}
 
-	if (m_vPosition[0] + 5 < 1)
-	{
-	float d = 1 - (m_vPosition[0] + 5);
-	d *= 4000;
-	d += m_vVelocity[1] * 50;
-	if (d > 0) m_vForceSum[0] += d;
-	}*/
+	//if (m_vPosition[0] + 5 < 1)
+	//{
+	//	float d = 1 - (m_vPosition[0] + 5);
+	//	d *= 4000;
+	//	d += m_vVelocity[1] * 50;
+	//	if (d > 0) m_vForceSum[0] += d;
+	//}
 }
 
 void RigidBody::ApplyForce(const Vector3& force, const Vector3& pointOfApplication)
