@@ -109,8 +109,6 @@ private:
 };
 
 
-
-
 namespace MatrixOp{
 
 	template<int Row, int Col, int secondMatrixCol>

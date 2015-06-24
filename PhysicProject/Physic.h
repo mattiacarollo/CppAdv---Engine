@@ -1,11 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <stdio.h>
 #include "Vector3.h"
 #include "RigidBody.h"
-#include "CollisionType.h"
+#include "CollisionDetector.h"
 
-class CollisionType;
+class CollisionDetector;
 class RigidBody;
 
 typedef std::vector<RigidBody*> RigidBodyList;
@@ -32,5 +33,5 @@ private:
 	RigidBodyID m_RigidBodyID;
 	RigidBodyList m_RigidBodyList;
 
-	CollisionType* m_CollisionType;
+	CollisionDetector* m_CollisionDetector;
 };

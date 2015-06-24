@@ -7,7 +7,6 @@
 
 #include "Vector3.h"
 #include "RigidBody.h"
-#include "SphereCollider.h"
 #include "Forces.h"
 
 #include <DirectXMath.h>
@@ -56,5 +55,4 @@ private :
 
 	TextureManager* m_TextureManager;
 	ShaderManager* m_ShaderManager;	
-	
 };

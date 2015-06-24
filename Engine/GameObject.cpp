@@ -20,7 +20,8 @@ GameObject::~GameObject()
 void GameObject::setPosition(float x, float y, float z)
 {
 	m_position = { x, y, z };
-	if (isRigidBody() == true){
+	if (isRigidBody() == true)
+	{
 		m_pRigidbody->SetPosition(m_position);
 	}
 }
@@ -37,13 +38,18 @@ void GameObject::addRigidBody(int type, float mass)
 	{
 		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
 	}
-	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
 	
-	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), m_radius);
-	m_pRigidbody->AttachCollider(sC0);
-	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
-}
+	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
+	m_pRigidbody->SetColliderType(type);
 
+	if (type == 0)
+	{
+		m_pRigidbody->SetRadius(m_radius);
+	}
+	else
+	{
+	}
+}
 
 bool GameObject::isRigidBody() const
 {

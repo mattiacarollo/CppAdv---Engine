@@ -65,29 +65,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BoxCollider.h" />
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
-    <ClInclude Include="CollisionType.h" />
+    <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Forces.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Physic.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="RigidBody.h" />
-    <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BoxCollider.cpp" />
-    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="CollisionType.cpp" />
+    <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="Forces.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Physic.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="RigidBody.cpp" />
-    <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
