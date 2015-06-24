@@ -19,7 +19,10 @@ public:
 	void UpdateMovement(float DeltaTime);
 	void ApplyForce(const Vector3& force, const Vector3& pointOfApplication);
 
+	void SetK(float value) { m_fK = value; };
+	void SetL(float value) { m_fL = value; };
 	void SetForceSum(Vector3& v){ m_vForceSum = v; };
+	void SetMomentumSum(Vector3& v){ m_vMomentumSum = v; };
 	void SetPosition(const Vector3& v){ m_vPosition = v; };
 	void SetVelocity(const Vector3& v){ m_vVelocity = v; };
 	void SetRadius(float value){ radius = value; };

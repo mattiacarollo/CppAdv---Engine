@@ -36,6 +36,7 @@ void GameObject::addRigidBody(int type, float mass)
 	}
 	else
 	{
+		//... modificare i valori che passo
 		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
 	}
 	
@@ -45,9 +46,14 @@ void GameObject::addRigidBody(int type, float mass)
 	if (type == 0)
 	{
 		m_pRigidbody->SetRadius(m_radius);
+		m_pRigidbody->SetK(1200.0f);
+		m_pRigidbody->SetL(100.0f);
 	}
 	else
 	{
+		//....
+		m_pRigidbody->SetK(600.0f);
+		m_pRigidbody->SetL(100.0f);
 	}
 }
 

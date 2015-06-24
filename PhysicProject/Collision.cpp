@@ -46,6 +46,6 @@ void Collision::ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodyse
 	}
 	if (rigidbodysecond != NULL)
 	{
-		rigidbodysecond->ApplyForce(Fnorm * -1, m_vInpactPoint);
+		rigidbodysecond->ApplyForce(Fnorm * -1.0f, m_vInpactPoint);
 	}
 }

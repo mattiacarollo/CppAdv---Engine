@@ -28,6 +28,8 @@ void Physic::ComputePhysic()
 	{
 		m_RigidBodyList[i]->SetForceSum(Physic::mk_vGravity * m_RigidBodyList[i]->GetMass());
 		m_RigidBodyList[i]->UpdateMovement(Physic::mk_fDeltaTime);
+		m_RigidBodyList[i]->SetForceSum(VectorOp::Zero);
+		m_RigidBodyList[i]->SetMomentumSum(VectorOp::Zero);
 	}
 
 

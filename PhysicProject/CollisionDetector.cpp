@@ -12,9 +12,9 @@ CollisionDetector::~CollisionDetector()
 //SPHERE-PLANE
 bool CollisionDetector::CollisionDetectionSpherePlane(RigidBody& rigidbody0)
 {
-	// troviamo il punto di contatto della sfera verso il piano
-	Vector3 temp = { 0.f, -1.f, 0.f };
-	m_Collision->SetInpactPoint(temp);
+	Vector3 temp = { 0.f, 1.f, 0.f };	// normale del piano (0, 1, 0)
+
+	m_Collision->SetInpactPoint(temp * -1);
 	m_Collision->SetInpactPoint( 
 		m_Collision->GetInpactPoint() * rigidbody0.GetRadius() 
 		);
@@ -29,17 +29,21 @@ bool CollisionDetector::CollisionDetectionSpherePlane(RigidBody& rigidbody0)
 		rigidbody0.GetVelocity() + m_Collision->GetInpactVelocity()
 		);
 
-	//c[0].deformation = -(A * c[0].inpactPoint[0] + B * c[0].inpactPoint[1] + C * c[0].inpactPoint[2] + D);
 	m_Collision->SetDeformation(
-		-(/*0.0f * m_Collision->GetInpactPoint()*/ + 5.0f)
+		((m_Collision->GetInpactPoint()).getX() * 0.0f +
+		(m_Collision->GetInpactPoint()).getY() * 1.0f +
+		(m_Collision->GetInpactPoint()).getZ() * 0.0f + 0.0f) * -1
 		);
 	
+	// Se Deformazione = 0 allora sono sul piano
+	// Se Deformazione < 0 allora sono sopra al piano
+	// Se Deformazione > 0 allora lo sto compenetrando
 	if (m_Collision->GetDeformation() < 0)
 	{
 		return false;
 	}
 
-	temp = { 0.f, -1.f, 0.f };
+	temp = { 0.f, 1.f, 0.f };
 	m_Collision->SetNormalVector(temp);
 
 	m_Collision->SetInpactVelocity(m_Collision->GetInpactVelocity() * -1.0f);
