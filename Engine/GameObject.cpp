@@ -37,7 +37,8 @@ void GameObject::addRigidBody(int type, float mass)
 	else
 	{
 		//... modificare i valori che passo
-		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
+		inertia = Pns::Forces::CubeInertia(mass, 1.f, 1.f, 1.f);
+		//inertia = Pns::Forces::CubeInertia(mass, 1.f, 1.f);
 	}
 	
 	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
@@ -51,7 +52,10 @@ void GameObject::addRigidBody(int type, float mass)
 	}
 	else
 	{
-		//....
+		m_pRigidbody->SetSemiX(m_radius / 2);
+		m_pRigidbody->SetSemiY(m_radius / 2);
+		m_pRigidbody->SetSemiZ(m_radius / 2);
+		m_pRigidbody->SetVerteces();
 		m_pRigidbody->SetK(600.0f);
 		m_pRigidbody->SetL(100.0f);
 	}

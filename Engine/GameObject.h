@@ -29,7 +29,7 @@ public:
 	void addShader(IdShader shaderId) { m_idShader = shaderId; };
 	void addTexture(const WCHAR* textureId) {	m_textures.push_back(m_TextureManager->GetTexture(textureId));	};
 
-	void addRigidBody(int type, float mass = 10);
+	void addRigidBody(int type, float mass = 5);
 
 	void setPosition(float, float, float);
 	void setScale(float x, float y, float z) { m_scale = { x, y, z }; };

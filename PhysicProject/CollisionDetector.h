@@ -2,8 +2,9 @@
 
 #include "Collision.h"
 #include "RigidBody.h"
-//#include "Matrix.h"
 #include "Vector3.h"
+#include "Matrix.h"
+#include <vector>
 
 class RigidBody;
 class Collision;
@@ -12,10 +13,11 @@ class CollisionDetector
 public:
 	CollisionDetector();
 
+	//collision between rigidbody and plane
 	bool CollisionDetectionSpherePlane(RigidBody& rigidbody0);
-	bool CollisionDetectionCubePlane(RigidBody& rigidbody0);
+	int CollisionDetectionCubePlane(RigidBody& rigidbody0);
 	void ResolveCollisionSpherePlane(RigidBody& rigidbody0, float k, float l, float m);
-	void ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, float m);
+	void ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, float m, int nCollisions);
 
 	bool CollisionDetectionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1);
 	bool CollisionDetectionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1);
@@ -31,4 +33,5 @@ private:
 	CollisionDetector& operator=(const CollisionDetector& other);
 
 	Collision* m_Collision;
+	std::vector<Collision*> m_aCollision;
 };
