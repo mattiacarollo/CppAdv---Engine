@@ -23,13 +23,13 @@ void Physic::ComputePhysic()
 {
 	unsigned int i, j;
 	m_CollisionType = new CollisionType();
-	float direction = 1.0f;
+	float direction = 0.0f;
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
-		//m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
+		m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
 		m_RigidBodyList[i]->DoPhysicMove(Physic::mk_fDeltaTime, direction);
-		direction *= -1;
+		direction *= -1; // La prima palla muove in una direct, la seconda nell'opposta
 	}
 
 
