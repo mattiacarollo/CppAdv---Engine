@@ -20,14 +20,14 @@ GameObject::~GameObject()
 void GameObject::setPosition(float x, float y, float z)
 {
 	m_position = { x, y, z };
-	if (isRigidBody() == true){
+	if (isRigidBody() == true)
+	{
 		m_pRigidbody->SetPosition(m_position);
 	}
 }
 
 
-
-void GameObject::addRigidBody( int type, float mass)
+void GameObject::addRigidBody(int type, float mass)
 {
 	Vector3 inertia;
 	if (type == 0)
@@ -36,19 +36,26 @@ void GameObject::addRigidBody( int type, float mass)
 	}
 	else
 	{
+		//... modificare i valori che passo
 		inertia = Pns::Forces::CubeInertia(mass, 10.f, 10.f, 10.f);
 	}
-
-	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
 	
-	SphereCollider* sC0 = new SphereCollider(m_pRigidbody->GetPosition(), m_radius);
-	m_pRigidbody->AttachCollider(sC0);
-	m_pRigidbody->SetColliderType(RigidBody::ColliderTypeEnum::SPHERE);
+	m_pRigidbody = new RigidBody(Vector3(m_position.getX(), m_position.getY(), m_position.getZ()), GameObject::m_Id, mass, inertia);
+	m_pRigidbody->SetColliderType(type);
 
-	//m_position = m_pRigidbody->GetPosition();	
-	//m_pRigidbody->ApplyForce(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 3.0f, 4.0f));
+	if (type == 0)
+	{
+		m_pRigidbody->SetRadius(m_radius);
+		m_pRigidbody->SetK(1200.0f);
+		m_pRigidbody->SetL(100.0f);
+	}
+	else
+	{
+		//....
+		m_pRigidbody->SetK(600.0f);
+		m_pRigidbody->SetL(100.0f);
+	}
 }
-
 
 bool GameObject::isRigidBody() const
 {

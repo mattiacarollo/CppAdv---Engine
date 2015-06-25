@@ -22,7 +22,7 @@ void MyApplication::start(){
 	cube1->addShader(IdShader::color);
 	cube1->setPosition(50, 10, 50);
 	cube1->setScale(1, 1, 1);
-	AddRigidBody(cube1, 0, 100.0f);
+	AddRigidBody(cube1, 0, 15);
 
 	cube2 = InstanceGameObject(); 
 	cube2->addModel(m_SphereModel);  
@@ -31,7 +31,7 @@ void MyApplication::start(){
 	cube2->addTexture(Constants::WALL01);
 	cube2->setPosition(50, 20, 50);
 	cube2->setScale(1, 1, 1);
-	AddRigidBody(cube2, 0, 100.0f);
+	AddRigidBody(cube2, 0, 15);
 
 	//cube3 = InstanceGameObject();
 	//cube3->addModel(m_CubeModel);
@@ -64,5 +64,4 @@ void MyApplication::update(){
 	//i+= 0.1f;
 	//
 	//cube5->setPosition(i, cube5->getPosition().y, cube5->getPosition().z);
-
 }

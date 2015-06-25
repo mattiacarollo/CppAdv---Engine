@@ -63,6 +63,14 @@ Vector3& Vector3::operator/=(float scalar)
 	return *this;
 }
 
+Vector3& Vector3::operator/=(const Vector3& other)
+{
+	v.x /= other.getX();
+	v.y /= other.getY();
+	v.z /= other.getZ();
+	return *this;
+}
+
 Vector3 operator+(const Vector3& first, const Vector3& second)
 {
 	Vector3 result(first);

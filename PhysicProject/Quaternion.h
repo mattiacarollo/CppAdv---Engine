@@ -7,7 +7,6 @@ class Quaternion
 {
 
 public:
-	Matrix<3, 3> ToMatrix() const;
 	Quaternion();
 	Quaternion(float, float, float, float);
 	Quaternion(const Quaternion&);
@@ -21,6 +20,8 @@ public:
 	void Normalize();
 	float Modulus() const;
 	float GetValue(int i) const;
+
+	Matrix<3, 3> ToMatrix() const;
 
 private:
 	float q[4];

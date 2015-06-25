@@ -7,69 +7,45 @@ Collision::~Collision()
 {
 }
 
-Collision::Collision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float deformation, const Vector3& pointOfApplication, const Vector3& force, const Vector3& normal)
-	: m_firstObj(rigidbodyfirst),
-	  m_secondObj(rigidbodysecond),
-	  m_fDeformation(deformation),
-	  m_vpointOfApplication(pointOfApplication),
-	  m_vforce(force),
-	  m_vnormal(normal)
+void Collision::ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L, float m)
 {
-}
+	float force;
+	float vn;
+	float modVtang;
+	Vector3 Vtang, Ftang, Fnorm;
 
-void Collision::ApplyCollision()
-{
-	float force, modVtang;
-	float vn = VectorOp::DotProduct(m_vforce, m_vnormal);;
-	Vector3 Vnorm = m_vnormal*vn;
-	Vector3 Vtang = m_vforce - Vnorm;
+	vn = VectorOp::DotProduct(m_vInpactVelocity, m_vNormalVector);
+	Vtang = m_vNormalVector * vn;
+	Vtang = m_vInpactVelocity - Vtang;
 
-	// K = coefficente elastico L = coefficente anaelastico  TO DO
-	force = (0.5f * m_fDeformation) + (5.0f * vn);
-	m_vnormal *= force;
-
-	force *= 5;								// forza reagente (modulo) -> m = coefficente attrito TO DO
-	modVtang = Vtang.Modulus();
-
+	force = (K * m_fDeformation) + (L * vn);
 	if (force < 0)
 	{
 		force = 0;
 	}
+	Fnorm = m_vNormalVector * force;
 
-	Vtang *= force;
+	force *= m;							// forza attrito (modulo)
+	modVtang = Vtang.Modulus();
+	Ftang = Vtang * force;
+
 	if (modVtang > 9.8f * Physic::mk_fDeltaTime)
 	{
-		Vtang.Normalize();
+		Ftang /= modVtang;
 	}
 	else
 	{
-		Vtang /= (9.8f * Physic::mk_fDeltaTime);
+		Ftang /= (9.8f * Physic::mk_fDeltaTime);
 	}
 
-	m_vnormal += Vtang;
+	Fnorm += Ftang;	// ora Fnorm e' la F totale
 
-	m_firstObj->ApplyForce(m_vnormal, m_vpointOfApplication);
-	m_secondObj->ApplyForce(m_vnormal*-1.0f, m_vpointOfApplication);
-
-	/*float m1, m2, x1, x2;
-	Vector3 v1, v2, v1x, v2x, v1y, v2y;
-
-	v1 = m_firstObj->GetVelocity();
-	x1 = VectorOp::DotProduct(m_vnormal, v1);
-	v1x = m_vnormal * x1;
-	v1y = v1 - v1x;
-	m1 = m_firstObj->GetMass();
-
-	m_vnormal = m_vnormal * -1.0f;
-	v2 = m_secondObj->GetVelocity();
-	x2 = VectorOp::DotProduct(m_vnormal, v2);
-	v2x = m_vnormal * x2;
-	v2y = v2 - v2x;
-	m2 = m_secondObj->GetMass();
-
-	Vector3 firstRbVel = { v1x*(m1 - m2) / (m1 + m2) + v2x*(2 * m2) / (m1 + m2) + v1y };
-	Vector3 secondRbVel = { v1x*(2 * m1) / (m1 + m2) + v2x*(m2 - m1) / (m1 + m2) + v2y };
-
-	m_firstObj->SetVelocity(firstRbVel);
-	m_secondObj->SetVelocity(secondRbVel);*/
-};
+	if (rigidbodyfirst != NULL)
+	{
+		rigidbodyfirst->ApplyForce(Fnorm, m_vInpactPoint);
+	}
+	if (rigidbodysecond != NULL)
+	{
+		rigidbodysecond->ApplyForce(Fnorm * -1.0f, m_vInpactPoint);
+	}
+}

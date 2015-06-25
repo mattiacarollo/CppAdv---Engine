@@ -46,6 +46,17 @@ public:
 			m_matrix[i] = 0;
 		}
 	}
+	/*Matrix(){
+		m_matrix[0] = 1;
+		m_matrix[1] = 0;
+		m_matrix[2] = 0;
+		m_matrix[3] = 0;
+		m_matrix[4] = 0;
+		m_matrix[5] = 1;
+		m_matrix[6] = 0;
+		m_matrix[7] = 0;
+		m_matrix[8] = 1;
+	}*/
 
 	template<int OtherDim>
 	float MultiplyRowCol(int Nrow, int Ncol, const Matrix<Col, OtherDim>& secondMatrix) const
@@ -109,8 +120,6 @@ private:
 };
 
 
-
-
 namespace MatrixOp{
 
 	template<int Row, int Col, int secondMatrixCol>
@@ -126,7 +135,6 @@ namespace MatrixOp{
 			result.SetRow(i, rowR);
 		}
 	}
-
 
 	template<int Row, int Col>
 	void Rotate(const Matrix<Row, Col>& Matrix, const float* vector, float * result);

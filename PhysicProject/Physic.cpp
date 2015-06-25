@@ -22,24 +22,51 @@ Physic::~Physic()
 void Physic::ComputePhysic()
 {
 	unsigned int i, j;
-	m_CollisionType = new CollisionType();
-	float direction = 0.0f;
+	m_CollisionDetector = new CollisionDetector();
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
-		m_RigidBodyList[i]->DoPhysicJump(Physic::mk_fDeltaTime);
-		m_RigidBodyList[i]->DoPhysicMove(Physic::mk_fDeltaTime, direction);
-		direction *= -1; // La prima palla muove in una direct, la seconda nell'opposta
+		m_RigidBodyList[i]->SetForceSum(Physic::mk_vGravity * m_RigidBodyList[i]->GetMass());
+		m_RigidBodyList[i]->UpdateMovement(Physic::mk_fDeltaTime);
+		m_RigidBodyList[i]->SetForceSum(VectorOp::Zero);
+		m_RigidBodyList[i]->SetMomentumSum(VectorOp::Zero);
 	}
 
 
 	for (i = 0; i < m_RigidBodyList.size(); ++i)
 	{
+		if (m_RigidBodyList.at(i)->GetColliderType() == 0)
+		{
+			//if collision was between SPHERE-PLANE
+			if (m_CollisionDetector->CollisionDetectionSpherePlane(*m_RigidBodyList.at(i)))
+			{
+				m_CollisionDetector->ResolveCollisionSpherePlane(
+					*m_RigidBodyList.at(i),
+					m_RigidBodyList.at(i)->GetK(),
+					m_RigidBodyList.at(i)->GetL(),
+					m_RigidBodyList.at(i)->GetMass()
+					);
+			}
+		}
+		else
+		{
+			//if collision was between CUBE-PLANE
+			if (m_CollisionDetector->CollisionDetectionCubePlane(*m_RigidBodyList.at(i)))
+			{
+				m_CollisionDetector->ResolveCollisionCubePlane(
+					*m_RigidBodyList.at(i),
+					m_RigidBodyList.at(i)->GetK(),
+					m_RigidBodyList.at(i)->GetL(),
+					m_RigidBodyList.at(i)->GetMass());
+			}
+		}
+		
+
 		//second loop not check a rigidbody with itself and previous rigidbody (double check)
 		for (j = i + 1; j < m_RigidBodyList.size(); ++j)
 		{
 			//if collision was between SPHERE-SPHERE
-			if ((m_RigidBodyList[i]->GetColliderType() == 0) && (m_RigidBodyList[j]->GetColliderType() == 0))
+		/*	if ((m_RigidBodyList[i]->GetColliderType() == 0) && (m_RigidBodyList[j]->GetColliderType() == 0))
 			{
 				if (m_CollisionType->CollisionDetectionSphereSphere(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider()))
 				{
@@ -50,35 +77,35 @@ void Physic::ComputePhysic()
 						m_RigidBodyList[j]->GetCollider()
 						);
 				}
-			}
+			}*/
 			//if collision was between BOX-BOX
-			else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 1))
-			{
-				if (m_CollisionType->CollisionDetectionBoxBox(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider()))
-				{
-					m_CollisionType->ResolveCollisionBoxBox(
-						*m_RigidBodyList[i],
-						*m_RigidBodyList[j],
-						m_RigidBodyList[i]->GetCollider(),
-						m_RigidBodyList[j]->GetCollider()
-						);
-				}
-			}
-			//if collision was between BOX-SPHERE or SPHERE-BOX
-			else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 0)
-				|| (m_RigidBodyList[i]->GetColliderType() == 0) && (m_RigidBodyList[j]->GetColliderType() == 1))
-			{
-				if (m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider())
-					|| m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[j]->GetCollider(), m_RigidBodyList[i]->GetCollider()))
-				{
-					m_CollisionType->ResolveCollisionBoxSphere(
-						*m_RigidBodyList[i],
-						*m_RigidBodyList[j],
-						m_RigidBodyList[i]->GetCollider(),
-						m_RigidBodyList[j]->GetCollider()
-						);
-				}
-			}
+			//else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 1))
+			//{
+			//	if (m_CollisionType->CollisionDetectionBoxBox(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider()))
+			//	{
+			//		m_CollisionType->ResolveCollisionBoxBox(
+			//			*m_RigidBodyList[i],
+			//			*m_RigidBodyList[j],
+			//			m_RigidBodyList[i]->GetCollider(),
+			//			m_RigidBodyList[j]->GetCollider()
+			//			);
+			//	}
+			//}
+			////if collision was between BOX-SPHERE or SPHERE-BOX
+			//else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 0)
+			//	|| (m_RigidBodyList[i]->GetColliderType() == 0) && (m_RigidBodyList[j]->GetColliderType() == 1))
+			//{
+			//	if (m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider())
+			//		|| m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[j]->GetCollider(), m_RigidBodyList[i]->GetCollider()))
+			//	{
+			//		m_CollisionType->ResolveCollisionBoxSphere(
+			//			*m_RigidBodyList[i],
+			//			*m_RigidBodyList[j],
+			//			m_RigidBodyList[i]->GetCollider(),
+			//			m_RigidBodyList[j]->GetCollider()
+			//			);
+			//	}
+			//}
 		}
 	}
 }

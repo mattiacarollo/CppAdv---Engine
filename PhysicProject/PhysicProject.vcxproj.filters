@@ -25,12 +25,6 @@
     <Filter Include="Source Files\Physic">
       <UniqueIdentifier>{3885670e-13df-4b26-b617-7a1e838087c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Collider">
-      <UniqueIdentifier>{df860e50-1be2-4177-82c0-6626b0f8b303}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Collider">
-      <UniqueIdentifier>{16ba7cc4-e070-4303-9492-184fc74cfa98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rigidbody">
       <UniqueIdentifier>{a0847e13-66e6-4285-bd90-9951b7731e7d}</UniqueIdentifier>
     </Filter>
@@ -51,15 +45,6 @@
     <ClInclude Include="Vector3.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="BoxCollider.h">
-      <Filter>Header Files\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
-      <Filter>Header Files\Collider</Filter>
-    </ClInclude>
     <ClInclude Include="Quaternion.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
@@ -69,14 +54,14 @@
     <ClInclude Include="Collision.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionType.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="Forces.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetector.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -85,15 +70,6 @@
     </ClCompile>
     <ClCompile Include="Physic.cpp">
       <Filter>Source Files\Physic</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxCollider.cpp">
-      <Filter>Source Files\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Source Files\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>Source Files\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Quaternion.cpp">
       <Filter>Source Files\Util</Filter>
@@ -104,14 +80,14 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionType.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Forces.cpp">
       <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDetector.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
