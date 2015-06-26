@@ -10,6 +10,5 @@ namespace Pns
 	public:
 		static Vector3 SphereInertia(float mass, float radius);
 		static Vector3 CubeInertia(float mass, float width, float height, float depth);
-		//static Vector3 CubeInertia(float mass, float width, float height);
 	};
 }

@@ -227,35 +227,17 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 
 	// portiamo le coord della sfera relative al paral
 	m_Collision->SetInpactPoint(
-		rigidbody1.GetPosition() - rigidbody0.GetPosition()
+		rigidbody0.GetPosition() + rigidbody1.GetPosition()
 		);
 	MatrixOp::Rotate<MatrixOp::ToObjSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
 	m_Collision->SetInpactPoint(temp);
 
-	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[2].getX())
-	{
-		m_Collision->GetInpactPoint().SetX(rigidbody0.m_vVerteces[2].getX());
-	}
-	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[0].getX())
-	{
-		m_Collision->GetInpactPoint().SetX(rigidbody0.m_vVerteces[0].getX());
-	}
-	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[1].getY())
-	{
-		m_Collision->GetInpactPoint().SetY(rigidbody0.m_vVerteces[1].getY());
-	}
-	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[0].getY())
-	{
-		m_Collision->GetInpactPoint().SetY(rigidbody0.m_vVerteces[0].getY());
-	}
-	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[0].getZ())
-	{
-		m_Collision->GetInpactPoint().SetZ(rigidbody0.m_vVerteces[0].getZ());
-	}
-	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[4].getY())
-	{
-		m_Collision->GetInpactPoint().SetZ(rigidbody0.m_vVerteces[4].getZ());
-	}
+	if (c[0].inpactPoint[0] > Verteces[2][0]) c[0].inpactPoint[0] = Verteces[2][0];
+	if (c[0].inpactPoint[0] < Verteces[0][0]) c[0].inpactPoint[0] = Verteces[0][0];
+	if (c[0].inpactPoint[1] > Verteces[1][1]) c[0].inpactPoint[1] = Verteces[1][1];
+	if (c[0].inpactPoint[1] < Verteces[0][1]) c[0].inpactPoint[1] = Verteces[0][1];
+	if (c[0].inpactPoint[2] > Verteces[0][2]) c[0].inpactPoint[2] = Verteces[0][2];
+	if (c[0].inpactPoint[2] < Verteces[4][2]) c[0].inpactPoint[2] = Verteces[4][2];
 
 	// trovato il punto relativo d'impatto, rendiamolo assoluto
 	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
@@ -263,39 +245,28 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	m_Collision->SetInpactPoint(
 		rigidbody0.GetPosition() + m_Collision->GetInpactPoint()
 		);
+	SommaVettori(r->Pos, c[0].inpactPoint, c[0].inpactPoint);
 
 	// direzione e distanza (dalla Sfera verso il paral)
-	m_Collision->SetNormalVector(
-		m_Collision->GetInpactPoint() - rigidbody1.GetPosition()
-		);
-	d = m_Collision->GetNormalVector().Modulus();
-	if (d > rigidbody1.GetRadius())
-	{
-		return false;
-	}
+	SottraiVettori(c[0].inpactPoint, rigidbody1->Pos, c[0].normalVector);
+	d = ModuloVettore(c[0].normalVector);
+	if (d > ray) return(0);
 
-	m_Collision->SetDeformation(rigidbody1.GetRadius() - d);
-	m_Collision->SetNormalVector( m_Collision->GetNormalVector() / d );
+	c[0].deformation = ray - d;
+	DividiVettoreScalare(c[0].normalVector, d, c[0].normalVector);
 
 	// la vel di impatto e' la diff tra la vel della sfera e quella del parall
-	m_Collision->SetInpactVelocity(
-		m_Collision->GetInpactPoint() - rigidbody1.GetPosition()
-		);
-	VectorOp::VectorialProduct(rigidbody1.GetAngularVelocity(), m_Collision->GetInpactVelocity(), temp);
-	m_Collision->SetInpactVelocity(temp);
-	m_Collision->SetInpactVelocity(
-		rigidbody1.GetVelocity() + m_Collision->GetInpactVelocity()
-		);
+	SottraiVettori(c[0].inpactPoint, rigidbody1->Pos, c[0].inpactVelocity);
+	ProdottoVettoriale(rigidbody1->Vang, c[0].inpactVelocity, c[0].inpactVelocity);
+	SommaVettori(rigidbody1->Vel, c[0].inpactVelocity, c[0].inpactVelocity);
 
-	temp = m_Collision->GetInpactPoint() - rigidbody0.GetPosition();
-	VectorOp::VectorialProduct(rigidbody0.GetAngularVelocity(), temp, temp);
-	temp += rigidbody0.GetVelocity();
+	SottraiVettori(c[0].inpactPoint, r->Pos, Temp);
+	ProdottoVettoriale(r->Vang, Temp, Temp);
+	SommaVettori(r->Vel, Temp, Temp);
 
-	m_Collision->SetInpactVelocity(
-		m_Collision->GetInpactVelocity() - temp
-		);
+	SottraiVettori(c[0].inpactVelocity, Temp, c[0].inpactVelocity);
 
-	return true;
+	return(1);
 }
 
 void CollisionDetector::ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m)
