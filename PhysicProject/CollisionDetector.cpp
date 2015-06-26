@@ -211,7 +211,50 @@ void CollisionDetector::ResolveCollisionSphereSphere(RigidBody& rigidbody0, Rigi
 //BOX-BOX
 bool CollisionDetector::CollisionDetectionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1)
 {
-	return false;
+	//float d1;
+	//float Temp[3];
+
+	//// portiamo le coord del paral2 relative al paral1
+	//m_Collision->SetInpactPoint(
+	//	rigidbody1.GetPosition() - rigidbody0.GetPosition()
+	//	);
+	//MatrixOp::Rotate<MatrixOp::ToObjSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
+	//RuotaRelative(p1->MRot, c[0].inpactPoint, c[0].inpactPoint);
+
+	//if (c[0].inpactPoint[0] > Verteces[2][0]) c[0].inpactPoint[0] = Verteces[2][0];
+	//if (c[0].inpactPoint[0] < Verteces[0][0]) c[0].inpactPoint[0] = Verteces[0][0];
+	//if (c[0].inpactPoint[1] > Verteces[1][1]) c[0].inpactPoint[1] = Verteces[1][1];
+	//if (c[0].inpactPoint[1] < Verteces[0][1]) c[0].inpactPoint[1] = Verteces[0][1];
+	//if (c[0].inpactPoint[2] > Verteces[0][2]) c[0].inpactPoint[2] = Verteces[0][2];
+	//if (c[0].inpactPoint[2] < Verteces[4][2]) c[0].inpactPoint[2] = Verteces[4][2];
+
+	//// trovato il punto relativo d'impatto, rendiamolo assoluto
+	//RuotaAssolute(p1->MRot, c[0].inpactPoint, c[0].inpactPoint);
+	//SommaVettori(p1->Pos, c[0].inpactPoint, c[0].inpactPoint);
+
+	//// direzione e distanza (dal paral2 verso il paral1)
+	//SottraiVettori(c[0].inpactPoint, p2->Pos, c[0].normalVector);
+
+	//d1 = ModuloVettore(c[0].normalVector);
+
+	//float media = sqrt(2 * semiX*semiX + 2 * semiY*semiY + 2 * semiZ*semiZ) / 2;
+	//if (d1 > media) return(0);
+
+	//c[0].deformation = media - d1;
+	//DividiVettoreScalare(c[0].normalVector, d1, c[0].normalVector);
+
+	//// la vel di impatto e' la diff tra la vel del paral1 e quella del parall2
+	//SottraiVettori(c[0].inpactPoint, p2->Pos, c[0].inpactVelocity);
+	//ProdottoVettoriale(p2->Vang, c[0].inpactVelocity, c[0].inpactVelocity);
+	//SommaVettori(p2->Vel, c[0].inpactVelocity, c[0].inpactVelocity);
+
+	//SottraiVettori(c[0].inpactPoint, p1->Pos, Temp);
+	//ProdottoVettoriale(p1->Vang, Temp, Temp);
+	//SommaVettori(p1->Vel, Temp, Temp);
+
+	//SottraiVettori(c[0].inpactVelocity, Temp, c[0].inpactVelocity);
+
+	return true;
 }
 
 void CollisionDetector::ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m)
@@ -232,30 +275,37 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	MatrixOp::Rotate<MatrixOp::ToObjSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
 	m_Collision->SetInpactPoint(temp);
 
+	temp = {
+		m_Collision->GetInpactPoint().getX(),
+		m_Collision->GetInpactPoint().getY(),
+		m_Collision->GetInpactPoint().getZ()
+	};
+
 	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[2].getX())
 	{
-		m_Collision->GetInpactPoint().SetX(rigidbody0.m_vVerteces[2].getX());
+		temp.SetX(rigidbody0.m_vVerteces[2].getX());
 	}
 	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[0].getX())
 	{
-		m_Collision->GetInpactPoint().SetX(rigidbody0.m_vVerteces[0].getX());
+		temp.SetX(rigidbody0.m_vVerteces[0].getX());
 	}
 	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[1].getY())
 	{
-		m_Collision->GetInpactPoint().SetY(rigidbody0.m_vVerteces[1].getY());
+		temp.SetY(rigidbody0.m_vVerteces[1].getY());
 	}
 	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[0].getY())
 	{
-		m_Collision->GetInpactPoint().SetY(rigidbody0.m_vVerteces[0].getY());
+		temp.SetY(rigidbody0.m_vVerteces[0].getY());
 	}
 	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[0].getZ())
 	{
-		m_Collision->GetInpactPoint().SetZ(rigidbody0.m_vVerteces[0].getZ());
+		temp.SetZ(rigidbody0.m_vVerteces[0].getZ());
 	}
 	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[4].getY())
 	{
-		m_Collision->GetInpactPoint().SetZ(rigidbody0.m_vVerteces[4].getZ());
+		temp.SetZ(rigidbody0.m_vVerteces[4].getZ());
 	}
+	m_Collision->SetInpactPoint(temp);
 
 	// trovato il punto relativo d'impatto, rendiamolo assoluto
 	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
