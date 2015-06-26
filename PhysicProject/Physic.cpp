@@ -78,7 +78,7 @@ void Physic::ComputePhysic()
 				}
 			}
 			//if collision was between BOX-BOX
-			//else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 1))
+			//if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 1))
 			//{
 			//	if (m_CollisionType->CollisionDetectionBoxBox(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider()))
 			//	{
@@ -90,21 +90,32 @@ void Physic::ComputePhysic()
 			//			);
 			//	}
 			//}
-			////if collision was between BOX-SPHERE or SPHERE-BOX
-			//else if ((m_RigidBodyList[i]->GetColliderType() == 1) && (m_RigidBodyList[j]->GetColliderType() == 0)
-			//	|| (m_RigidBodyList[i]->GetColliderType() == 0) && (m_RigidBodyList[j]->GetColliderType() == 1))
-			//{
-			//	if (m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[i]->GetCollider(), m_RigidBodyList[j]->GetCollider())
-			//		|| m_CollisionType->CollisionDetectionBoxSphere(m_RigidBodyList[j]->GetCollider(), m_RigidBodyList[i]->GetCollider()))
-			//	{
-			//		m_CollisionType->ResolveCollisionBoxSphere(
-			//			*m_RigidBodyList[i],
-			//			*m_RigidBodyList[j],
-			//			m_RigidBodyList[i]->GetCollider(),
-			//			m_RigidBodyList[j]->GetCollider()
-			//			);
-			//	}
-			//}
+			//if collision was between BOX-SPHERE
+			if ((m_RigidBodyList.at(i)->GetColliderType() == 1) && (m_RigidBodyList.at(j)->GetColliderType() == 0))
+			{
+				if (m_CollisionDetector->CollisionDetectionBoxSphere(*m_RigidBodyList.at(i), *m_RigidBodyList.at(j)))
+				{
+					m_CollisionDetector->ResolveCollisionSphereSphere(
+						*m_RigidBodyList.at(i),
+						*m_RigidBodyList.at(j),
+						m_RigidBodyList.at(j)->GetK(),
+						m_RigidBodyList.at(j)->GetL(),
+						m_RigidBodyList.at(j)->GetMass());
+				}
+			}
+			//if collision was between SPHERE-BOX
+			if ((m_RigidBodyList.at(i)->GetColliderType() == 0) && (m_RigidBodyList.at(j)->GetColliderType() == 1))
+			{
+				if (m_CollisionDetector->CollisionDetectionBoxSphere(*m_RigidBodyList.at(j), *m_RigidBodyList.at(i)))
+				{
+					m_CollisionDetector->ResolveCollisionSphereSphere(
+						*m_RigidBodyList.at(j),
+						*m_RigidBodyList.at(i),
+						m_RigidBodyList.at(i)->GetK(),
+						m_RigidBodyList.at(i)->GetL(),
+						m_RigidBodyList.at(i)->GetMass());
+				}
+			}
 		}
 	}
 	for (i = 0; i < m_RigidBodyList.size(); ++i)

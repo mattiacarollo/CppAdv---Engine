@@ -9,6 +9,7 @@ class Collision
 {
 public:
 	Collision();
+	~Collision();
 	
 	void ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L, float m);
 
@@ -23,8 +24,6 @@ public:
 	Vector3 GetInpactVelocity() const{ return m_vInpactVelocity; };
 
 private:
-	~Collision();
-
 	float m_fDeformation;
 	Vector3 m_vInpactPoint;
 	Vector3 m_vNormalVector;
