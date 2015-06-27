@@ -78,7 +78,7 @@ void Physic::ComputePhysic()
 				}
 			}
 			//if collision was between BOX-BOX
-	/*		if ((m_RigidBodyList.at(i)->GetColliderType() == 1) && (m_RigidBodyList.at(j)->GetColliderType() == 1))
+			if ((m_RigidBodyList.at(i)->GetColliderType() == 1) && (m_RigidBodyList.at(j)->GetColliderType() == 1))
 			{
 				if (m_CollisionDetector->CollisionDetectionBoxBox(*m_RigidBodyList.at(i), *m_RigidBodyList.at(j)))
 				{
@@ -89,7 +89,7 @@ void Physic::ComputePhysic()
 						m_RigidBodyList.at(j)->GetL(),
 						m_RigidBodyList.at(j)->GetMass());
 				}
-			}*/
+			}
 			//if collision was between BOX-SPHERE
 			if ((m_RigidBodyList.at(i)->GetColliderType() == 1) && (m_RigidBodyList.at(j)->GetColliderType() == 0))
 			{

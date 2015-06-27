@@ -33,22 +33,22 @@ void MyApplication::start(){
 	cube2->setScale(1, 1, 1);
 	AddRigidBody(cube2, 0, 15);
 
-	cube3 = InstanceGameObject();
-	cube3->addModel(m_CubeModel);
-	cube3->addShader(IdShader::texture);
-	cube3->addTexture(Constants::METAL);
-	cube3->addTexture(Constants::ICE);
-	cube3->setPosition(60, 10, 50);
-	cube3->setScale(1, 1, 1);
-	AddRigidBody(cube3, 1, 7);
-	
-	cube4 = InstanceGameObject(); 
-	cube4->addModel(m_CubeModel);  
+	cube4 = InstanceGameObject();
+	cube4->addModel(m_CubeModel);
 	cube4->addShader(IdShader::texture);
 	cube4->addTexture(Constants::METAL);
 	cube4->setPosition(51, 12, 50);
 	cube4->setScale(1, 1, 1);
 	AddRigidBody(cube4, 1, 7);
+
+	cube3 = InstanceGameObject();
+	cube3->addModel(m_CubeModel);
+	cube3->addShader(IdShader::texture);
+	cube3->addTexture(Constants::METAL);
+	cube3->addTexture(Constants::ICE);
+	cube3->setPosition(40, 20, 50);
+	cube3->setScale(1, 1, 1);
+	AddRigidBody(cube3, 1, 7);
 
 	cube5 = InstanceGameObject();
 	cube5->addModel(m_CubeModel);
