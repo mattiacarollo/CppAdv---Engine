@@ -211,48 +211,90 @@ void CollisionDetector::ResolveCollisionSphereSphere(RigidBody& rigidbody0, Rigi
 //BOX-BOX
 bool CollisionDetector::CollisionDetectionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1)
 {
-	//float d1;
-	//float Temp[3];
+	float d1, media;
+	Vector3 temp = VectorOp::Zero;
 
-	//// portiamo le coord del paral2 relative al paral1
-	//m_Collision->SetInpactPoint(
-	//	rigidbody1.GetPosition() - rigidbody0.GetPosition()
-	//	);
-	//MatrixOp::Rotate<MatrixOp::ToObjSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
-	//RuotaRelative(p1->MRot, c[0].inpactPoint, c[0].inpactPoint);
+	// portiamo le coord del paral2 relative al paral1
+	m_Collision->SetInpactPoint(
+		rigidbody1.GetPosition() - rigidbody0.GetPosition()
+		);
+	MatrixOp::Rotate<MatrixOp::ToObjSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
+	m_Collision->SetInpactPoint(temp);
 
-	//if (c[0].inpactPoint[0] > Verteces[2][0]) c[0].inpactPoint[0] = Verteces[2][0];
-	//if (c[0].inpactPoint[0] < Verteces[0][0]) c[0].inpactPoint[0] = Verteces[0][0];
-	//if (c[0].inpactPoint[1] > Verteces[1][1]) c[0].inpactPoint[1] = Verteces[1][1];
-	//if (c[0].inpactPoint[1] < Verteces[0][1]) c[0].inpactPoint[1] = Verteces[0][1];
-	//if (c[0].inpactPoint[2] > Verteces[0][2]) c[0].inpactPoint[2] = Verteces[0][2];
-	//if (c[0].inpactPoint[2] < Verteces[4][2]) c[0].inpactPoint[2] = Verteces[4][2];
+	temp = {
+		m_Collision->GetInpactPoint().getX(),
+		m_Collision->GetInpactPoint().getY(),
+		m_Collision->GetInpactPoint().getZ()
+	};
 
-	//// trovato il punto relativo d'impatto, rendiamolo assoluto
-	//RuotaAssolute(p1->MRot, c[0].inpactPoint, c[0].inpactPoint);
-	//SommaVettori(p1->Pos, c[0].inpactPoint, c[0].inpactPoint);
+	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[2].getX())
+	{
+		temp.SetX(rigidbody0.m_vVerteces[2].getX());
+	}
+	if (m_Collision->GetInpactPoint().getX() < rigidbody0.m_vVerteces[0].getX())
+	{
+		temp.SetX(rigidbody0.m_vVerteces[0].getX());
+	}
+	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[1].getY())
+	{
+		temp.SetY(rigidbody0.m_vVerteces[1].getY());
+	}
+	if (m_Collision->GetInpactPoint().getY() < rigidbody0.m_vVerteces[0].getY())
+	{
+		temp.SetY(rigidbody0.m_vVerteces[0].getY());
+	}
+	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[0].getZ())
+	{
+		temp.SetZ(rigidbody0.m_vVerteces[0].getZ());
+	}
+	if (m_Collision->GetInpactPoint().getZ() < rigidbody0.m_vVerteces[4].getY())
+	{
+		temp.SetZ(rigidbody0.m_vVerteces[4].getZ());
+	}
+	m_Collision->SetInpactPoint(temp);
 
-	//// direzione e distanza (dal paral2 verso il paral1)
-	//SottraiVettori(c[0].inpactPoint, p2->Pos, c[0].normalVector);
+	// trovato il punto relativo d'impatto, rendiamolo assoluto
+	MatrixOp::Rotate<MatrixOp::ToWorldSpace>(rigidbody0.GetRotationMatrix(), m_Collision->GetInpactPoint(), temp);
+	m_Collision->SetInpactPoint(temp);
+	m_Collision->SetInpactPoint(
+		rigidbody0.GetPosition() + m_Collision->GetInpactPoint()
+		);
 
-	//d1 = ModuloVettore(c[0].normalVector);
+	// direzione e distanza (dal paral2 verso il paral1)
+	m_Collision->SetNormalVector(
+		m_Collision->GetInpactPoint() - rigidbody1.GetPosition()
+		);
 
-	//float media = sqrt(2 * semiX*semiX + 2 * semiY*semiY + 2 * semiZ*semiZ) / 2;
-	//if (d1 > media) return(0);
+	d1 = m_Collision->GetNormalVector().Modulus();
 
-	//c[0].deformation = media - d1;
-	//DividiVettoreScalare(c[0].normalVector, d1, c[0].normalVector);
+	media = sqrt(2 * rigidbody0.GetSemiX()*rigidbody0.GetSemiX() 
+		+ 2 * rigidbody0.GetSemiY()*rigidbody0.GetSemiY() 
+		+ 2 * rigidbody0.GetSemiZ()*rigidbody0.GetSemiZ()) / 2;
+	if (d1 > media)
+	{
+		return false;
+	}
 
-	//// la vel di impatto e' la diff tra la vel del paral1 e quella del parall2
-	//SottraiVettori(c[0].inpactPoint, p2->Pos, c[0].inpactVelocity);
-	//ProdottoVettoriale(p2->Vang, c[0].inpactVelocity, c[0].inpactVelocity);
-	//SommaVettori(p2->Vel, c[0].inpactVelocity, c[0].inpactVelocity);
+	m_Collision->SetDeformation(media - d1);
+	m_Collision->SetNormalVector(m_Collision->GetNormalVector() / d1);
 
-	//SottraiVettori(c[0].inpactPoint, p1->Pos, Temp);
-	//ProdottoVettoriale(p1->Vang, Temp, Temp);
-	//SommaVettori(p1->Vel, Temp, Temp);
+	// la vel di impatto e' la diff tra la vel del paral1 e quella del parall2
+	m_Collision->SetInpactVelocity(
+		m_Collision->GetInpactPoint() - rigidbody1.GetPosition()
+		);
+	VectorOp::VectorialProduct(rigidbody1.GetAngularVelocity(), m_Collision->GetInpactVelocity(), temp);
+	m_Collision->SetInpactVelocity(temp);
+	m_Collision->SetInpactVelocity(
+		rigidbody1.GetVelocity() + m_Collision->GetInpactVelocity()
+		);
 
-	//SottraiVettori(c[0].inpactVelocity, Temp, c[0].inpactVelocity);
+	temp = m_Collision->GetInpactPoint() - rigidbody0.GetPosition();
+	VectorOp::VectorialProduct(rigidbody0.GetAngularVelocity(), temp, temp);
+	temp += rigidbody0.GetVelocity();
+
+	m_Collision->SetInpactVelocity(
+		m_Collision->GetInpactVelocity() - temp
+		);
 
 	return true;
 }
@@ -285,7 +327,7 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	{
 		temp.SetX(rigidbody0.m_vVerteces[2].getX());
 	}
-	if (m_Collision->GetInpactPoint().getX() > rigidbody0.m_vVerteces[0].getX())
+	if (m_Collision->GetInpactPoint().getX() < rigidbody0.m_vVerteces[0].getX())
 	{
 		temp.SetX(rigidbody0.m_vVerteces[0].getX());
 	}
@@ -293,7 +335,7 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	{
 		temp.SetY(rigidbody0.m_vVerteces[1].getY());
 	}
-	if (m_Collision->GetInpactPoint().getY() > rigidbody0.m_vVerteces[0].getY())
+	if (m_Collision->GetInpactPoint().getY() < rigidbody0.m_vVerteces[0].getY())
 	{
 		temp.SetY(rigidbody0.m_vVerteces[0].getY());
 	}
@@ -301,7 +343,7 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	{
 		temp.SetZ(rigidbody0.m_vVerteces[0].getZ());
 	}
-	if (m_Collision->GetInpactPoint().getZ() > rigidbody0.m_vVerteces[4].getY())
+	if (m_Collision->GetInpactPoint().getZ() < rigidbody0.m_vVerteces[4].getY())
 	{
 		temp.SetZ(rigidbody0.m_vVerteces[4].getZ());
 	}
