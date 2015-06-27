@@ -7,7 +7,7 @@ Collision::~Collision()
 {
 }
 
-void Collision::ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L, float m)
+void Collision::ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L)
 {
 	float force;
 	float vn;
@@ -25,7 +25,7 @@ void Collision::ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodyse
 	}
 	Fnorm = m_vNormalVector * force;
 
-	force *= m;							// forza attrito (modulo)
+	force *= Physic::m_fm;							// forza attrito (modulo)
 	modVtang = Vtang.Modulus();
 	Ftang = Vtang * force;
 

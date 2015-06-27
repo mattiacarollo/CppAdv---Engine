@@ -16,16 +16,16 @@ public:
 	//collision between rigidbody and plane
 	bool CollisionDetectionSpherePlane(RigidBody& rigidbody0);
 	int CollisionDetectionCubePlane(RigidBody& rigidbody0);
-	void ResolveCollisionSpherePlane(RigidBody& rigidbody0, float k, float l, float m);
-	void ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, float m, int nCollisions);
+	void ResolveCollisionSpherePlane(RigidBody& rigidbody0, float k, float l);
+	void ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, int nCollisions);
 
 	bool CollisionDetectionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1);
 	bool CollisionDetectionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1);
 	bool CollisionDetectionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1);
 
-	void ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m);
-	void ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m);
-	void ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m);
+	void ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l);
+	void ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l);
+	void ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l);
 
 private:
 	~CollisionDetector();

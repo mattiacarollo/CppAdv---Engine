@@ -2,6 +2,7 @@
 
 const float Physic::mk_fDeltaTime = 0.025f;
 const Vector3 Physic::mk_vGravity = Vector3(0.0f, -9.8f, 0.0f);
+const float Physic::m_fm = 0.2f;
 
 Physic::Physic()
 {
@@ -40,8 +41,7 @@ void Physic::ComputePhysic()
 				m_CollisionDetector->ResolveCollisionSpherePlane(
 					*m_RigidBodyList.at(i),
 					m_RigidBodyList.at(i)->GetK(),
-					m_RigidBodyList.at(i)->GetL(),
-					m_RigidBodyList.at(i)->GetMass()
+					m_RigidBodyList.at(i)->GetL()
 					);
 			}
 		}
@@ -55,7 +55,6 @@ void Physic::ComputePhysic()
 					*m_RigidBodyList.at(i),
 					m_RigidBodyList.at(i)->GetK(),
 					m_RigidBodyList.at(i)->GetL(),
-					m_RigidBodyList.at(i)->GetMass(),
 					numCollisions);
 			}
 		}
@@ -73,8 +72,7 @@ void Physic::ComputePhysic()
 						*m_RigidBodyList.at(i),
 						*m_RigidBodyList.at(j),
 						m_RigidBodyList.at(i)->GetK(),
-						m_RigidBodyList.at(i)->GetL(),
-						m_RigidBodyList.at(i)->GetMass());
+						m_RigidBodyList.at(i)->GetL());
 				}
 			}
 			//if collision was between BOX-BOX
@@ -86,8 +84,7 @@ void Physic::ComputePhysic()
 						*m_RigidBodyList.at(i),
 						*m_RigidBodyList.at(j),
 						m_RigidBodyList.at(j)->GetK(),
-						m_RigidBodyList.at(j)->GetL(),
-						m_RigidBodyList.at(j)->GetMass());
+						m_RigidBodyList.at(j)->GetL());
 				}
 			}
 			//if collision was between BOX-SPHERE
@@ -99,8 +96,7 @@ void Physic::ComputePhysic()
 						*m_RigidBodyList.at(i),
 						*m_RigidBodyList.at(j),
 						m_RigidBodyList.at(j)->GetK(),
-						m_RigidBodyList.at(j)->GetL(),
-						m_RigidBodyList.at(j)->GetMass());
+						m_RigidBodyList.at(j)->GetL());
 				}
 			}
 			//if collision was between SPHERE-BOX
@@ -112,8 +108,7 @@ void Physic::ComputePhysic()
 						*m_RigidBodyList.at(j),
 						*m_RigidBodyList.at(i),
 						m_RigidBodyList.at(i)->GetK(),
-						m_RigidBodyList.at(i)->GetL(),
-						m_RigidBodyList.at(i)->GetMass());
+						m_RigidBodyList.at(i)->GetL());
 				}
 			}
 		}
