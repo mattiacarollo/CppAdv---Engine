@@ -11,7 +11,7 @@ public:
 	Collision();
 	~Collision();
 	
-	void ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L, float m);
+	void ApplyCollision(RigidBody* rigidbodyfirst, RigidBody* rigidbodysecond, float K, float L);
 
 	void SetDeformation(float value){ m_fDeformation = value; };
 	void SetInpactPoint(Vector3& v){ m_vInpactPoint = v; };

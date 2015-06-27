@@ -51,9 +51,9 @@ bool CollisionDetector::CollisionDetectionSpherePlane(RigidBody& rigidbody0)
 	return true;
 }
 
-void CollisionDetector::ResolveCollisionSpherePlane(RigidBody& rigidbody0, float k, float l, float m)
+void CollisionDetector::ResolveCollisionSpherePlane(RigidBody& rigidbody0, float k, float l)
 {
-	m_Collision->ApplyCollision(&rigidbody0, NULL, k, l, m);
+	m_Collision->ApplyCollision(&rigidbody0, NULL, k, l);
 }
 
 //CUBE-PLANE
@@ -101,11 +101,11 @@ int CollisionDetector::CollisionDetectionCubePlane(RigidBody& rigidbody0)
 	return n;
 }
 
-void CollisionDetector::ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, float m, int nCollisions)
+void CollisionDetector::ResolveCollisionCubePlane(RigidBody& rigidbody0, float k, float l, int nCollisions)
 {
 	for (int i = 0; i < nCollisions; ++i)
 	{
-		m_aCollision.at(i)->ApplyCollision(&rigidbody0, NULL, k, l, m);
+		m_aCollision.at(i)->ApplyCollision(&rigidbody0, NULL, k, l);
 	}
 	for (int i = 0; i < nCollisions; ++i)
 	{
@@ -203,9 +203,9 @@ bool CollisionDetector::CollisionDetectionSphereSphere(RigidBody& rigidbody0, Ri
 	return true;
 }
 
-void CollisionDetector::ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m)
+void CollisionDetector::ResolveCollisionSphereSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l)
 {
-	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l, m);
+	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l);
 }
 
 //BOX-BOX
@@ -299,9 +299,9 @@ bool CollisionDetector::CollisionDetectionBoxBox(RigidBody& rigidbody0, RigidBod
 	return true;
 }
 
-void CollisionDetector::ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m)
+void CollisionDetector::ResolveCollisionBoxBox(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l)
 {
-	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l, m);
+	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l);
 }
 
 //BOX-SPHERE
@@ -390,7 +390,7 @@ bool CollisionDetector::CollisionDetectionBoxSphere(RigidBody& rigidbody0, Rigid
 	return true;
 }
 
-void CollisionDetector::ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l, float m)
+void CollisionDetector::ResolveCollisionBoxSphere(RigidBody& rigidbody0, RigidBody& rigidbody1, float k, float l)
 {
-	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l, m);
+	m_Collision->ApplyCollision(&rigidbody0, &rigidbody1, k, l);
 }

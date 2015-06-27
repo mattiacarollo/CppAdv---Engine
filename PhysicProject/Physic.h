@@ -25,6 +25,7 @@ public:
 
 	static const float mk_fDeltaTime;
 	static const Vector3 mk_vGravity;
+	static const float m_fm;
 
 private:
 	Physic(const Physic& other);

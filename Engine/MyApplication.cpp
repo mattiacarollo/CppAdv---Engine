@@ -9,11 +9,25 @@ void MyApplication::start(){
 	{
 		GameObject* temp;
 		temp = InstanceGameObject();
-		temp->addModel(m_CubeModel);
-		//temp->setID(i);
+		temp->addModel(m_SphereModel);
 		temp->setPosition(rand() % 100, rand() % 10, rand() % 100);
 		temp->addShader(IdShader::color);
 		temp->setScale(1, 1, 1);
+		AddRigidBody(temp, 0, 15);
+		temp->setID(temp->getRigidbody().GetID());
+		m_GameObjectPool.push_back(temp);
+	}
+
+	for (int i = 0; i < Constants::MAX_MODELS; ++i)
+	{
+		GameObject* temp;
+		temp = InstanceGameObject();
+		temp->addModel(m_CubeModel);
+		temp->setPosition(rand() % 100, rand() % 10, rand() % 100);
+		temp->addShader(IdShader::color);
+		temp->setScale(1, 1, 1);
+		AddRigidBody(temp, 1, 7);
+		temp->setID(temp->getRigidbody().GetID());
 		m_GameObjectPool.push_back(temp);
 	}
 
