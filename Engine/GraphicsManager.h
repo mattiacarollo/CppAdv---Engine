@@ -51,6 +51,8 @@ private:
 protected:
 	Model* m_CubeModel;
 	Model* m_SphereModel;
+	Camera* m_Camera;
+	DXManager* m_D3D;
 	ParticleModel* m_ParticleSystem;
 
 	ShaderManager* m_ShaderManager;
@@ -58,15 +60,14 @@ protected:
 
 	SceneModelsList* m_SceneModelsListDinamic;
 	SceneModelsList* m_SceneModelsListStatic;
-	
-private:
-	DXManager* m_D3D;
+
+private:	
 	LightManager* m_Light;
 	Terrain* m_Terrain;	
-	Camera* m_Camera;
 	RenderToTexture* m_RenderToTexture;
 	Frustum* m_Frustum;
 	TextDrawer* m_TextDrawer;
 	TextFont* m_ArialFont;
 	Physic* m_Physic;
+
 };

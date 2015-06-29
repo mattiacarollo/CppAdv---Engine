@@ -202,13 +202,14 @@ bool GraphicsManager::Frame(float frameTime, int fps, int cpu)
 
 	m_Physic->ComputePhysic();
 	m_ParticleSystem->Frame(frameTime, m_D3D->GetDeviceContext());
-
-	//------------------------- Update di MyApplication --------------------------
-	update(); 
-
+		
 	// Render the graphics scene.
 	result = Render(rotation);
 	if (!result)	{ return false; }
+
+	//------------------------- Update di MyApplication --------------------------
+
+	update();
 
 	return true;
 }
@@ -264,9 +265,7 @@ bool GraphicsManager::Render(float rotation)
 
 	// Initialize the count of models that have been rendered.
 	renderCount = 0;
-
 	
-
 	m_Terrain->Render(m_D3D->GetDeviceContext());
 	result = m_ShaderManager->RenderDepthShader(m_Terrain->GetVertexCount(), m_Terrain->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)	{	return false;	}
@@ -286,14 +285,6 @@ bool GraphicsManager::Render(float rotation)
 		// If it can be seen then render it, if not skip this model and check the next sphere.
 		if (renderModel)
 		{	
-
-			m_TextDrawer->beginDraw();
-			std::wstring cpuText = L"POSITION Y : ";
-			cpuText += std::to_wstring(m_SceneModelsListDinamic->getGameObject(index)->getRigidbody().GetPosition().getY());
-			m_TextDrawer->setColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
-			m_TextDrawer->setPosition(DirectX::XMFLOAT2(10.0f, 180.0f));
-			m_TextDrawer->drawText(*m_ArialFont, cpuText);
-			m_TextDrawer->endDraw();
 			m_D3D->TurnZBufferOn();
 
 			m_SceneModelsListDinamic->getGameObject(index)->setPosition(
@@ -361,30 +352,30 @@ bool GraphicsManager::Render(float rotation)
 	m_D3D->TurnZBufferOn();
 
 
-	DirectX::XMFLOAT3 cameraPosition, particlePosition;
-	DirectX::XMMATRIX translateMatrix;
-	double angle;
-	float rotation;
-	// Get the position of the camera.
-	cameraPosition = m_Camera->GetPosition();
-	// Set the position of the billboard model.
-	particlePosition.x = 70.0f;
-	particlePosition.y = 8.0f;
-	particlePosition.z = 50.0f;
-	angle = atan2(particlePosition.x - cameraPosition.x, particlePosition.z - cameraPosition.z) * (180.0 / DirectX::XM_PI);
-	rotation = (float)angle * 0.0174532925f;
-	worldMatrix = DirectX::XMMatrixRotationY(rotation);
-	translateMatrix = DirectX::XMMatrixTranslation(particlePosition.x, particlePosition.y, particlePosition.z);
-	worldMatrix = XMMatrixMultiply(worldMatrix, translateMatrix);
-	m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
-	projectionMatrix = m_D3D->GetTransf()->projection;
-	// Turn on alpha blending.
-	m_D3D->TurnOnAlphaBlending();
-	m_ParticleSystem->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderParticleShader(m_ParticleSystem->GetIndexCount(), 1, worldMatrix, viewMatrix, projectionMatrix, m_ParticleSystem->GetTexture());
-	if (!result)	{	return false;	}
-	// Turn off alpha blending.
-	m_D3D->TurnOffAlphaBlending();
+	//DirectX::XMFLOAT3 cameraPosition, particlePosition;
+	//DirectX::XMMATRIX translateMatrix;
+	//double angle;
+	//float rotation;
+	//// Get the position of the camera.
+	//cameraPosition = m_Camera->GetPosition();
+	//// Set the position of the billboard model.
+	//particlePosition.x = 50.0f;
+	//particlePosition.y = 8.0f;
+	//particlePosition.z = 20.0f;
+	//angle = atan2(particlePosition.x - cameraPosition.x, particlePosition.z - cameraPosition.z) * (180.0 / DirectX::XM_PI);
+	//rotation = (float)angle * 0.0174532925f;
+	//worldMatrix = DirectX::XMMatrixRotationY(rotation);
+	//translateMatrix = DirectX::XMMatrixTranslation(particlePosition.x, particlePosition.y, particlePosition.z);
+	//worldMatrix = XMMatrixMultiply(worldMatrix, translateMatrix);
+	//m_Camera->GetViewMatrix(viewMatrix); //Get camera matrix
+	//projectionMatrix = m_D3D->GetTransf()->projection;
+	//// Turn on alpha blending.
+	//m_D3D->TurnOnAlphaBlending();
+	//m_ParticleSystem->Render(m_D3D->GetDeviceContext());
+	//result = m_ShaderManager->RenderParticleShader(m_ParticleSystem->GetIndexCount(), 1, worldMatrix, viewMatrix, projectionMatrix, m_ParticleSystem->GetTexture());
+	//if (!result)	{	return false;	}
+	//// Turn off alpha blending.
+	//m_D3D->TurnOffAlphaBlending();
 
 	return true;
 }
