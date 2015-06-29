@@ -14,9 +14,7 @@ GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderMana
 };
 
 GameObject::~GameObject(){
-	if (m_pRigidbody){
-		delete m_pRigidbody;
-	}
+	
 }
 
 void GameObject::setPosition(float x, float y, float z)
