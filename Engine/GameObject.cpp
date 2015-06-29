@@ -13,8 +13,10 @@ GameObject::GameObject(TextureManager* textureManager, ShaderManager* shaderMana
 	m_position = {0.0f , 0.0f, 0.0f};
 };
 
-GameObject::~GameObject()
-{
+GameObject::~GameObject(){
+	if (m_pRigidbody){
+		delete m_pRigidbody;
+	}
 }
 
 void GameObject::setPosition(float x, float y, float z)

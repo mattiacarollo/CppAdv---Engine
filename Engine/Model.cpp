@@ -215,43 +215,6 @@ void Model::RenderBuffers()
 }
 
 
-//bool Model::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
-//{
-//	bool result;
-//
-//
-//	// Create the texture object.
-//	m_TextureArray = new TextureManager;
-//	if (!m_TextureArray)
-//	{
-//		return false;
-//	}
-//
-//	// Initialize the texture object.
-//	result = m_TextureArray->Initialize(device, filename1, filename2);
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
-//
-//void Model::ReleaseTexture()
-//{
-//	// Release the texture object.
-//	if (m_TextureArray)
-//	{
-//		m_TextureArray->Shutdown();
-//		delete m_TextureArray;
-//		m_TextureArray = 0;
-//	}
-//
-//	return;
-//}
-
-
 bool Model::LoadModel(const char* filename)
 {
 	ifstream fin;

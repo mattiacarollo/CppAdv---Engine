@@ -434,6 +434,27 @@ void GraphicsManager::Shutdown()
 		delete m_ParticleSystem;
 		m_ParticleSystem = 0;
 	}
+	if (m_Frustum){		
+		delete m_Frustum;
+	}
+	if (m_SceneModelsListDinamic){
+		for (int i = 0; i < m_SceneModelsListDinamic->GetModelsCount(); i++){
+			GameObject*tmp = m_SceneModelsListDinamic->getGameObject(i);			
+			delete tmp;
+		}
+		delete m_SceneModelsListDinamic;
+	}
+	if (m_SceneModelsListStatic){
+		for (int i= 0; i < m_SceneModelsListStatic->GetModelsCount(); i++){
+			GameObject*tmp = m_SceneModelsListStatic->getGameObject(i);			
+			delete tmp;
+		}
+		delete m_SceneModelsListStatic;
+	}
+	if (m_TextureManager){
+		m_TextureManager->Shutdown();
+		delete m_TextureManager;
+	}
 	return;
 }
 

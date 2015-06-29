@@ -40,6 +40,6 @@ private:
 	Timer* m_Timer;
 	FpsMonitor* m_Fps;
 	CpuMonitor* m_Cpu;
-	Physic* m_phisic;
+	Physic* m_physic;
 	
 };
