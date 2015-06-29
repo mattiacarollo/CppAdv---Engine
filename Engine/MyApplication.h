@@ -18,11 +18,14 @@ public :
 	void start() override;
 	void update() override;
 
+	void particle();
+	void physic();
+	void renderObject();
 	std::vector<GameObject*> m_GameObjectPool;
 
+	GameObject* sphere1;
+	GameObject* sphere2;
 	GameObject* cube1;
+	GameObject* sphere3;
 	GameObject* cube2;
-	GameObject* cube3;
-	GameObject* cube4;
-	GameObject* cube5;
 };
