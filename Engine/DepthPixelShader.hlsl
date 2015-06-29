@@ -19,7 +19,7 @@ struct PixelInputType
 float4 DepthPixelShader(PixelInputType input) : SV_TARGET
 {
 	float depthValue;
-	float4 color;
+	float4 color = { 0.0f, 0.0f, 0.0f, 0.0f, };
 
 
 	// Get the depth value of the pixel by dividing the Z pixel depth by the homogeneous W coordinate.

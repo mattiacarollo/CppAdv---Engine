@@ -2,6 +2,7 @@
 #define _CAMERACLASS_H_
 
 #include <DirectXMath.h>
+#include <crtdbg.h>
 
 class Camera
 {
@@ -9,6 +10,9 @@ public:
 	Camera();
 	Camera(const Camera&);
 	~Camera();
+
+	void * operator new(size_t nSize, size_t nAlignment);
+	void operator delete(void *pObject, size_t nAlignment);
 
 	void SetPosition(float, float, float);
 	void SetRotation(float, float, float);

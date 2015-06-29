@@ -13,7 +13,6 @@ SystemManager::~SystemManager(){}
 bool SystemManager::Initialize()
 {
 	int screenWidth, screenHeight;
-	bool result;
 
 	screenWidth = 0;
 	screenHeight = 0;

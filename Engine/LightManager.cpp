@@ -1,5 +1,21 @@
 #include "LightManager.h"
 
+void * LightManager::operator new(size_t nSize, size_t nAlignment)
+
+{
+	if (((nAlignment)&(nAlignment - 1)) == 0)
+	return (void *)_aligned_malloc_dbg(nSize, nAlignment, __FILE__, __LINE__);
+	else
+		return (void *)NULL;
+
+}
+
+void LightManager::operator delete(void *pObject, size_t nAlignment)
+
+{
+	if (pObject != NULL)
+		_aligned_free_dbg(pObject);
+}
 
 LightManager::LightManager()
 {

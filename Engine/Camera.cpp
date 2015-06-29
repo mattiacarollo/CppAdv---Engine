@@ -1,6 +1,23 @@
 #include "Camera.h"
 
 
+void * Camera::operator new(size_t nSize, size_t nAlignment)
+
+{
+	if (((nAlignment)&(nAlignment - 1)) == 0)
+	return (void *)_aligned_malloc_dbg(nSize, nAlignment, __FILE__, __LINE__);
+	else
+		return (void *)NULL;
+
+}
+
+void Camera::operator delete(void *pObject, size_t nAlignment)
+
+{
+	if (pObject != NULL)
+		_aligned_free_dbg(pObject);
+}
+
 Camera::Camera()
 {
 	m_positionX = 0.0f;

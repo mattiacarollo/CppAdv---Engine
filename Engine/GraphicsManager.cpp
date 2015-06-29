@@ -73,14 +73,14 @@ bool GraphicsManager::Initialize(DXManager* D3D, HWND hwnd, Camera* camera, Phys
 	}
 
 	// Create and initialize the light object.
-	m_Light = new LightManager;
+	m_Light = new(16) LightManager;
 	if (!m_Light)	{ return false; }
 	m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->GenerateOrthoMatrix(20.0f, Constants::SHADOWMAP_DEPTH, Constants::SHADOWMAP_NEAR);
 	
 	// Create and Initialize the render to texture object.
-	m_RenderToTexture = new RenderToTexture;
+	m_RenderToTexture = new(16) RenderToTexture;
 	if (!m_RenderToTexture)	{ return false; }
 	result = m_RenderToTexture->Initialize(m_D3D->GetDevice(), Constants::SHADOWMAP_WIDTH, Constants::SHADOWMAP_HEIGHT, Constants::SHADOWMAP_DEPTH, Constants::SHADOWMAP_NEAR);
 	if (!result)
@@ -246,7 +246,8 @@ bool GraphicsManager::Render(float rotation)
 {
 	
 	bool result, renderModel;
-	int modelCount, renderCount, index, radius;
+	int modelCount, renderCount, index;
+	float radius;
 	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;	
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT4 color;

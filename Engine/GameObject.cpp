@@ -107,5 +107,6 @@ bool GameObject::render(XMMATRIX& worldMatrix, XMMATRIX& viewMatrix, XMMATRIX& p
 	default:
 		break;
 	}
+	return true;
 }
 

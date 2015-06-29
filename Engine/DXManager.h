@@ -4,6 +4,7 @@
 #include <dxgi.h>
 #include "DataType.h"
 #include "ErrorBox.h"
+#include <crtdbg.h>
 
 
 using namespace utility;
@@ -14,6 +15,9 @@ public:
 	DXManager();
 	DXManager(const DXManager&);
 	~DXManager();
+
+	void * operator new(size_t nSize, size_t nAlignment);
+	void operator delete(void *pObject, size_t nAlignment);
 
 	bool Initialize(int, int, bool, HWND, bool, float, float);
 	void BeginScene(float, float, float, float);

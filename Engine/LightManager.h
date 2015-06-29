@@ -2,6 +2,7 @@
 
 
 #include <DirectXMath.h>
+#include <crtdbg.h>
 
 
 class LightManager
@@ -10,6 +11,9 @@ public:
 	LightManager();
 	LightManager(const LightManager&);
 	~LightManager();
+
+	void * operator new(size_t nSize, size_t nAlignment);
+	void operator delete(void *pObject, size_t nAlignment);
 
 	void SetAmbientColor(float, float, float, float);
 	void SetDiffuseColor(float, float, float, float);

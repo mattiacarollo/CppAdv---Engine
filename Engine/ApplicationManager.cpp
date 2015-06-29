@@ -36,7 +36,7 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	}
 
 	// Create and Initialize the DirectX object.
-	m_D3D = new DXManager;
+	m_D3D = new(16) DXManager;
 	if (!m_D3D) { return false; }
 	result = m_D3D->Initialize(screenWidth, screenHeight, Constants::VSYNC_ENABLED, hwnd, Constants::FULL_SCREEN, Constants::SCREEN_DEPTH, Constants::SCREEN_NEAR);
 	if (!result)
@@ -46,7 +46,7 @@ bool ApplicationManager::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWi
 	}
 
 	// Create and Initialize the Camera object.
-	m_Camera = new Camera;
+	m_Camera = new(16) Camera;
 	if (!m_Camera)
 	{
 		MessageBox(hwnd, L"Could not initialize Camera", L"Error", MB_OK);
@@ -187,7 +187,7 @@ bool ApplicationManager::Frame()
 
 bool ApplicationManager::HandleInput(float frameTime)
 {
-	bool keyDown, result;
+	bool keyDown;
 	float posX, posY, posZ, rotX, rotY, rotZ;
 
 	// Set the frame time for calculating the updated position.
@@ -232,8 +232,6 @@ bool ApplicationManager::HandleInput(float frameTime)
 
 bool ApplicationManager::RenderGraphics()
 {
-	bool result;
-
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 0.0f);
 
 	m_Graphic->Frame(m_Timer->GetTime(), m_Fps->GetFps(), m_Cpu->GetCpuPercentage());

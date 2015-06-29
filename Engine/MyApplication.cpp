@@ -96,7 +96,7 @@ void MyApplication::renderObject()
 		GameObject* temp;
 		temp = InstanceGameObject();
 		temp->addModel(m_SphereModel);
-		temp->setPosition(rand() % 100, rand() % 10, rand() % 100);
+		temp->setPosition((float)(rand() % 100), (float)(rand() % 10), (float)(rand() % 100));
 		temp->addShader(IdShader::color);
 		temp->setScale(1, 1, 1);
 		m_GameObjectPool.push_back(temp);

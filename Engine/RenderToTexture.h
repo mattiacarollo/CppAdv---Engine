@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <crtdbg.h>
 
 
 class RenderToTexture
@@ -11,6 +12,9 @@ public:
 	RenderToTexture();
 	RenderToTexture(const RenderToTexture&);
 	~RenderToTexture();
+
+	void * operator new(size_t nSize, size_t nAlignment);
+	void operator delete(void *pObject, size_t nAlignment);
 
 	bool Initialize(ID3D11Device*, int, int, float, float);
 	void Shutdown();

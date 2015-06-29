@@ -36,5 +36,5 @@ namespace Constants
 	const float PARTICLE_VELOCITY_VARIATION = 0.2f;
 	const float PARTICLE_SIZE = 0.2f;
 	const float PARTICLE_PER_SECOND = 250.0f;
-	const float PARTICLE_MAX_NUMBERS = 5000;
+	const int PARTICLE_MAX_NUMBERS = 5000;
 }

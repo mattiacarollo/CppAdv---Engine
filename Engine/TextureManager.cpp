@@ -42,7 +42,7 @@ ID3D11ShaderResourceView* TextureManager::GetTexture(const WCHAR* filename1)
 
 void TextureManager::Shutdown()
 {
-	for (int i = 0; i < m_textures.size(); i++)
+	for (unsigned int i = 0; i < m_textures.size(); i++)
 	{
 		m_textures.at(i)->Release();
 	}
